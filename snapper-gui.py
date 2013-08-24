@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
 import dbus
+from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
 from time import gmtime, strftime, localtime
 from pwd import getpwuid
 import subprocess
 
-bus = dbus.SystemBus()
+bus = dbus.SystemBus(mainloop=DBusGMainLoop())
 snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/Snapper'),
 							dbus_interface='org.opensuse.Snapper')
 
@@ -124,6 +125,7 @@ class SnapperGUI(object):
 		self.update_snapshots_list()
 
 		self.dialogCreate = self.builder.get_object("dialogCreate")
+		self.init_dbus_signal_handlers()
 
 	def update_snapshots_list(self,widget=None):
 		treestore = self.get_config_treestore(self.currentConfig)
@@ -254,8 +256,6 @@ class SnapperGUI(object):
 										"snapper test", 
 										"", 
 										{"by":"SnapperGUI"})
-			self.add_snapshot_to_tree(newSnapshot)
-			# snapshot = snapper.GetSnapshot(currentConfig,newSnapshot)
 			print("Created single snapshot for " + self.currentConfig)
 		elif response == Gtk.ResponseType.CANCEL:
 			print("The Cancel button was clicked")
@@ -303,8 +303,35 @@ class SnapperGUI(object):
 		Gtk.main()
 		return 0
 
-def dbus_signal_handler():
-	pass
+	def init_dbus_signal_handlers(self):
+		signals = {
+		"SnapshotCreated" : self.on_dbus_snapshot_created,
+		"SnapshotModified" : self.on_dbus_snapshot_modified,
+		"SnapshotDeleted" : self.on_dbus_snapshot_deleted,
+		"ConfigCreated" : self.on_dbus_config_created,
+		"ConfigDeleted" : self.on_dbus_config_deleted
+		}
+		for signal, handler in signals.items():
+			snapper.connect_to_signal(signal,handler)
+
+	def on_dbus_snapshot_created(self,config,snapshot):
+		if config == self.currentConfig:
+			self.add_snapshot_to_tree(str(snapshot))
+
+	def on_dbus_snapshot_modified(self,args):
+		print("Snapshot SnapshotModified")
+
+	def on_dbus_snapshot_deleted(self,config,snapshot):
+		# FIXME signal not working, may be an upstream bug
+		print("FIXED signal snapshot deleted")
+		if config == self.currentConfig:
+			self.remove_snapshot_to_tree(str(snapshot))
+
+	def on_dbus_config_created(self,args):
+		print("Config Created")
+
+	def on_dbus_config_deleted(self,args):
+		print("Config Deleted")
 
 if __name__ == '__main__':
 	interface = SnapperGUI()
