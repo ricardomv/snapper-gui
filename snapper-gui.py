@@ -11,14 +11,18 @@ bus = dbus.SystemBus(mainloop=DBusGMainLoop())
 snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/Snapper'),
 							dbus_interface='org.opensuse.Snapper')
 
-class propertiesDialog(Gtk.Dialog):
+class propertiesDialog(object):
 	"""docstring for propertiesDialog"""
 	def __init__(self,parent):
-		Gtk.Dialog.__init__(self, "Properties", parent, 0,
-			(Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE))
+		builder = Gtk.Builder()
+		builder.add_from_file("glade/propertiesDialog.glade")
+		
+		self.dialog = builder.get_object("dialogProperties")
+		self.notebook = builder.get_object("notebookProperties")
+		builder.connect_signals(self)
 
 		# key : value = [widget, grid line]
-		widgets = {
+		self.widgets = {
 		"SUBVOLUME": [Gtk.Label, 0],
 		"FSTYPE" : [Gtk.Label, 1],
 		"ALLOW_USERS" : [Gtk.Label, 2],
@@ -37,38 +41,71 @@ class propertiesDialog(Gtk.Dialog):
 		"NUMBER_CLEANUP" : [Gtk.Switch, 15],
 		"BACKGROUND_COMPARISON" : [Gtk.Switch, 16]
 		}
-		notebook = Gtk.Notebook()
-		self.get_content_area().pack_start(notebook, True, True, 0)
+		self.grid = []
+		tab=0
 		for aux, config in enumerate(snapper.ListConfigs()):
 			# VerticalBox to hold a label and the grid
 			vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 			vbox.pack_start(Gtk.Label("Subvolume to snapshot: " + config[1]),False,False,0)
 			# Grig to hold de pairs key and value
-			grid = Gtk.Grid(orientation=Gtk.Orientation.VERTICAL)
-			vbox.pack_start(grid,True,True,0)
-
+			self.grid.append(Gtk.Grid(orientation=Gtk.Orientation.VERTICAL))
+			vbox.pack_start(self.grid[tab],True,True,0)
 			for k, v in config[2].items():
 				label = Gtk.Label(k,selectable=True)
-				grid.attach(label, 0, widgets[k][1], 1, 1)
+				self.grid[tab].attach(label, 0, self.widgets[k][1], 1, 1)
+				self.widgets[k].append(str(v))
 
-				if widgets[k][0] == Gtk.Label:
-					grid.attach_next_to(widgets[k][0](v,selectable=True),label, Gtk.PositionType.RIGHT, 1, 1)
-				elif widgets[k][0] == Gtk.SpinButton:
+				if self.widgets[k][0] == Gtk.Label:
+					self.grid[tab].attach_next_to(self.widgets[k][0](v,selectable=True),label, Gtk.PositionType.RIGHT, 1, 1)
+				elif self.widgets[k][0] == Gtk.SpinButton:
 					adjustment = Gtk.Adjustment(0, 0, 5000, 1, 10, 0)
-					spinbutton = widgets[k][0](adjustment=adjustment)
+					spinbutton = self.widgets[k][0](adjustment=adjustment)
 					spinbutton.set_value(int(v))
-					grid.attach_next_to(spinbutton,label, Gtk.PositionType.RIGHT, 1, 1)
-				elif widgets[k][0] == Gtk.Switch:
-					switch = widgets[k][0]()
+					self.grid[tab].attach_next_to(spinbutton,label, Gtk.PositionType.RIGHT, 1, 1)
+				elif self.widgets[k][0] == Gtk.Switch:
+					switch = self.widgets[k][0]()
 					if v == "yes":
 						switch.set_active(True)
 					elif v == "no":
 						switch.set_active(False)
-					grid.attach_next_to(switch,label, Gtk.PositionType.RIGHT, 1, 1)
+					self.grid[tab].attach_next_to(switch,label, Gtk.PositionType.RIGHT, 1, 1)
+			tab += 1
 			# add a new page to the notebook with the name of the config and the content
-			notebook.append_page(vbox, Gtk.Label.new(config[0]))
-		notebook.show_all()
+			self.notebook.append_page(vbox, Gtk.Label.new(config[0]))
+		self.notebook.show_all()
 
+	def get_current_value(self, setting):
+		setting = self.widgets[setting]
+		line = setting[1]
+		widget = self.grid[self.notebook.get_current_page()].get_child_at(1,line)
+		if setting[0] == Gtk.Label:
+			return str(widget.get_label())
+		elif setting[0] == Gtk.Switch:
+			if(widget.get_active()):
+				return "yes"
+			else:
+				return "no"
+		elif setting[0] == Gtk.SpinButton:
+			return str(int(widget.get_value()))
+
+	def get_changed_settings(self):
+		changed = {}
+		currentConfig = str(snapper.ListConfigs()[self.notebook.get_current_page()][0])
+		for k, v in self.widgets.items():
+			currentValue = self.get_current_value(k)
+			if v[2+self.notebook.get_current_page()] != currentValue:
+				changed[k] = currentValue
+		return changed
+
+	def on_save_settings(self,widget):
+		try:
+			snapper.SetConfig("root",self.get_changed_settings())
+		except dbus.exceptions.DBusException as error:
+			if(str(error).find("error.no_permission") != -1):
+				dialog = Gtk.MessageDialog(self.dialog, 0, Gtk.MessageType.ERROR,
+				Gtk.ButtonsType.OK, "This user does not have permission to edit this configuration")
+				dialog.run()
+				dialog.destroy()
 
 class deleteDialog(object):
 	"""docstring for deleteDialog"""
@@ -269,8 +306,6 @@ class SnapperGUI(object):
 			treeiter = model.get_iter(path)
 			snapshots.append(model[treeiter][0])
 		dialog = deleteDialog(self.mainWindow, self.currentConfig,snapshots)
-		for snapshot in dialog.deleted:
-			self.remove_snapshot_from_tree(snapshot)
 		if(len(dialog.deleted) != 0):
 			self.statusbar.push(True, "Snapshots deleted from %s: %s"% (self.currentConfig, dialog.deleted))
 
@@ -287,8 +322,8 @@ class SnapperGUI(object):
 
 	def on_configs_properties_clicked(self,notebook):
 		dialog = propertiesDialog(self.mainWindow)
-		dialog.run()
-		dialog.destroy()
+		dialog.dialog.run()
+		dialog.dialog.hide()
 
 	def on_about_clicked(self,widget):
 		about = self.builder.get_object("aboutdialog1")
@@ -307,8 +342,9 @@ class SnapperGUI(object):
 		signals = {
 		"SnapshotCreated" : self.on_dbus_snapshot_created,
 		"SnapshotModified" : self.on_dbus_snapshot_modified,
-		"SnapshotDeleted" : self.on_dbus_snapshot_deleted,
+		"SnapshotsDeleted" : self.on_dbus_snapshot_deleted,
 		"ConfigCreated" : self.on_dbus_config_created,
+		"ConfigModified" : self.on_dbus_config_modified,
 		"ConfigDeleted" : self.on_dbus_config_deleted
 		}
 		for signal, handler in signals.items():
@@ -321,14 +357,16 @@ class SnapperGUI(object):
 	def on_dbus_snapshot_modified(self,args):
 		print("Snapshot SnapshotModified")
 
-	def on_dbus_snapshot_deleted(self,config,snapshot):
-		# FIXME signal not working, may be an upstream bug
-		print("FIXED signal snapshot deleted")
+	def on_dbus_snapshot_deleted(self,config,snapshots):
 		if config == self.currentConfig:
-			self.remove_snapshot_to_tree(str(snapshot))
+			for deleted in snapshots:
+				self.remove_snapshot_from_tree(deleted)
 
 	def on_dbus_config_created(self,args):
 		print("Config Created")
+
+	def on_dbus_config_modified(self,args):
+		print("Config Modified")
 
 	def on_dbus_config_deleted(self,args):
 		print("Config Deleted")
