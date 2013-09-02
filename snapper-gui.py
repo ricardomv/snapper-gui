@@ -107,6 +107,29 @@ class propertiesDialog(object):
 				dialog.run()
 				dialog.destroy()
 
+class createDialog(object):
+	"""docstring for createDialog"""
+	def __init__(self, parent):
+		super(createDialog, self).__init__()
+		builder = Gtk.Builder()
+		builder.add_from_file("glade/createDialog.glade")
+		
+		self.dialog = builder.get_object("dialogCreate")
+		self.dialog.set_transient_for(parent)
+		builder.connect_signals(self)
+
+		self.config = "root"
+		self.description = "test class"
+		self.cleanup = "number"
+		self.userdata = {"by":"SnapperGui"}
+
+	def run(self):
+		return self.dialog.run()
+
+	def destroy(self):
+		self.dialog.destroy()
+		pass
+
 class deleteDialog(object):
 	"""docstring for deleteDialog"""
 	def __init__(self, parent, config, snapshots):
@@ -161,7 +184,6 @@ class SnapperGUI(object):
 		#self.update_configs_list()
 		self.update_snapshots_list()
 
-		self.dialogCreate = self.builder.get_object("dialogCreate")
 		self.init_dbus_signal_handlers()
 
 	def update_snapshots_list(self,widget=None):
@@ -287,16 +309,16 @@ class SnapperGUI(object):
 			self.update_snapshots_list()
 
 	def on_create_snapshot(self, widget):
-		response = self.dialogCreate.run()
+		dialog = createDialog(self.mainWindow)
+		response = dialog.run()
 		if response == Gtk.ResponseType.OK:
-			newSnapshot = snapper.CreateSingleSnapshot(self.currentConfig, 
-										"snapper test", 
-										"", 
-										{"by":"SnapperGUI"})
-			print("Created single snapshot for " + self.currentConfig)
+			newSnapshot = snapper.CreateSingleSnapshot(dialog.config, 
+										dialog.description, 
+										dialog.cleanup, 
+										dialog.userdata)
 		elif response == Gtk.ResponseType.CANCEL:
-			print("The Cancel button was clicked")
-		self.dialogCreate.hide()
+			pass
+		dialog.destroy()
 
 
 	def on_delete_snapshot(self, selection):
