@@ -3,7 +3,7 @@
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
-from time import gmtime, strftime, localtime
+from time import strftime, localtime
 from pwd import getpwuid
 import subprocess
 
@@ -21,7 +21,7 @@ class propertiesDialog(object):
 		self.notebook = builder.get_object("notebookProperties")
 		builder.connect_signals(self)
 
-		# key : value = [widget, grid line]
+		# key : value = [widget, grid line, ...] later will be appended the settings for each config
 		self.widgets = {
 		"SUBVOLUME": [Gtk.Label, 0],
 		"FSTYPE" : [Gtk.Label, 1],
@@ -145,7 +145,6 @@ class createDialog(object):
 
 	def destroy(self):
 		self.dialog.destroy()
-		pass
 
 class deleteDialog(object):
 	"""docstring for deleteDialog"""
@@ -181,7 +180,6 @@ class deleteDialog(object):
 
 	def on_toggle_delete_snapshot(self,widget,index):
 		self.deleteTreeStore[int(index)][0] = not(self.deleteTreeStore[int(index)][0])
-		pass
 
 class SnapperGUI(object):
 	"""docstring for SnapperGUI"""
@@ -345,8 +343,6 @@ class SnapperGUI(object):
 			treeiter = model.get_iter(path)
 			snapshots.append(model[treeiter][0])
 		dialog = deleteDialog(self.mainWindow, self.currentConfig,snapshots)
-		if(len(dialog.deleted) != 0):
-			self.statusbar.push(True, "Snapshots deleted from %s: %s"% (self.currentConfig, dialog.deleted))
 
 	def on_open_snapshot_folder(self, selection,treepath=None,column=None):
 		model, paths = selection.get_selected_rows()
@@ -381,7 +377,7 @@ class SnapperGUI(object):
 		signals = {
 		"SnapshotCreated" : self.on_dbus_snapshot_created,
 		"SnapshotModified" : self.on_dbus_snapshot_modified,
-		"SnapshotsDeleted" : self.on_dbus_snapshot_deleted,
+		"SnapshotsDeleted" : self.on_dbus_snapshots_deleted,
 		"ConfigCreated" : self.on_dbus_config_created,
 		"ConfigModified" : self.on_dbus_config_modified,
 		"ConfigDeleted" : self.on_dbus_config_deleted
@@ -390,13 +386,18 @@ class SnapperGUI(object):
 			snapper.connect_to_signal(signal,handler)
 
 	def on_dbus_snapshot_created(self,config,snapshot):
+		self.statusbar.push(True, "Snapshot %s created for %s"% (str(snapshot), config))
 		if config == self.currentConfig:
 			self.add_snapshot_to_tree(str(snapshot))
 
 	def on_dbus_snapshot_modified(self,args):
 		print("Snapshot SnapshotModified")
 
-	def on_dbus_snapshot_deleted(self,config,snapshots):
+	def on_dbus_snapshots_deleted(self,config,snapshots):
+		snaps_str = ""
+		for snapshot in snapshots:
+			snaps_str += str(snapshot) + " "
+		self.statusbar.push(True, "Snapshots deleted from %s: %s"% (config, snaps_str))
 		if config == self.currentConfig:
 			for deleted in snapshots:
 				self.remove_snapshot_from_tree(deleted)
