@@ -48,20 +48,19 @@
   </object>
   <object class="GtkActionGroup" id="toolbarActions">
     <child>
-      <object class="GtkRadioAction" id="textOnly">
-        <property name="label" translatable="yes">Text Only</property>
-        <property name="draw_as_radio">True</property>
-        <property name="value">1</property>
-        <property name="group">iconsOnly</property>
-        <property name="current_value">1</property>
-        <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
-      </object>
-    </child>
-    <child>
       <object class="GtkRadioAction" id="iconsOnly">
         <property name="label" translatable="yes">Icons only</property>
         <property name="draw_as_radio">True</property>
         <property name="group">textBeside</property>
+        <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioAction" id="textOnly">
+        <property name="label" translatable="yes">Text Only</property>
+        <property name="draw_as_radio">True</property>
+        <property name="value">1</property>
+        <property name="group">textOnly</property>
         <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
       </object>
     </child>
@@ -72,7 +71,6 @@
         <property name="active">True</property>
         <property name="value">2</property>
         <property name="group">textOnly</property>
-        <property name="current_value">2</property>
         <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
       </object>
     </child>
@@ -81,8 +79,7 @@
         <property name="label" translatable="yes">Text beside Icons</property>
         <property name="draw_as_radio">True</property>
         <property name="value">3</property>
-        <property name="group">textBelow</property>
-        <property name="current_value">3</property>
+        <property name="group">textOnly</property>
         <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
       </object>
     </child>
@@ -411,7 +408,6 @@ for filesystem snapshot management</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="draw_as_radio">True</property>
-                                <property name="group">menuitem16</property>
                               </object>
                             </child>
                             <child>
@@ -420,7 +416,6 @@ for filesystem snapshot management</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="draw_as_radio">True</property>
-                                <property name="group">menuitem16</property>
                               </object>
                             </child>
                             <child>
@@ -429,7 +424,6 @@ for filesystem snapshot management</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="draw_as_radio">True</property>
-                                <property name="group">menuitem16</property>
                               </object>
                             </child>
                             <child>
