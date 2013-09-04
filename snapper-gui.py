@@ -23,10 +23,10 @@ class propertiesDialog(object):
 
 		# key : value = [widget, grid line, ...] later will be appended the settings for each config
 		self.widgets = {
-		"SUBVOLUME": [Gtk.Label, 0],
-		"FSTYPE" : [Gtk.Label, 1],
-		"ALLOW_USERS" : [Gtk.Label, 2],
-		"ALLOW_GROUPS" : [Gtk.Label, 3],
+		"SUBVOLUME": [Gtk.Entry, 0],
+		"FSTYPE" : [Gtk.Entry, 1],
+		"ALLOW_USERS" : [Gtk.Entry, 2],
+		"ALLOW_GROUPS" : [Gtk.Entry, 3],
 		"TIMELINE_CREATE" : [Gtk.Switch, 4],
 		"TIMELINE_CLEANUP" : [Gtk.Switch, 5],
 		"TIMELINE_LIMIT_HOURLY" : [Gtk.SpinButton, 6],
@@ -41,6 +41,7 @@ class propertiesDialog(object):
 		"NUMBER_CLEANUP" : [Gtk.Switch, 15],
 		"BACKGROUND_COMPARISON" : [Gtk.Switch, 16]
 		}
+		# array that will hold the grids for each tab/config
 		self.grid = []
 		tab=0
 		for aux, config in enumerate(snapper.ListConfigs()):
@@ -51,12 +52,14 @@ class propertiesDialog(object):
 			self.grid.append(Gtk.Grid(orientation=Gtk.Orientation.VERTICAL))
 			vbox.pack_start(self.grid[tab],True,True,0)
 			for k, v in config[2].items():
+				# Label that holds the key
 				label = Gtk.Label(k,selectable=True)
 				self.grid[tab].attach(label, 0, self.widgets[k][1], 1, 1)
 				self.widgets[k].append(str(v))
 
-				if self.widgets[k][0] == Gtk.Label:
-					self.grid[tab].attach_next_to(self.widgets[k][0](v,selectable=True),label, Gtk.PositionType.RIGHT, 1, 1)
+				# Values are set here depending on their types
+				if self.widgets[k][0] == Gtk.Entry:
+					self.grid[tab].attach_next_to(self.widgets[k][0](text=v),label, Gtk.PositionType.RIGHT, 1, 1)
 				elif self.widgets[k][0] == Gtk.SpinButton:
 					adjustment = Gtk.Adjustment(0, 0, 5000, 1, 10, 0)
 					spinbutton = self.widgets[k][0](adjustment=adjustment)
@@ -78,8 +81,8 @@ class propertiesDialog(object):
 		setting = self.widgets[setting]
 		line = setting[1]
 		widget = self.grid[self.notebook.get_current_page()].get_child_at(1,line)
-		if setting[0] == Gtk.Label:
-			return str(widget.get_label())
+		if setting[0] == Gtk.Entry:
+			return widget.get_text()
 		elif setting[0] == Gtk.Switch:
 			if(widget.get_active()):
 				return "yes"
@@ -204,6 +207,7 @@ class SnapperGUI(object):
 	def update_snapshots_list(self,widget=None):
 		treestore = self.get_config_treestore(self.currentConfig)
 		if treestore == None:
+
 			self.builder.get_object("configActions").set_sensitive(False)
 		else:
 			self.builder.get_object("configActions").set_sensitive(True)
