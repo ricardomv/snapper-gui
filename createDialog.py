@@ -28,7 +28,6 @@ class createDialog(object):
 
 		combobox = builder.get_object("configsCombo")
 		combobox.set_model(configscombo)
-
 		combobox.set_active(0)
 
 	def on_config_changed(self,widget):

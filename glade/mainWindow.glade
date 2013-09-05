@@ -213,6 +213,7 @@ for filesystem snapshot management</property>
     <accel-groups>
       <group name="snapshotaccelgroup"/>
     </accel-groups>
+    <signal name="show" handler="update_snapshots_list" swapped="no"/>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
@@ -586,6 +587,7 @@ for filesystem snapshot management</property>
                 <property name="rubber_banding">True</property>
                 <signal name="button-press-event" handler="on_button_press_event" swapped="no"/>
                 <signal name="row-activated" handler="on_open_snapshot_folder" object="treeview-selection1" swapped="no"/>
+                <signal name="show" handler="hello" swapped="no"/>
                 <signal name="popup-menu" handler="on_popup" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview-selection1">
@@ -686,7 +688,6 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
-  <object class="GtkAccelGroup" id="snapshotaccelgroup"/>
   <object class="GtkMenu" id="popupSnapshots">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -722,4 +723,5 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
+  <object class="GtkAccelGroup" id="snapshotaccelgroup"/>
 </interface>

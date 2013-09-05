@@ -30,17 +30,21 @@ class SnapperGUI(object):
 		self.snapshotsTreeView = self.builder.get_object("snapstreeview")
 		#self.configsTreeView = self.builder.get_object("configstreeview")
 		#self.update_configs_list()
-		self.update_snapshots_list()
 
 		self.init_dbus_signal_handlers()
 
 	def update_snapshots_list(self,widget=None):
 		treestore = self.get_config_treestore(self.currentConfig)
 		if treestore == None:
-
+			self.builder.get_object("snapshotActions").set_sensitive(False)
 			self.builder.get_object("configActions").set_sensitive(False)
+			dialog = Gtk.MessageDialog(self.mainWindow, 0, Gtk.MessageType.ERROR,
+			Gtk.ButtonsType.OK, "This user does not have permission to edit this configuration")
+			dialog.run()
+			dialog.destroy()
 		else:
 			self.builder.get_object("configActions").set_sensitive(True)
+			self.builder.get_object("snapshotActions").set_sensitive(True)
 		self.snapshotsTreeView.set_model(treestore)
 		self.snapshotsTreeView.expand_all()
 
@@ -68,10 +72,6 @@ class SnapperGUI(object):
 		try:
 			snapshots_list = snapper.ListSnapshots(config)
 		except dbus.exceptions.DBusException:
-			dialog = Gtk.MessageDialog(self.mainWindow, 0, Gtk.MessageType.ERROR,
-			Gtk.ButtonsType.OK, "This user does not have permission to edit this configuration")
-			dialog.run()
-			dialog.destroy()
 			return None
 		parents = []
 		self.statusbar.push(5,"%d snapshots"% (len(snapshots_list)))
@@ -244,6 +244,9 @@ class SnapperGUI(object):
 
 	def on_dbus_config_deleted(self,args):
 		print("Config Deleted")
+
+	def hello(self,args):
+		print("hello")
 
 if __name__ == '__main__':
 	interface = SnapperGUI()
