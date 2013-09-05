@@ -20,18 +20,28 @@ class SnapperGUI(object):
 		super(SnapperGUI, self).__init__()
 		self.builder = Gtk.Builder()
 		self.builder.add_from_file("glade/mainWindow.glade")
-		self.builder.connect_signals(self)
 		self.mainWindow = self.builder.get_object("mainWindow")
-
-		self.currentConfig = "root"
-		self.init_configs_menuitem()
-
 		self.statusbar = self.builder.get_object("statusbar")
 		self.snapshotsTreeView = self.builder.get_object("snapstreeview")
+
+		self.builder.connect_signals(self)
+
+		self.currentConfig = self.init_current_config()
+		self.init_configs_menuitem()
+
 		#self.configsTreeView = self.builder.get_object("configstreeview")
 		#self.update_configs_list()
 
 		self.init_dbus_signal_handlers()
+
+	def init_current_config(self):
+		for config in snapper.ListConfigs():
+			try:
+				snapper.ListSnapshots(config[0])
+			except dbus.exceptions.DBusException:
+				continue
+			break
+		return config[0]
 
 	def update_snapshots_list(self,widget=None):
 		treestore = self.get_config_treestore(self.currentConfig)
@@ -64,6 +74,8 @@ class SnapperGUI(object):
 			menu.insert(radioitem,5+aux)
 			radioitem.show()
 			radioitem.connect("toggled", self.on_menu_config_changed)
+			if self.currentConfig == config[0]:
+				radioitem.set_active(True)
 
 
 	def get_config_treestore(self,config):
@@ -244,9 +256,6 @@ class SnapperGUI(object):
 
 	def on_dbus_config_deleted(self,args):
 		print("Config Deleted")
-
-	def hello(self,args):
-		print("hello")
 
 if __name__ == '__main__':
 	interface = SnapperGUI()
