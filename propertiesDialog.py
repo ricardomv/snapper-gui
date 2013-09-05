@@ -96,8 +96,9 @@ class propertiesDialog(object):
 		return changed
 
 	def on_save_settings(self,widget):
+		currentConfig = str(snapper.ListConfigs()[self.notebook.get_current_page()][0])
 		try:
-			snapper.SetConfig("root",self.get_changed_settings())
+			snapper.SetConfig(currentConfig, self.get_changed_settings())
 		except dbus.exceptions.DBusException as error:
 			if(str(error).find("error.no_permission") != -1):
 				dialog = Gtk.MessageDialog(self.dialog, 0, Gtk.MessageType.ERROR,
