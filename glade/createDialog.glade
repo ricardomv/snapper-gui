@@ -135,7 +135,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTreeView" id="treeview2">
+          <object class="GtkTreeView" id="userdatatreeview">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="headers_clickable">False</property>
@@ -145,11 +145,29 @@
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn3">
                 <property name="title" translatable="yes">Name</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertext1">
+                    <property name="editable">True</property>
+                    <signal name="edited" handler="on_name_edited" swapped="no"/>
+                  </object>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
               </object>
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                 <property name="title" translatable="yes">Value</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertext2">
+                    <property name="editable">True</property>
+                    <signal name="edited" handler="on_value_edited" swapped="no"/>
+                  </object>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                  </attributes>
+                </child>
               </object>
             </child>
           </object>

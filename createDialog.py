@@ -30,6 +30,8 @@ class createDialog(object):
 		combobox.set_model(configscombo)
 		combobox.set_active(0)
 
+		self.userdataTree = builder.get_object("userdatatreeview")
+
 	def on_config_changed(self,widget):
 		self.config = widget.get_model()[widget.get_active()][0]
 
@@ -38,6 +40,12 @@ class createDialog(object):
 
 	def on_cleanup_changed(self,widget):
 		self.cleanup = widget.get_chars(0,-1)
+
+	def on_name_edited(self, path, new_text, user_data):
+		pass
+
+	def on_value_edited(self, path, new_text, user_data):
+		pass
 
 	def run(self):
 		return self.dialog.run()
