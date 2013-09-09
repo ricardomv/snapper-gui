@@ -72,6 +72,9 @@ class propertiesDialog(object):
 			self.notebook.append_page(vbox, Gtk.Label.new(config[0]))
 		self.notebook.show_all()
 
+	def run(self):
+		self.dialog.run()
+
 	def get_current_value(self, setting):
 		setting = self.widgets[setting]
 		line = setting[1]
@@ -106,3 +109,6 @@ class propertiesDialog(object):
 				dialog.run()
 				dialog.destroy()
  
+if __name__ == '__main__':
+	dialog = propertiesDialog(None)
+	dialog.run()

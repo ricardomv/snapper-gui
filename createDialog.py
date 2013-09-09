@@ -52,3 +52,11 @@ class createDialog(object):
 
 	def destroy(self):
 		self.dialog.destroy()
+
+if __name__ == '__main__':
+	dialog = createDialog(None)
+	dialog.run()
+	print(dialog.config)
+	print(dialog.description)
+	print(dialog.cleanup)
+	print(dialog.userdata)
