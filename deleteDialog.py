@@ -19,25 +19,28 @@ class deleteDialog(object):
 		self.deletetreeview = builder.get_object("deletetreeview")
 		builder.connect_signals(self)
 
+		self.snapshots_list = snapshots
+
 		self.deleteTreeStore = Gtk.ListStore(bool, int, str,  str)
 		for snapshot in snapshots:
 			snapinfo = snapper.GetSnapshot(config,snapshot)
 			self.deleteTreeStore.append([True, snapinfo[0], getpwuid(snapinfo[4])[0], snapinfo[5]])
 		self.deletetreeview.set_model(self.deleteTreeStore)
 
+	def run(self):
 		response = self.dialog.run()
-		self.dialog.hide()
-		delete = []
+		self.to_delete = []
 		# Check if any of the selected snapshots was toggled
-		for (aux,snapshot) in enumerate(snapshots):
+		for (aux,snapshot) in enumerate(self.snapshots_list):
 			if self.deleteTreeStore[aux][0]:
-				delete.append(snapshot)
-
-		if response == Gtk.ResponseType.YES and len(delete) != 0:
-			snapper.DeleteSnapshots(config, delete)
-			self.deleted = delete
-		else:
-			self.deleted = []
+				self.to_delete.append(snapshot)
+		self.dialog.destroy()
+		return response
 
 	def on_toggle_delete_snapshot(self,widget,index):
 		self.deleteTreeStore[int(index)][0] = not(self.deleteTreeStore[int(index)][0])
+
+if __name__ == '__main__':
+	dialog = deleteDialog(None,"root",[2,3,6])
+	print(dialog.run())
+	print(dialog.to_delete)

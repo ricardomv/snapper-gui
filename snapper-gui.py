@@ -189,6 +189,11 @@ class SnapperGUI(object):
 			treeiter = model.get_iter(path)
 			snapshots.append(model[treeiter][0])
 		dialog = deleteDialog(self.mainWindow, self.currentConfig,snapshots)
+		response = dialog.run()
+		if response == Gtk.ResponseType.YES and len(dialog.to_delete) != 0:
+			snapper.DeleteSnapshots(self.currentConfig, dialog.to_delete)
+		else:
+			pass
 
 	def on_open_snapshot_folder(self, selection,treepath=None,column=None):
 		model, paths = selection.get_selected_rows()
