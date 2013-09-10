@@ -23,6 +23,16 @@
       </object>
       <accelerator key="o" modifiers="GDK_CONTROL_MASK"/>
     </child>
+    <child>
+      <object class="GtkAction" id="snapshot-details">
+        <property name="label" translatable="yes">Info</property>
+        <property name="short_label" translatable="yes">Info</property>
+        <property name="tooltip" translatable="yes">Snapshot details</property>
+        <property name="stock_id">gtk-dialog-info</property>
+        <signal name="activate" handler="on_snapshot_info_clicked" object="treeview-selection1" swapped="no"/>
+      </object>
+      <accelerator key="i"/>
+    </child>
   </object>
   <object class="GtkActionGroup" id="toolbarActions">
     <child>
@@ -519,7 +529,18 @@ for filesystem snapshot management</property>
                 <property name="related_action">delete-snapshot</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Delete Snapshot</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="toolbutton7">
+                <property name="related_action">snapshot-details</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -686,7 +707,6 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
-  <object class="GtkAccelGroup" id="snapsaccelgroup"/>
   <object class="GtkMenu" id="popupSnapshots">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -723,4 +743,5 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
+  <object class="GtkAccelGroup" id="snapsaccelgroup"/>
 </interface>

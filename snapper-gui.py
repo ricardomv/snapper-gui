@@ -3,6 +3,7 @@
 from propertiesDialog import propertiesDialog
 from createDialog import createDialog
 from deleteDialog import deleteDialog
+from  detailsDialog import detailsDialog
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
@@ -195,7 +196,7 @@ class SnapperGUI(object):
 		else:
 			pass
 
-	def on_open_snapshot_folder(self, selection,treepath=None,column=None):
+	def on_open_snapshot_folder(self, selection, treepath=None, column=None):
 		model, paths = selection.get_selected_rows()
 		for path in paths:
 			treeiter = model.get_iter(path)
@@ -206,10 +207,20 @@ class SnapperGUI(object):
 				(model[treeiter][0], self.currentConfig, mountpoint))
 
 
-	def on_configs_properties_clicked(self,notebook):
+	def on_configs_properties_clicked(self, notebook):
 		dialog = propertiesDialog(self.mainWindow)
 		dialog.dialog.run()
 		dialog.dialog.hide()
+
+	def on_snapshot_info_clicked(self, selection):
+		snapshots = []
+		model, paths = selection.get_selected_rows()
+		for path in paths:
+			treeiter = model.get_iter(path)
+			snapshots.append(model[treeiter][0])
+		dialog = detailsDialog(self.currentConfig, snapshots)
+		dialog.dialog.run()
+		dialog.dialog.destroy()
 
 	def on_about_clicked(self,widget):
 		about = self.builder.get_object("aboutdialog1")
