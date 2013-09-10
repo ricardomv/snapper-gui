@@ -44,7 +44,7 @@ class propertiesDialog(object):
 			vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 			vbox.pack_start(Gtk.Label("Subvolume to snapshot: " + config[1]),False,False,0)
 			# Grig to hold de pairs key and value
-			self.grid.append(Gtk.Grid(orientation=Gtk.Orientation.VERTICAL))
+			self.grid.append(Gtk.Grid(orientation=Gtk.Orientation.VERTICAL,column_homogeneous=False))
 			vbox.pack_start(self.grid[tab],True,True,0)
 			for k, v in config[2].items():
 				# Label that holds the key
@@ -54,19 +54,19 @@ class propertiesDialog(object):
 
 				# Values are set here depending on their types
 				if self.widgets[k][0] == Gtk.Entry:
-					self.grid[tab].attach_next_to(self.widgets[k][0](text=v),label, Gtk.PositionType.RIGHT, 1, 1)
+					widget = self.widgets[k][0](text=v)
 				elif self.widgets[k][0] == Gtk.SpinButton:
 					adjustment = Gtk.Adjustment(0, 0, 5000, 1, 10, 0)
-					spinbutton = self.widgets[k][0](adjustment=adjustment)
-					spinbutton.set_value(int(v))
-					self.grid[tab].attach_next_to(spinbutton,label, Gtk.PositionType.RIGHT, 1, 1)
+					widget = self.widgets[k][0](adjustment=adjustment)
+					widget.set_value(int(v))
 				elif self.widgets[k][0] == Gtk.Switch:
-					switch = self.widgets[k][0]()
+					widget = self.widgets[k][0]()
 					if v == "yes":
-						switch.set_active(True)
+						widget.set_active(True)
 					elif v == "no":
-						switch.set_active(False)
-					self.grid[tab].attach_next_to(switch,label, Gtk.PositionType.RIGHT, 1, 1)
+						widget.set_active(False)
+				widget.set_halign(Gtk.Align.CENTER)
+				self.grid[tab].attach_next_to(widget,label, Gtk.PositionType.RIGHT, 1, 1)
 			tab += 1
 			# add a new page to the notebook with the name of the config and the content
 			self.notebook.append_page(vbox, Gtk.Label.new(config[0]))
