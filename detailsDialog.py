@@ -4,6 +4,7 @@ import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
 from pwd import getpwuid
+import subprocess
 
 bus = dbus.SystemBus(mainloop=DBusGMainLoop())
 snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/Snapper'),
@@ -45,6 +46,10 @@ class detailsDialog(object):
 		for key, value in snapshot_data[7].items():
 			userdata_liststore.append([key, value])
 		self.treeview.set_model(userdata_liststore)
+
+	def on_open_clicked(self, widget):
+		mountpoint = snapper.GetMountPoint(self.currentConfig, self.snapshots[widget.get_active()])
+		subprocess.Popen(['xdg-open', mountpoint])
 
 if __name__ == '__main__':
 	dialog = detailsDialog("root",[745,3,6])
