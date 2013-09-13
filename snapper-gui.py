@@ -10,6 +10,7 @@ from gi.repository import Gtk, Gdk#, GObject
 from time import strftime, localtime
 from pwd import getpwuid
 import subprocess
+import signal
 
 bus = dbus.SystemBus(mainloop=DBusGMainLoop())
 snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/Snapper'),
@@ -294,4 +295,5 @@ class SnapperGUI(object):
 
 if __name__ == '__main__':
 	interface = SnapperGUI()
+	signal.signal(signal.SIGINT, signal.SIG_DFL)
 	interface.main()
