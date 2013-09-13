@@ -586,6 +586,7 @@ for filesystem snapshot management</property>
                     <signal name="popup-menu" handler="on_popup" swapped="no"/>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection1">
+                        <property name="mode">multiple</property>
                         <signal name="changed" handler="on_snapshots_selection_changed" swapped="no"/>
                       </object>
                     </child>
@@ -683,6 +684,9 @@ for filesystem snapshot management</property>
                         <property name="headers_clickable">False</property>
                         <property name="expander_column">treeviewcolumn6</property>
                         <property name="search_column">0</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection2"/>
+                        </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn6">
                             <property name="title" translatable="yes">Key</property>
@@ -745,6 +749,7 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
+  <object class="GtkAccelGroup" id="snapsaccelgroup"/>
   <object class="GtkMenu" id="popupSnapshots">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -778,5 +783,4 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
-  <object class="GtkAccelGroup" id="snapsaccelgroup"/>
 </interface>
