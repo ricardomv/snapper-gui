@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
+  <object class="GtkActionGroup" id="configActions">
+    <property name="accel_group">configsaccelgroup</property>
+    <child>
+      <object class="GtkAction" id="create-snapshot">
+        <property name="label" translatable="yes">Create Snapshot</property>
+        <property name="short_label" translatable="yes">New Snapshot</property>
+        <property name="tooltip" translatable="yes">Create a new snapshot for the current configuration</property>
+        <property name="stock_id">gtk-add</property>
+        <signal name="activate" handler="on_create_snapshot" swapped="no"/>
+      </object>
+      <accelerator key="n" modifiers="GDK_CONTROL_MASK"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="refresh">
+        <property name="label" translatable="yes">Refresh</property>
+        <property name="short_label" translatable="yes">Refresh</property>
+        <property name="tooltip" translatable="yes">Refresh snapshots list</property>
+        <property name="stock_id">gtk-refresh</property>
+        <signal name="activate" handler="update_snapshots_list" swapped="no"/>
+      </object>
+      <accelerator key="F5"/>
+    </child>
+  </object>
+  <object class="GtkActionGroup" id="configsGroup"/>
   <object class="GtkActionGroup" id="snapshotActions">
     <property name="accel_group">snapsaccelgroup</property>
     <child>
@@ -32,44 +56,6 @@
         <signal name="activate" handler="on_snapshot_info_clicked" object="treeview-selection1" swapped="no"/>
       </object>
       <accelerator key="i"/>
-    </child>
-  </object>
-  <object class="GtkActionGroup" id="toolbarActions">
-    <child>
-      <object class="GtkRadioAction" id="iconsOnly">
-        <property name="label" translatable="yes">Icons only</property>
-        <property name="draw_as_radio">True</property>
-        <property name="group">textBeside</property>
-        <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioAction" id="textOnly">
-        <property name="label" translatable="yes">Text Only</property>
-        <property name="draw_as_radio">True</property>
-        <property name="value">1</property>
-        <property name="group">textOnly</property>
-        <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioAction" id="textBelow">
-        <property name="label" translatable="yes">Text below icons</property>
-        <property name="draw_as_radio">True</property>
-        <property name="active">True</property>
-        <property name="value">2</property>
-        <property name="group">textOnly</property>
-        <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkRadioAction" id="textBeside">
-        <property name="label" translatable="yes">Text beside Icons</property>
-        <property name="draw_as_radio">True</property>
-        <property name="value">3</property>
-        <property name="group">textOnly</property>
-        <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
-      </object>
     </child>
   </object>
   <object class="GtkAboutDialog" id="aboutdialog1">
@@ -106,29 +92,6 @@ for filesystem snapshot management</property>
     </child>
   </object>
   <object class="GtkAccelGroup" id="configsaccelgroup"/>
-  <object class="GtkActionGroup" id="configActions">
-    <property name="accel_group">configsaccelgroup</property>
-    <child>
-      <object class="GtkAction" id="create-snapshot">
-        <property name="label" translatable="yes">Create Snapshot</property>
-        <property name="short_label" translatable="yes">New Snapshot</property>
-        <property name="tooltip" translatable="yes">Create a new snapshot for the current configuration</property>
-        <property name="stock_id">gtk-add</property>
-        <signal name="activate" handler="on_create_snapshot" swapped="no"/>
-      </object>
-      <accelerator key="n" modifiers="GDK_CONTROL_MASK"/>
-    </child>
-    <child>
-      <object class="GtkAction" id="refresh">
-        <property name="label" translatable="yes">Refresh</property>
-        <property name="short_label" translatable="yes">Refresh</property>
-        <property name="tooltip" translatable="yes">Refresh snapshots list</property>
-        <property name="stock_id">gtk-refresh</property>
-        <signal name="activate" handler="update_snapshots_list" swapped="no"/>
-      </object>
-      <accelerator key="F5"/>
-    </child>
-  </object>
   <object class="GtkDialog" id="dialogProperties">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -406,34 +369,42 @@ for filesystem snapshot management</property>
                             <property name="can_focus">False</property>
                             <child>
                               <object class="GtkRadioMenuItem" id="menuitem16">
-                                <property name="related_action">iconsOnly</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Icons only</property>
                                 <property name="draw_as_radio">True</property>
+                                <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
                               </object>
                             </child>
                             <child>
                               <object class="GtkRadioMenuItem" id="menuitem17">
-                                <property name="related_action">textOnly</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Text only</property>
                                 <property name="draw_as_radio">True</property>
+                                <property name="group">menuitem16</property>
+                                <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
                               </object>
                             </child>
                             <child>
                               <object class="GtkRadioMenuItem" id="menuitem18">
-                                <property name="related_action">textBelow</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Text below icons</property>
+                                <property name="active">True</property>
                                 <property name="draw_as_radio">True</property>
+                                <property name="group">menuitem16</property>
+                                <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
                               </object>
                             </child>
                             <child>
                               <object class="GtkRadioMenuItem" id="menuitem19">
-                                <property name="related_action">textBeside</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Text beside icons</property>
                                 <property name="draw_as_radio">True</property>
+                                <property name="group">menuitem16</property>
+                                <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
                               </object>
                             </child>
                             <child>
@@ -707,6 +678,7 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
+  <object class="GtkAccelGroup" id="snapsaccelgroup"/>
   <object class="GtkMenu" id="popupSnapshots">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -743,5 +715,4 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
-  <object class="GtkAccelGroup" id="snapsaccelgroup"/>
 </interface>
