@@ -141,11 +141,19 @@ class SnapperGUI(object):
 		popup.popup(None,None,None,None,0,0)
 
 	def on_snapshots_selection_changed(self,selection):
+		userdatatreeview = self.builder.get_object("userdatatreeview")
 		(model, paths) = selection.get_selected_rows()
 		if(len(paths) == 0):
 			self.builder.get_object("snapshotActions").set_sensitive(False)
+			userdatatreeview.set_model(None)
 		else:
 			self.builder.get_object("snapshotActions").set_sensitive(True)
+			snapshot_data = snapper.GetSnapshot(self.currentConfig,model[model.get_iter(paths[0])][0])
+			userdata_liststore = Gtk.ListStore(str, str)
+			for key, value in snapshot_data[7].items():
+				userdata_liststore.append([key, value])
+			userdatatreeview.set_model(userdata_liststore)
+
 
 	def on_menu_config_changed(self,widget):
 		if(widget.get_active()):
