@@ -155,7 +155,6 @@ class SnapperGUI(object):
 			except dbus.exceptions.DBusException:
 				pass
 
-
 	def on_menu_config_changed(self,widget):
 		if(widget.get_active()):
 			self.currentConfig = widget.get_label()

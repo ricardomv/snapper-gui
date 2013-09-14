@@ -1,30 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
-  <object class="GtkActionGroup" id="configActions">
-    <property name="accel_group">configsaccelgroup</property>
-    <child>
-      <object class="GtkAction" id="create-snapshot">
-        <property name="label" translatable="yes">Create Snapshot</property>
-        <property name="short_label" translatable="yes">New Snapshot</property>
-        <property name="tooltip" translatable="yes">Create a new snapshot for the current configuration</property>
-        <property name="stock_id">gtk-add</property>
-        <signal name="activate" handler="on_create_snapshot" swapped="no"/>
-      </object>
-      <accelerator key="n" modifiers="GDK_CONTROL_MASK"/>
-    </child>
-    <child>
-      <object class="GtkAction" id="refresh">
-        <property name="label" translatable="yes">Refresh</property>
-        <property name="short_label" translatable="yes">Refresh</property>
-        <property name="tooltip" translatable="yes">Refresh snapshots list</property>
-        <property name="stock_id">gtk-refresh</property>
-        <signal name="activate" handler="update_snapshots_list" swapped="no"/>
-      </object>
-      <accelerator key="F5"/>
-    </child>
-  </object>
-  <object class="GtkActionGroup" id="configsGroup"/>
   <object class="GtkActionGroup" id="snapshotActions">
     <property name="accel_group">snapsaccelgroup</property>
     <child>
@@ -92,6 +68,30 @@ for filesystem snapshot management</property>
     </child>
   </object>
   <object class="GtkAccelGroup" id="configsaccelgroup"/>
+  <object class="GtkActionGroup" id="configActions">
+    <property name="accel_group">configsaccelgroup</property>
+    <child>
+      <object class="GtkAction" id="create-snapshot">
+        <property name="label" translatable="yes">Create Snapshot</property>
+        <property name="short_label" translatable="yes">New Snapshot</property>
+        <property name="tooltip" translatable="yes">Create a new snapshot for the current configuration</property>
+        <property name="stock_id">gtk-add</property>
+        <signal name="activate" handler="on_create_snapshot" swapped="no"/>
+      </object>
+      <accelerator key="n" modifiers="GDK_CONTROL_MASK"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="refresh">
+        <property name="label" translatable="yes">Refresh</property>
+        <property name="short_label" translatable="yes">Refresh</property>
+        <property name="tooltip" translatable="yes">Refresh snapshots list</property>
+        <property name="stock_id">gtk-refresh</property>
+        <signal name="activate" handler="update_snapshots_list" swapped="no"/>
+      </object>
+      <accelerator key="F5"/>
+    </child>
+  </object>
+  <object class="GtkActionGroup" id="configsGroup"/>
   <object class="GtkDialog" id="dialogProperties">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -749,11 +749,9 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
-  <object class="GtkAccelGroup" id="snapsaccelgroup"/>
   <object class="GtkMenu" id="popupSnapshots">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="accel_group">snapsaccelgroup</property>
     <child>
       <object class="GtkImageMenuItem" id="menuitem13">
         <property name="related_action">create-snapshot</property>
@@ -783,4 +781,5 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
+  <object class="GtkAccelGroup" id="snapsaccelgroup"/>
 </interface>
