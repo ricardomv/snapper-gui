@@ -33,9 +33,6 @@ class SnapperGUI(object):
 		self.currentConfig = self.init_current_config()
 		self.init_configs_menuitem()
 
-		#self.configsTreeView = self.builder.get_object("configstreeview")
-		#self.update_configs_list()
-
 		self.init_dbus_signal_handlers()
 
 	def init_current_config(self):
@@ -149,11 +146,14 @@ class SnapperGUI(object):
 			userdatatreeview.set_model(None)
 		else:
 			self.builder.get_object("snapshotActions").set_sensitive(True)
-			snapshot_data = snapper.GetSnapshot(self.currentConfig,model[model.get_iter(paths[0])][0])
-			userdata_liststore = Gtk.ListStore(str, str)
-			for key, value in snapshot_data[7].items():
-				userdata_liststore.append([key, value])
-			userdatatreeview.set_model(userdata_liststore)
+			try:
+				snapshot_data = snapper.GetSnapshot(self.currentConfig,model[model.get_iter(paths[0])][0])
+				userdata_liststore = Gtk.ListStore(str, str)
+				for key, value in snapshot_data[7].items():
+					userdata_liststore.append([key, value])
+				userdatatreeview.set_model(userdata_liststore)
+			except dbus.exceptions.DBusException:
+				pass
 
 
 	def on_menu_config_changed(self,widget):
@@ -278,7 +278,7 @@ class SnapperGUI(object):
 	def on_dbus_snapshots_deleted(self,config,snapshots):
 		snaps_str = ""
 		for snapshot in snapshots:
-			snaps_str += str(snapshot) + " "
+			snaps_str += str(snapshot) + " " 
 		self.statusbar.push(True, "Snapshots deleted from %s: %s"% (config, snaps_str))
 		if config == self.currentConfig:
 			for deleted in snapshots:
