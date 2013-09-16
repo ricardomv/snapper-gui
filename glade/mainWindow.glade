@@ -352,12 +352,6 @@ for filesystem snapshot management</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkSeparatorMenuItem" id="menuitem10">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
-                    </child>
-                    <child>
                       <object class="GtkMenuItem" id="checkmenuitem1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -425,6 +419,22 @@ for filesystem snapshot management</property>
                             </child>
                           </object>
                         </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="menuitem10">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckMenuItem" id="menuitem20">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Show userdata</property>
+                        <property name="use_underline">True</property>
+                        <property name="active">True</property>
+                        <signal name="toggled" handler="on_view_item_userdata_toggled" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -667,7 +677,7 @@ for filesystem snapshot management</property>
               </packing>
             </child>
             <child>
-              <object class="GtkExpander" id="expander1">
+              <object class="GtkExpander" id="userdataexpander">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="expanded">True</property>

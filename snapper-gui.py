@@ -174,6 +174,13 @@ class SnapperGUI(object):
 		if(widget.get_active()):
 			toolbar.set_style(styles[widget.get_label()])
 
+	def on_view_item_userdata_toggled(self,widget):
+		userdataexpander = self.builder.get_object("userdataexpander")
+		if(widget.get_active()):
+			userdataexpander.show()
+		else:
+			userdataexpander.hide()
+
 	def on_view_item_toolbar_toggled(self,widget):
 		toolbar = self.builder.get_object("toolbar1")
 		if(widget.get_active()):
