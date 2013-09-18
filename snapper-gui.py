@@ -219,10 +219,10 @@ class SnapperGUI(object):
 		response = dialog.run()
 		dialog.destroy()
 		if response == Gtk.ResponseType.OK:
-			newSnapshot = snapper.CreateConfig(dialog.name, 
-										dialog.subvolume, 
-										dialog.fstype, 
-										dialog.template)
+			snapper.CreateConfig(dialog.name, 
+								dialog.subvolume,
+								dialog.fstype,
+								dialog.template)
 		elif response == Gtk.ResponseType.CANCEL:
 			pass
 

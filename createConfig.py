@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
@@ -20,7 +22,7 @@ class createConfig(object):
 		self.name = ""
 		self.subvolume = ""
 		self.fstype = ""
-		self.template = ""
+		self.template = "default"
 
 		builder.get_object("fsTypeCombo").set_active(0)
 
