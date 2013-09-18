@@ -42,6 +42,11 @@ class SnapperGUI(object):
 			except dbus.exceptions.DBusException:
 				continue
 			break
+		try:
+			config[0]
+		except NameError:
+			return "None"
+
 		return config[0]
 
 	def update_snapshots_list(self,widget=None):
