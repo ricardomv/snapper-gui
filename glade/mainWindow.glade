@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
+  <object class="GtkAccelGroup" id="configsaccelgroup"/>
+  <object class="GtkActionGroup" id="configActions">
+    <property name="accel_group">configsaccelgroup</property>
+    <child>
+      <object class="GtkAction" id="create-snapshot">
+        <property name="label" translatable="yes">Create Snapshot</property>
+        <property name="short_label" translatable="yes">New Snapshot</property>
+        <property name="tooltip" translatable="yes">Create a new snapshot for the current configuration</property>
+        <property name="stock_id">gtk-add</property>
+        <signal name="activate" handler="on_create_snapshot" swapped="no"/>
+      </object>
+      <accelerator key="n" modifiers="GDK_CONTROL_MASK"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="refresh">
+        <property name="label" translatable="yes">Refresh</property>
+        <property name="short_label" translatable="yes">Refresh</property>
+        <property name="tooltip" translatable="yes">Refresh snapshots list</property>
+        <property name="stock_id">gtk-refresh</property>
+        <signal name="activate" handler="update_snapshots_list" swapped="no"/>
+      </object>
+      <accelerator key="F5"/>
+    </child>
+  </object>
+  <object class="GtkActionGroup" id="configsGroup"/>
   <object class="GtkActionGroup" id="snapshotActions">
     <property name="accel_group">snapsaccelgroup</property>
     <child>
@@ -65,31 +90,6 @@ for filesystem snapshot management</property>
           <placeholder/>
         </child>
       </object>
-    </child>
-  </object>
-  <object class="GtkActionGroup" id="configsGroup"/>
-  <object class="GtkAccelGroup" id="configsaccelgroup"/>
-  <object class="GtkActionGroup" id="configActions">
-    <property name="accel_group">configsaccelgroup</property>
-    <child>
-      <object class="GtkAction" id="create-snapshot">
-        <property name="label" translatable="yes">Create Snapshot</property>
-        <property name="short_label" translatable="yes">New Snapshot</property>
-        <property name="tooltip" translatable="yes">Create a new snapshot for the current configuration</property>
-        <property name="stock_id">gtk-add</property>
-        <signal name="activate" handler="on_create_snapshot" swapped="no"/>
-      </object>
-      <accelerator key="n" modifiers="GDK_CONTROL_MASK"/>
-    </child>
-    <child>
-      <object class="GtkAction" id="refresh">
-        <property name="label" translatable="yes">Refresh</property>
-        <property name="short_label" translatable="yes">Refresh</property>
-        <property name="tooltip" translatable="yes">Refresh snapshots list</property>
-        <property name="stock_id">gtk-refresh</property>
-        <signal name="activate" handler="update_snapshots_list" swapped="no"/>
-      </object>
-      <accelerator key="F5"/>
     </child>
   </object>
   <object class="GtkDialog" id="dialogProperties">
@@ -241,6 +241,8 @@ for filesystem snapshot management</property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem2">
                         <property name="label">gtk-open</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="related_action">open-mountpoint</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -266,7 +268,31 @@ for filesystem snapshot management</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkSeparatorMenuItem" id="menuitem14">
+                      <object class="GtkImageMenuItem" id="imagemenuitem5">
+                        <property name="label">gtk-quit</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                        <signal name="activate" handler="delete_event" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuitem23">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Config</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="configsmenu">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="separatormenuitem3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -278,22 +304,6 @@ for filesystem snapshot management</property>
                         <property name="label" translatable="yes">Properties</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_configs_properties_clicked" swapped="no"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem5">
-                        <property name="label">gtk-quit</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
-                        <signal name="activate" handler="delete_event" swapped="no"/>
                       </object>
                     </child>
                   </object>

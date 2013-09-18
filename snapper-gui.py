@@ -77,11 +77,11 @@ class SnapperGUI(object):
 			print(action.get_current_value())
 
 	def init_configs_menuitem(self):
-		menu = self.builder.get_object("filemenu")
+		menu = self.builder.get_object("configsmenu")
 		radioitem = None
 		for aux, config in enumerate(snapper.ListConfigs()):
 			radioitem = Gtk.RadioMenuItem(label=config[0],group=radioitem)
-			menu.insert(radioitem,5+aux)
+			menu.insert(radioitem,aux)
 			radioitem.show()
 			radioitem.connect("toggled", self.on_menu_config_changed)
 			if self.currentConfig == config[0]:
