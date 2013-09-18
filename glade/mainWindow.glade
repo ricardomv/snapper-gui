@@ -67,6 +67,7 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
+  <object class="GtkActionGroup" id="configsGroup"/>
   <object class="GtkAccelGroup" id="configsaccelgroup"/>
   <object class="GtkActionGroup" id="configActions">
     <property name="accel_group">configsaccelgroup</property>
@@ -91,7 +92,6 @@ for filesystem snapshot management</property>
       <accelerator key="F5"/>
     </child>
   </object>
-  <object class="GtkActionGroup" id="configsGroup"/>
   <object class="GtkDialog" id="dialogProperties">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -212,7 +212,30 @@ for filesystem snapshot management</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="activate" handler="on_create_snapshot" object="treeview-selection1" swapped="no"/>
+                        <child type="submenu">
+                          <object class="GtkMenu" id="menu5">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkMenuItem" id="menuitem21">
+                                <property name="use_action_appearance">False</property>
+                                <property name="related_action">create-snapshot</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Snapshot</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkMenuItem" id="menuitem22">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Configuration</property>
+                                <property name="use_underline">True</property>
+                                <signal name="activate" handler="on_create_config" swapped="no"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>

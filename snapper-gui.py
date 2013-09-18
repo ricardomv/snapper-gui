@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 from propertiesDialog import propertiesDialog
-from createDialog import createDialog
+from createSnapshot import createSnapshot
+from createConfig import createConfig
 from deleteDialog import deleteDialog
 from  detailsDialog import detailsDialog
 import dbus
@@ -202,8 +203,9 @@ class SnapperGUI(object):
 			self.update_snapshots_list()
 
 	def on_create_snapshot(self, widget):
-		dialog = createDialog(self.mainWindow)
+		dialog = createSnapshot(self.mainWindow)
 		response = dialog.run()
+		dialog.destroy()
 		if response == Gtk.ResponseType.OK:
 			newSnapshot = snapper.CreateSingleSnapshot(dialog.config, 
 										dialog.description, 
@@ -211,8 +213,18 @@ class SnapperGUI(object):
 										dialog.userdata)
 		elif response == Gtk.ResponseType.CANCEL:
 			pass
-		dialog.destroy()
 
+	def on_create_config(self, widget):
+		dialog = createConfig(self.mainWindow)
+		response = dialog.run()
+		dialog.destroy()
+		if response == Gtk.ResponseType.OK:
+			newSnapshot = snapper.CreateConfig(dialog.name, 
+										dialog.subvolume, 
+										dialog.fstype, 
+										dialog.template)
+		elif response == Gtk.ResponseType.CANCEL:
+			pass
 
 	def on_delete_snapshot(self, selection):
 		(model, paths) = selection.get_selected_rows()
