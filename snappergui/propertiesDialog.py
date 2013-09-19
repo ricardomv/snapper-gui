@@ -1,3 +1,5 @@
+
+import pkg_resources
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
@@ -10,7 +12,7 @@ class propertiesDialog(object):
 	"""docstring for propertiesDialog"""
 	def __init__(self,parent):
 		builder = Gtk.Builder()
-		builder.add_from_file("glade/propertiesDialog.glade")
+		builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/propertiesDialog.glade"))
 		
 		self.dialog = builder.get_object("dialogProperties")
 		self.notebook = builder.get_object("notebookProperties")
@@ -108,7 +110,3 @@ class propertiesDialog(object):
 				Gtk.ButtonsType.OK, "This user does not have permission to edit this configuration")
 				dialog.run()
 				dialog.destroy()
- 
-if __name__ == '__main__':
-	dialog = propertiesDialog(None)
-	dialog.run()

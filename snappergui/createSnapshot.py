@@ -1,3 +1,5 @@
+
+import pkg_resources
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
@@ -11,7 +13,7 @@ class createSnapshot(object):
 	def __init__(self, parent):
 		super(createSnapshot, self).__init__()
 		builder = Gtk.Builder()
-		builder.add_from_file("glade/createSnapshot.glade")
+		builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/createSnapshot.glade"))
 		
 		self.dialog = builder.get_object("dialogCreate")
 		self.dialog.set_transient_for(parent)
@@ -55,11 +57,3 @@ class createSnapshot(object):
 
 	def destroy(self):
 		self.dialog.destroy()
-
-if __name__ == '__main__':
-	dialog = createSnapshot(None)
-	dialog.run()
-	print(dialog.config)
-	print(dialog.description)
-	print(dialog.cleanup)
-	print(dialog.userdata)

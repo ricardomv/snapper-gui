@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
-from propertiesDialog import propertiesDialog
-from createSnapshot import createSnapshot
-from createConfig import createConfig
-from deleteDialog import deleteDialog
-from  detailsDialog import detailsDialog
-from changesWindow import changesWindow
+import pkg_resources
+from snappergui.propertiesDialog import propertiesDialog
+from snappergui.createSnapshot import createSnapshot
+from snappergui.createConfig import createConfig
+from snappergui.deleteDialog import deleteDialog
+from snappergui.detailsDialog import detailsDialog
+from snappergui.changesWindow import changesWindow
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
@@ -20,10 +21,11 @@ snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/S
 
 class SnapperGUI(object):
 	"""docstring for SnapperGUI"""
+
 	def __init__(self):
 		super(SnapperGUI, self).__init__()
 		self.builder = Gtk.Builder()
-		self.builder.add_from_file("glade/mainWindow.glade")
+		self.builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/mainWindow.glade"))
 		self.mainWindow = self.builder.get_object("mainWindow")
 		self.statusbar = self.builder.get_object("statusbar")
 		self.snapshotsTreeView = self.builder.get_object("snapstreeview")
@@ -341,8 +343,3 @@ class SnapperGUI(object):
 
 	def on_dbus_config_deleted(self,args):
 		print("Config Deleted")
-
-if __name__ == '__main__':
-	interface = SnapperGUI()
-	signal.signal(signal.SIGINT, signal.SIG_DFL)
-	interface.main()

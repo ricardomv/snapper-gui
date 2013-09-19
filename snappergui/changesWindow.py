@@ -1,5 +1,5 @@
-#! /usr/bin/env python
 
+import pkg_resources
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
@@ -13,7 +13,7 @@ class changesWindow(object):
 	def __init__(self, paths):
 		super(changesWindow, self).__init__()
 		builder = Gtk.Builder()
-		builder.add_from_file("glade/changesWindow.glade")
+		builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/changesWindow.glade"))
 		
 		self.window = builder.get_object("changesWindow")
 		builder.connect_signals(self)
@@ -23,10 +23,3 @@ class changesWindow(object):
 			treestore.append(None, [path[0]])
 
 		builder.get_object("pathstreeview").set_model(treestore)
-
-
-
-if __name__ == '__main__':
-	window = changesWindow(["hello"])
-	window.window.show()
-	Gtk.main()

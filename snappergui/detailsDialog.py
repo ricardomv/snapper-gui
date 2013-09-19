@@ -1,5 +1,5 @@
-#!/usr/bin/env python
 
+import pkg_resources
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
@@ -15,7 +15,7 @@ class detailsDialog(object):
 	def __init__(self, config, snapshots):
 		super(detailsDialog, self).__init__()
 		builder = Gtk.Builder()
-		builder.add_from_file("glade/snapshotDetails.glade")
+		builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/snapshotDetails.glade"))
 		
 		self.dialog = builder.get_object("detailsDialog")
 		self.snapshotsCombo = builder.get_object("snapshotscombo")
@@ -50,7 +50,3 @@ class detailsDialog(object):
 	def on_open_clicked(self, widget):
 		mountpoint = snapper.GetMountPoint(self.currentConfig, self.snapshots[widget.get_active()])
 		subprocess.Popen(['xdg-open', mountpoint])
-
-if __name__ == '__main__':
-	dialog = detailsDialog("root",[745,3,6])
-	print(dialog.dialog.run())

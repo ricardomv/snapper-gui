@@ -1,3 +1,5 @@
+
+import pkg_resources
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
@@ -12,7 +14,7 @@ class deleteDialog(object):
 	def __init__(self, parent, config, snapshots):
 		super(deleteDialog, self).__init__()
 		builder = Gtk.Builder()
-		builder.add_from_file("glade/deleteSnapshot.glade")
+		builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/deleteSnapshot.glade"))
 		
 		self.dialog = builder.get_object("dialogDelete")
 		self.dialog.set_transient_for(parent)
@@ -39,8 +41,3 @@ class deleteDialog(object):
 
 	def on_toggle_delete_snapshot(self,widget,index):
 		self.deleteTreeStore[int(index)][0] = not(self.deleteTreeStore[int(index)][0])
-
-if __name__ == '__main__':
-	dialog = deleteDialog(None,"root",[2,3,6])
-	print(dialog.run())
-	print(dialog.to_delete)
