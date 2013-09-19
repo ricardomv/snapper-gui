@@ -7,7 +7,7 @@
     <child>
       <object class="GtkAction" id="create-snapshot">
         <property name="label" translatable="yes">Create Snapshot</property>
-        <property name="short_label" translatable="yes">New Snapshot</property>
+        <property name="short_label" translatable="yes">New</property>
         <property name="tooltip" translatable="yes">Create a new snapshot for the current configuration</property>
         <property name="stock_id">gtk-add</property>
         <signal name="activate" handler="on_create_snapshot" swapped="no"/>
@@ -25,6 +25,7 @@
       <accelerator key="F5"/>
     </child>
   </object>
+  <object class="GtkActionGroup" id="configsGroup"/>
   <object class="GtkActionGroup" id="snapshotActions">
     <property name="accel_group">snapsaccelgroup</property>
     <child>
@@ -91,7 +92,6 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
-  <object class="GtkActionGroup" id="configsGroup"/>
   <object class="GtkDialog" id="dialogProperties">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -493,13 +493,34 @@ for filesystem snapshot management</property>
             <property name="can_focus">False</property>
             <property name="toolbar_style">both</property>
             <child>
-              <object class="GtkToolButton" id="toolbutton1">
+              <object class="GtkMenuToolButton" id="toolbutton1">
                 <property name="related_action">create-snapshot</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Create a new snapshot</property>
-                <property name="label" translatable="yes">Create Snapshot</property>
                 <property name="use_underline">True</property>
+                <child type="menu">
+                  <object class="GtkMenu" id="menu6">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkMenuItem" id="menuitem14">
+                        <property name="related_action">create-snapshot</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="menuitem24">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Create Configuration</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_create_config" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
