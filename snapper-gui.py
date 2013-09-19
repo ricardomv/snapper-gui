@@ -5,6 +5,7 @@ from createSnapshot import createSnapshot
 from createConfig import createConfig
 from deleteDialog import deleteDialog
 from  detailsDialog import detailsDialog
+from changesWindow import changesWindow
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
@@ -266,15 +267,11 @@ class SnapperGUI(object):
 		begin = model[paths[0]][0]
 		end = model[paths[-1]][0]
 
-		print("started comparisson")
-		print("%d->%d",begin,end)
-		try:
-			snapper.CreateComparison(self.currentConfig,begin,end)
-		except dbus.exceptions.DBusException:
-			pass
-		print("now get files")
-		for path in snapper.GetFiles(self.currentConfig,begin,end):
-			print(path[0])
+		snapper.CreateComparison(self.currentConfig,begin,end)
+		paths_list = snapper.GetFiles(self.currentConfig,begin,end)
+		window = changesWindow(paths_list)
+		window.window.show()
+		
 		snapper.DeleteComparison(self.currentConfig,begin,end)
 		
 
