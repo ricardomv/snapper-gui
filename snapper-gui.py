@@ -260,6 +260,14 @@ class SnapperGUI(object):
 				"The mount point for the snapshot %s from %s is %s"% 
 				(model[treeiter][0], self.currentConfig, mountpoint))
 
+	def on_viewchanges_clicked(self, selection):
+		model, paths = selection.get_selected_rows()
+
+		snapper.CreateComparison(self.currentConfig,model[0][0],model[-1][0])
+		print(snapper.GetFiles(self.currentConfig,model[0][0],model[-1][0]))
+		snapper.DeleteComparison(self.currentConfig,model[0][0],model[-1][0])
+		
+
 
 	def on_configs_properties_clicked(self, notebook):
 		dialog = propertiesDialog(self.mainWindow)

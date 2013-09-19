@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
-  <object class="GtkAccelGroup" id="configsaccelgroup"/>
   <object class="GtkActionGroup" id="configActions">
     <property name="accel_group">configsaccelgroup</property>
     <child>
@@ -58,6 +57,15 @@
       </object>
       <accelerator key="i"/>
     </child>
+    <child>
+      <object class="GtkAction" id="view-changes">
+        <property name="label" translatable="yes">View changes</property>
+        <property name="short_label" translatable="yes">Changes</property>
+        <property name="tooltip" translatable="yes">Show witch files have changed between selected snapshots</property>
+        <property name="stock_id">gtk-file</property>
+        <signal name="activate" handler="on_viewchanges_clicked" object="treeview-selection1" swapped="no"/>
+      </object>
+    </child>
   </object>
   <object class="GtkAboutDialog" id="aboutdialog1">
     <property name="can_focus">False</property>
@@ -92,6 +100,7 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
+  <object class="GtkAccelGroup" id="configsaccelgroup"/>
   <object class="GtkDialog" id="dialogProperties">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -556,6 +565,18 @@ for filesystem snapshot management</property>
             <child>
               <object class="GtkToolButton" id="toolbutton7">
                 <property name="related_action">snapshot-details</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="toolbutton8">
+                <property name="related_action">view-changes</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
