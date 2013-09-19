@@ -198,6 +198,21 @@ class SnapperGUI(object):
 			print(self.currentConfig)
 			self.update_snapshots_list()
 
+	def on_description_edited(self, widget, treepath, text):
+		snapshot_row = self.snapshotsTreeView.get_model()[treepath]
+		snapshot_num = snapshot_row[0]
+		snapshot_info = snapper.GetSnapshot(self.currentConfig,snapshot_num)
+		snapper.SetSnapshot(self.currentConfig,snapshot_info[0],text,snapshot_info[6],snapshot_info[7])
+		snapshot_row[5] = text
+
+
+	def on_cleanup_edited(self, widget, treepath, text):
+		snapshot_row = self.snapshotsTreeView.get_model()[treepath]
+		snapshot_num = snapshot_row[0]
+		snapshot_info = snapper.GetSnapshot(self.currentConfig,snapshot_num)
+		snapper.SetSnapshot(self.currentConfig,snapshot_info[0],snapshot_info[5],text,snapshot_info[7])
+		snapshot_row[6] = text
+
 	def on_create_snapshot(self, widget):
 		dialog = createSnapshot(self.mainWindow)
 		response = dialog.run()
@@ -291,7 +306,7 @@ class SnapperGUI(object):
 		if config == self.currentConfig:
 			self.add_snapshot_to_tree(str(snapshot))
 
-	def on_dbus_snapshot_modified(self,args):
+	def on_dbus_snapshot_modified(self,config,snapshot):
 		print("Snapshot SnapshotModified")
 
 	def on_dbus_snapshots_deleted(self,config,snapshots):
