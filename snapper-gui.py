@@ -263,9 +263,19 @@ class SnapperGUI(object):
 	def on_viewchanges_clicked(self, selection):
 		model, paths = selection.get_selected_rows()
 
-		snapper.CreateComparison(self.currentConfig,model[0][0],model[-1][0])
-		print(snapper.GetFiles(self.currentConfig,model[0][0],model[-1][0]))
-		snapper.DeleteComparison(self.currentConfig,model[0][0],model[-1][0])
+		begin = model[paths[0]][0]
+		end = model[paths[-1]][0]
+
+		print("started comparisson")
+		print("%d->%d",begin,end)
+		try:
+			snapper.CreateComparison(self.currentConfig,begin,end)
+		except dbus.exceptions.DBusException:
+			pass
+		print("now get files")
+		for path in snapper.GetFiles(self.currentConfig,begin,end):
+			print(path[0])
+		snapper.DeleteComparison(self.currentConfig,begin,end)
 		
 
 
