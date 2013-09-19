@@ -55,10 +55,6 @@ class SnapperGUI(object):
 		if treestore == None:
 			self.builder.get_object("snapshotActions").set_sensitive(False)
 			self.builder.get_object("configActions").set_sensitive(False)
-			dialog = Gtk.MessageDialog(self.mainWindow, 0, Gtk.MessageType.ERROR,
-			Gtk.ButtonsType.OK, "This user does not have permission to edit this configuration")
-			dialog.run()
-			dialog.destroy()
 		else:
 			self.builder.get_object("configActions").set_sensitive(True)
 			self.builder.get_object("snapshotActions").set_sensitive(True)
