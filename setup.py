@@ -6,14 +6,16 @@ except ImportError:
 # from options["setup"] in build.vel
 
 config = {
+ 'name': 'snappergui',
+ 'version': '0.1',
+ 'packages': ['snappergui'],
  'description': 'snapper-gui grafical user interface for snapper btrfs snapshot manager',
  'author': 'Ricardo Vieira',
  'url': 'https://github.com/ricardo-vieira/snapper-gui',
  'download_url': 'https://github.com/ricardo-vieira/snapper-gui',
  'author_email': 'ricard.vieira@ist.utl.pt',
- 'version': '0.1',
- 'packages': ['snapper-gui'],
- 'name': 'python-snapper-gui'
+ 'package_data' : {"snappergui": ["glade/*.glade",
+ 								"glade/icons/*.svg"]}
 }
 
 setup(**config)
