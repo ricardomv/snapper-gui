@@ -48,16 +48,6 @@
       <accelerator key="o" modifiers="GDK_CONTROL_MASK"/>
     </child>
     <child>
-      <object class="GtkAction" id="snapshot-details">
-        <property name="label" translatable="yes">Info</property>
-        <property name="short_label" translatable="yes">Info</property>
-        <property name="tooltip" translatable="yes">Snapshot details</property>
-        <property name="stock_id">gtk-dialog-info</property>
-        <signal name="activate" handler="on_snapshot_info_clicked" object="treeview-selection1" swapped="no"/>
-      </object>
-      <accelerator key="i"/>
-    </child>
-    <child>
       <object class="GtkAction" id="view-changes">
         <property name="label" translatable="yes">View changes</property>
         <property name="short_label" translatable="yes">Changes</property>
