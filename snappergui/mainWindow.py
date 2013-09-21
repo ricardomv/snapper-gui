@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 import pkg_resources
 from snappergui.propertiesDialog import propertiesDialog
@@ -278,23 +277,11 @@ class SnapperGUI(object):
 		window.window.show()
 		
 		snapper.DeleteComparison(self.currentConfig,begin,end)
-		
-
 
 	def on_configs_properties_clicked(self, notebook):
 		dialog = propertiesDialog(self.mainWindow)
 		dialog.dialog.run()
 		dialog.dialog.hide()
-
-	def on_snapshot_info_clicked(self, selection):
-		snapshots = []
-		model, paths = selection.get_selected_rows()
-		for path in paths:
-			treeiter = model.get_iter(path)
-			snapshots.append(model[treeiter][0])
-		dialog = detailsDialog(self.currentConfig, snapshots)
-		dialog.dialog.run()
-		dialog.dialog.destroy()
 
 	def on_about_clicked(self,widget):
 		about = self.builder.get_object("aboutdialog1")

@@ -13,7 +13,7 @@ config = {
  'author': 'Ricardo Vieira',
  'url': 'https://github.com/ricardo-vieira/snapper-gui',
  'download_url': 'https://github.com/ricardo-vieira/snapper-gui',
- 'author_email': 'ricard.vieira@ist.utl.pt',
+ 'author_email': 'ricardo.vieira@ist.utl.pt',
  'package_data' : {"snappergui": ["glade/*.glade",
  								"glade/icons/*.svg"]}
 }

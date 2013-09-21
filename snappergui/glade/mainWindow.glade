@@ -563,18 +563,6 @@ for filesystem snapshot management</property>
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="toolbutton7">
-                <property name="related_action">snapshot-details</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkToolButton" id="toolbutton8">
                 <property name="related_action">view-changes</property>
                 <property name="visible">True</property>
