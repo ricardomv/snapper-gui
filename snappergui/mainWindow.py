@@ -270,7 +270,10 @@ class SnapperGUI(object):
 		end = model[paths[-1]][0]
 
 		snapper.CreateComparison(self.currentConfig,begin,end)
-		paths_list = snapper.GetFiles(self.currentConfig,begin,end)
+		dbus_array = snapper.GetFiles(self.currentConfig,begin,end)
+		paths_list = []
+		for path in dbus_array:
+			paths_list.append(str(path[0]))
 		window = changesWindow(paths_list)
 		window.window.show()
 		
