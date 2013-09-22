@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
+  <object class="GtkActionGroup" id="configsGroup"/>
+  <object class="GtkAccelGroup" id="configsaccelgroup"/>
   <object class="GtkActionGroup" id="configActions">
     <property name="accel_group">configsaccelgroup</property>
     <child>
@@ -24,7 +26,6 @@
       <accelerator key="F5"/>
     </child>
   </object>
-  <object class="GtkActionGroup" id="configsGroup"/>
   <object class="GtkActionGroup" id="snapshotActions">
     <property name="accel_group">snapsaccelgroup</property>
     <child>
@@ -90,7 +91,6 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
-  <object class="GtkAccelGroup" id="configsaccelgroup"/>
   <object class="GtkDialog" id="dialogProperties">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -145,7 +145,11 @@ for filesystem snapshot management</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
-              <placeholder/>
+              <object class="GtkImage" id="image1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="pixbuf">../icons/snappergui.svg</property>
+              </object>
             </child>
             <child type="tab">
               <placeholder/>
@@ -183,7 +187,6 @@ for filesystem snapshot management</property>
     <property name="window_position">center</property>
     <property name="default_width">600</property>
     <property name="default_height">651</property>
-    <property name="icon">./icons/snappergui.svg</property>
     <signal name="show" handler="update_snapshots_list" swapped="no"/>
     <child>
       <object class="GtkBox" id="box1">

@@ -4,11 +4,10 @@ from snappergui.propertiesDialog import propertiesDialog
 from snappergui.createSnapshot import createSnapshot
 from snappergui.createConfig import createConfig
 from snappergui.deleteDialog import deleteDialog
-from snappergui.detailsDialog import detailsDialog
 from snappergui.changesWindow import changesWindow
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
-from gi.repository import Gtk, Gdk#, GObject
+from gi.repository import Gtk, Gdk, GdkPixbuf#, GObject
 from time import strftime, localtime
 from pwd import getpwuid
 import subprocess
@@ -32,6 +31,9 @@ class SnapperGUI(object):
 		self.init_configs_group(self.configsGroup)
 
 		self.builder.connect_signals(self)
+
+		icon = GdkPixbuf.Pixbuf.new_from_file(pkg_resources.resource_filename("snappergui", "icons/snappergui.svg"))
+		self.mainWindow.set_default_icon(icon)
 
 		self.currentConfig = self.init_current_config()
 		self.init_configs_menuitem()

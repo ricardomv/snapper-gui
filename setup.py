@@ -15,7 +15,7 @@ config = {
  'download_url': 'https://github.com/ricardo-vieira/snapper-gui',
  'author_email': 'ricardo.vieira@ist.utl.pt',
  'package_data' : {"snappergui": ["glade/*.glade",
- 								"glade/icons/*.svg"]}
+ 								"icons/*.svg"]}
 }
 
 setup(**config)
