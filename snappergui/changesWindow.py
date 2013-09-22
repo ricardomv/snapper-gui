@@ -12,23 +12,34 @@ snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/S
 
 class changesWindow(object):
 	"""docstring for changesWindow"""
-	def __init__(self, paths):
+	def __init__(self, config, begin, end):
 		super(changesWindow, self).__init__()
 		builder = Gtk.Builder()
 		builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/changesWindow.glade"))
 		
 		self.window = builder.get_object("changesWindow")
-		builder.connect_signals(self)
+		treeview = builder.get_object("pathstreeview")
+		self.window.show_all()
+		
+		#builder.connect_signals(self)
+
+		snapper.CreateComparison(config,begin,end)
+		dbus_array = snapper.GetFiles(config,begin,end)
+		paths_list = []
+		for path in dbus_array:
+			paths_list.append(str(path[0]))
 
 		files_tree = {}
-		for path in paths:
+		for path in paths_list:
 			self.add_path_to_tree(path,files_tree)
 
-		builder.get_object("statusbar1").push(True,"%d files"%len(paths))
+		builder.get_object("statusbar1").push(True,"%d files"%len(paths_list))
 
-		treeview = builder.get_object("pathstreeview")
+		
 		treeview.set_model(self.get_treestore_from_tree(files_tree))
 		treeview.expand_all()
+
+		snapper.DeleteComparison(config,begin,end)
 
 	def add_path_to_tree(self, path, tree):
 		parts = path.split('/')
@@ -50,7 +61,7 @@ class changesWindow(object):
 		treestore = Gtk.TreeStore(str, str)
 		def get_childs(tree, parent=None):
 			for path, childs in tree.items():
-				node = treestore.append(parent,[Gtk.STOCK_DISCARD,path])
+				node = treestore.append(parent,[Gtk.STOCK_FILE, path])
 				get_childs(childs,node)
 		get_childs(tree)
 		return treestore

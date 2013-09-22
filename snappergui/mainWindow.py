@@ -270,15 +270,7 @@ class SnapperGUI(object):
 		begin = model[paths[0]][0]
 		end = model[paths[-1]][0]
 
-		snapper.CreateComparison(self.currentConfig,begin,end)
-		dbus_array = snapper.GetFiles(self.currentConfig,begin,end)
-		paths_list = []
-		for path in dbus_array:
-			paths_list.append(str(path[0]))
-		window = changesWindow(paths_list)
-		window.window.show()
-		
-		snapper.DeleteComparison(self.currentConfig,begin,end)
+		window = changesWindow(self.currentConfig, begin, end)
 
 	def on_configs_properties_clicked(self, notebook):
 		dialog = propertiesDialog(self.mainWindow)

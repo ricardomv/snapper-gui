@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
-  <object class="GtkActionGroup" id="configsGroup"/>
-  <object class="GtkAccelGroup" id="configsaccelgroup"/>
   <object class="GtkActionGroup" id="configActions">
     <property name="accel_group">configsaccelgroup</property>
     <child>
@@ -26,6 +24,8 @@
       <accelerator key="F5"/>
     </child>
   </object>
+  <object class="GtkActionGroup" id="configsGroup"/>
+  <object class="GtkAccelGroup" id="configsaccelgroup"/>
   <object class="GtkActionGroup" id="snapshotActions">
     <property name="accel_group">snapsaccelgroup</property>
     <child>
@@ -145,11 +145,7 @@ for filesystem snapshot management</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
-              <object class="GtkImage" id="image1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="pixbuf">../icons/snappergui.svg</property>
-              </object>
+              <placeholder/>
             </child>
             <child type="tab">
               <placeholder/>
