@@ -266,11 +266,11 @@ class SnapperGUI(object):
 
 	def on_viewchanges_clicked(self, selection):
 		model, paths = selection.get_selected_rows()
+		if len(paths) > 1:
+			begin = model[paths[0]][0]
+			end = model[paths[-1]][0]
 
-		begin = model[paths[0]][0]
-		end = model[paths[-1]][0]
-
-		window = changesWindow(self.currentConfig, begin, end)
+			window = changesWindow(self.currentConfig, begin, end)
 
 	def on_configs_properties_clicked(self, notebook):
 		dialog = propertiesDialog(self.mainWindow)
