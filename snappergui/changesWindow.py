@@ -81,7 +81,6 @@ class changesWindow(object):
 
 	def on_idle_init_paths_tree(self):
 		snapper.CreateComparison(self.config,self.snapshot_begin,self.snapshot_end)
-		self.statusbar.push(1,"Creating comparison between snapshots")
 		
 		dbus_array = snapper.GetFiles(self.config,self.snapshot_begin,self.snapshot_end)
 
@@ -91,9 +90,8 @@ class changesWindow(object):
 			self.add_path_to_tree(str(path[0]),files_tree)
 
 		#self.print_tree(files_tree)
-		self.statusbar.push(1,"Waiting for tree...")
 		self.pathstreeview.set_model(self.get_treestore_from_tree(files_tree))
-		#treeview.expand_all()
+		#self.pathstreeview.expand_all()
 
 		# display in statusbar how many files have changed
 		self.statusbar.push(1,"%d files"%len(dbus_array))
