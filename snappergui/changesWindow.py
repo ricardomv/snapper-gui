@@ -4,7 +4,6 @@ import dbus
 import os
 import time
 import difflib
-import mimetypes
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk, GObject, GtkSource
 
@@ -111,26 +110,36 @@ class changesWindow(object):
 			fromfile = self.beginpath+model[treeiter][2]
 			tofile = self.endpath+model[treeiter][2]
 
-			(fromtype, fromencoding) = mimetypes.guess_type(fromfile)
-			(totype, toencoding) = mimetypes.guess_type(tofile)
-			if fromtype == None or totype == None or not "text/" in fromtype or not "text/" in totype :
-				return
-
 			try:
 				fromlines = list(open(fromfile))
 				fromdate = time.ctime(os.stat(fromfile).st_mtime)
+			except IsADirectoryError:
+				return
 			except FileNotFoundError:
 				fromfile = "New file"
 				fromlines = ""
 				fromdate = ""
+			except UnicodeDecodeError:
+				return
+			except PermissionError:
+				print("PermissionError")
+				return # TODO maybe display a dialog with the error?
 
 			try:
 				tolines = list(open(tofile,"r"))
 				todate = time.ctime(os.stat(tofile).st_mtime)
+			except IsADirectoryError:
+				return
 			except FileNotFoundError:
 				tofile = "Deleted file"
 				tolines = ""
 				todate = ""
+			except UnicodeDecodeError:
+				return
+			except PermissionError:
+				print("PermissionError")
+				return # TODO maybe display a dialog with the error?
+
 			difflines = difflib.unified_diff(fromlines, tolines, fromfile=fromfile, tofile=tofile, fromfiledate=fromdate, tofiledate=todate)
 			difftext = "".join(difflines)
 			self.diffbuffer.set_text(difftext)
