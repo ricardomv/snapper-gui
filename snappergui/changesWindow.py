@@ -4,6 +4,7 @@ import dbus
 import os
 import time
 import difflib
+import mimetypes
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk, GObject, GtkSource
 
@@ -109,6 +110,12 @@ class changesWindow(object):
 		if treeiter != None and model[treeiter] != "":
 			fromfile = self.beginpath+model[treeiter][2]
 			tofile = self.endpath+model[treeiter][2]
+
+			(fromtype, fromencoding) = mimetypes.guess_type(fromfile)
+			(totype, toencoding) = mimetypes.guess_type(tofile)
+			if fromtype == None or totype == None or not "text/" in fromtype or not "text/" in totype :
+				return
+
 			try:
 				fromlines = list(open(fromfile))
 				fromdate = time.ctime(os.stat(fromfile).st_mtime)
