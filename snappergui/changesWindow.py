@@ -19,6 +19,7 @@ class changesWindow(object):
 		GObject.type_register(GtkSource.View)
 		builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/changesWindow.glade"))
 		
+		builder.get_object("titlelabel").set_text("%s -> %s"%(begin, end))
 		self.window = builder.get_object("changesWindow")
 		self.statusbar = builder.get_object("statusbar1")
 		self.pathstreeview = builder.get_object("pathstreeview")
@@ -32,10 +33,12 @@ class changesWindow(object):
 		self.config = config
 		self.snapshot_begin = begin
 		self.snapshot_end = end
-		builder.get_object("titlelabel").set_text("%s -> %s"%(begin, end))
 
 		self.choicesviewgroup.get_action("begin").set_label(str(begin))
 		self.choicesviewgroup.get_action("end").set_label(str(end))
+
+		self.sourcebuffer = GtkSource.Buffer()
+		self.fileview.set_buffer(self.sourcebuffer)
 		
 		self.window.show_all()
 		GObject.idle_add(self.on_idle_init_paths_tree)
@@ -100,70 +103,60 @@ class changesWindow(object):
 		# we dont want this function to be called anymore
 		return False
 
-	def display_diff(self,fromfile,tofile):
-		# create a source buffer and set the language to "diff"
-		manager = GtkSource.LanguageManager()
-		language = manager.get_language("diff")
-		diffbuffer = GtkSource.Buffer.new_with_language(language)
-		self.fileview.set_buffer(diffbuffer)
-
-		try:
-			fromlines = list(open(fromfile))
-			fromdate = time.ctime(os.stat(fromfile).st_mtime)
-		except IsADirectoryError:
-			return
-		except FileNotFoundError:
-			fromfile = "New file"
-			fromlines = ""
-			fromdate = ""
-		except UnicodeDecodeError:
-			return
-		except PermissionError:
-			print("PermissionError")
-			return # TODO maybe display a dialog with the error?
-
-		try:
-			tolines = list(open(tofile,"r"))
-			todate = time.ctime(os.stat(tofile).st_mtime)
-		except IsADirectoryError:
-			return
-		except FileNotFoundError:
-			tofile = "Deleted file"
-			tolines = ""
-			todate = ""
-		except UnicodeDecodeError:
-			return
-		except PermissionError:
-			print("PermissionError")
-			return # TODO maybe display a dialog with the error?
-
-		difflines = difflib.unified_diff(fromlines, 
-											tolines, 
-											fromfile=fromfile, 
-											tofile=tofile, 
-											fromfiledate=fromdate, 
-											tofiledate=todate)
-		difftext = "".join(difflines)
-		diffbuffer.set_text(difftext)
-
 	def _on_pathstree_selection_changed(self, selection):
 		(model, treeiter) = selection.get_selected()
 		if treeiter != None and model[treeiter] != "":
+			# append file path to snapshot mountpoint 
 			fromfile = self.beginpath+model[treeiter][2]
 			tofile = self.endpath+model[treeiter][2]
 
+			try:
+				fromlines = list(open(fromfile))
+				fromdate = time.ctime(os.stat(fromfile).st_mtime)
+			except IsADirectoryError:
+				return
+			except FileNotFoundError:
+				fromfile = "New file"
+				fromlines = ""
+				fromdate = ""
+			except UnicodeDecodeError:
+				return
+			except PermissionError:
+				print("PermissionError")
+				return # TODO maybe display a dialog with the error?
+
+			try:
+				tolines = list(open(tofile))
+				todate = time.ctime(os.stat(tofile).st_mtime)
+			except IsADirectoryError:
+				return
+			except FileNotFoundError:
+				tofile = "Deleted file"
+				tolines = ""
+				todate = ""
+			except UnicodeDecodeError:
+				return
+			except PermissionError:
+				return # TODO maybe display a dialog with the error?
+
+			languagemanager = GtkSource.LanguageManager()
 			currentview = self.choicesviewgroup.get_action("end").get_current_value()
 
-			if currentview == 0:
-				textbuffer = Gtk.TextBuffer()
-				self.fileview.set_buffer(textbuffer)
-				textbuffer.set_text("".join(open(fromfile).readlines()))
-			elif currentview == 1: 
-				self.display_diff(fromfile,tofile)
-			elif currentview == 2:
-				textbuffer = Gtk.TextBuffer()
-				self.fileview.set_buffer(textbuffer)
-				textbuffer.set_text("".join(open(tofile).readlines()))
+			if currentview == 0: # show file from begin snapshot
+				self.sourcebuffer.set_language(languagemanager.get_language("text"))
+				self.sourcebuffer.set_text("".join(fromlines))
+			elif currentview == 1: # show diff of file changes between snapshots
+				self.sourcebuffer.set_language(languagemanager.get_language("diff"))
+				difflines = difflib.unified_diff(fromlines, 
+													tolines, 
+													fromfile=fromfile, 
+													tofile=tofile, 
+													fromfiledate=fromdate, 
+													tofiledate=todate)
+				self.sourcebuffer.set_text("".join(difflines))
+			elif currentview == 2:  # show file from end snapshot
+				self.sourcebuffer.set_language(languagemanager.get_language("text"))
+				self.sourcebuffer.set_text("".join(tolines))
 
 			
 
