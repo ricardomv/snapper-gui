@@ -2,6 +2,32 @@
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
   <!-- interface-requires gtksourceview 3.0 -->
+  <object class="GtkActionGroup" id="actiongroup">
+    <child>
+      <object class="GtkRadioAction" id="begin">
+        <property name="tooltip" translatable="yes">Snapshot in the begin of comparison</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">end</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioAction" id="end">
+        <property name="tooltip" translatable="yes">Snapshot in the end of comparison</property>
+        <property name="draw_as_radio">True</property>
+        <property name="value">2</property>
+        <property name="group">begin</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioAction" id="diff">
+        <property name="label" translatable="yes">Diff</property>
+        <property name="tooltip" translatable="yes">Display diff of begin and end file</property>
+        <property name="draw_as_radio">True</property>
+        <property name="value">1</property>
+        <property name="group">begin</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkWindow" id="changesWindow">
     <property name="can_focus">False</property>
     <property name="default_width">700</property>
@@ -68,7 +94,7 @@
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkLabel" id="label1">
+                      <object class="GtkLabel" id="titlelabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="yalign">0.47999998927116394</property>
@@ -85,7 +111,7 @@
                         <property name="can_focus">True</property>
                         <property name="shadow_type">in</property>
                         <child>
-                          <object class="GtkSourceView" id="diffview">
+                          <object class="GtkSourceView" id="fileview">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="has_tooltip">True</property>
@@ -110,13 +136,43 @@
                         <property name="can_focus">False</property>
                         <property name="layout_style">start</property>
                         <child>
-                          <placeholder/>
+                          <object class="GtkButton" id="button1">
+                            <property name="related_action">begin</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <object class="GtkButton" id="button2">
+                            <property name="related_action">diff</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <object class="GtkButton" id="button3">
+                            <property name="related_action">end</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>

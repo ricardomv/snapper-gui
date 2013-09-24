@@ -22,7 +22,8 @@ class changesWindow(object):
 		self.window = builder.get_object("changesWindow")
 		self.statusbar = builder.get_object("statusbar1")
 		self.pathstreeview = builder.get_object("pathstreeview")
-		diffview = builder.get_object("diffview")
+		self.fileview = builder.get_object("fileview")
+		self.choicesviewgroup = builder.get_object("actiongroup")
 		builder.connect_signals(self)
 
 		# save mountpoints for begin and end snapshots
@@ -31,12 +32,10 @@ class changesWindow(object):
 		self.config = config
 		self.snapshot_begin = begin
 		self.snapshot_end = end
+		builder.get_object("titlelabel").set_text("%s -> %s"%(begin, end))
 
-		# create a source buffer and set the language to "diff"
-		manager = GtkSource.LanguageManager()
-		language = manager.get_language("diff")
-		self.diffbuffer = GtkSource.Buffer.new_with_language(language)
-		diffview.set_buffer(self.diffbuffer)
+		self.choicesviewgroup.get_action("begin").set_label(str(begin))
+		self.choicesviewgroup.get_action("end").set_label(str(end))
 		
 		self.window.show_all()
 		GObject.idle_add(self.on_idle_init_paths_tree)
@@ -101,6 +100,51 @@ class changesWindow(object):
 		# we dont want this function to be called anymore
 		return False
 
+	def display_diff(self,fromfile,tofile):
+		# create a source buffer and set the language to "diff"
+		manager = GtkSource.LanguageManager()
+		language = manager.get_language("diff")
+		diffbuffer = GtkSource.Buffer.new_with_language(language)
+		self.fileview.set_buffer(diffbuffer)
+
+		try:
+			fromlines = list(open(fromfile))
+			fromdate = time.ctime(os.stat(fromfile).st_mtime)
+		except IsADirectoryError:
+			return
+		except FileNotFoundError:
+			fromfile = "New file"
+			fromlines = ""
+			fromdate = ""
+		except UnicodeDecodeError:
+			return
+		except PermissionError:
+			print("PermissionError")
+			return # TODO maybe display a dialog with the error?
+
+		try:
+			tolines = list(open(tofile,"r"))
+			todate = time.ctime(os.stat(tofile).st_mtime)
+		except IsADirectoryError:
+			return
+		except FileNotFoundError:
+			tofile = "Deleted file"
+			tolines = ""
+			todate = ""
+		except UnicodeDecodeError:
+			return
+		except PermissionError:
+			print("PermissionError")
+			return # TODO maybe display a dialog with the error?
+
+		difflines = difflib.unified_diff(fromlines, 
+											tolines, 
+											fromfile=fromfile, 
+											tofile=tofile, 
+											fromfiledate=fromdate, 
+											tofiledate=todate)
+		difftext = "".join(difflines)
+		diffbuffer.set_text(difftext)
 
 	def _on_pathstree_selection_changed(self, selection):
 		(model, treeiter) = selection.get_selected()
@@ -108,37 +152,18 @@ class changesWindow(object):
 			fromfile = self.beginpath+model[treeiter][2]
 			tofile = self.endpath+model[treeiter][2]
 
-			try:
-				fromlines = list(open(fromfile))
-				fromdate = time.ctime(os.stat(fromfile).st_mtime)
-			except IsADirectoryError:
-				return
-			except FileNotFoundError:
-				fromfile = "New file"
-				fromlines = ""
-				fromdate = ""
-			except UnicodeDecodeError:
-				return
-			except PermissionError:
-				print("PermissionError")
-				return # TODO maybe display a dialog with the error?
+			currentview = self.choicesviewgroup.get_action("end").get_current_value()
 
-			try:
-				tolines = list(open(tofile,"r"))
-				todate = time.ctime(os.stat(tofile).st_mtime)
-			except IsADirectoryError:
-				return
-			except FileNotFoundError:
-				tofile = "Deleted file"
-				tolines = ""
-				todate = ""
-			except UnicodeDecodeError:
-				return
-			except PermissionError:
-				print("PermissionError")
-				return # TODO maybe display a dialog with the error?
+			if currentview == 0:
+				textbuffer = Gtk.TextBuffer()
+				self.fileview.set_buffer(textbuffer)
+				textbuffer.set_text("".join(open(fromfile).readlines()))
+			elif currentview == 1: 
+				self.display_diff(fromfile,tofile)
+			elif currentview == 2:
+				textbuffer = Gtk.TextBuffer()
+				self.fileview.set_buffer(textbuffer)
+				textbuffer.set_text("".join(open(tofile).readlines()))
 
-			difflines = difflib.unified_diff(fromlines, tolines, fromfile=fromfile, tofile=tofile, fromfiledate=fromdate, tofiledate=todate)
-			difftext = "".join(difflines)
-			self.diffbuffer.set_text(difftext)
+			
 
