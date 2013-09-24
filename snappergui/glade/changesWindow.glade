@@ -8,6 +8,7 @@
         <property name="tooltip" translatable="yes">Snapshot in the begin of comparison</property>
         <property name="draw_as_radio">True</property>
         <property name="group">end</property>
+        <signal name="toggled" handler="_on_pathstree_selection_changed" object="treeview-selection" swapped="no"/>
       </object>
     </child>
     <child>
@@ -16,6 +17,7 @@
         <property name="draw_as_radio">True</property>
         <property name="value">2</property>
         <property name="group">begin</property>
+        <signal name="toggled" handler="_on_pathstree_selection_changed" object="treeview-selection" swapped="no"/>
       </object>
     </child>
     <child>
@@ -25,6 +27,7 @@
         <property name="draw_as_radio">True</property>
         <property name="value">1</property>
         <property name="group">begin</property>
+        <signal name="toggled" handler="_on_pathstree_selection_changed" object="treeview-selection" swapped="no"/>
       </object>
     </child>
   </object>
