@@ -56,14 +56,12 @@ class SnapperGUI(object):
 
 	def update_snapshots_list(self,widget=None):
 		treestore = self.get_config_treestore(self.currentConfig)
-		if treestore == None:
-			self.builder.get_object("snapshotActions").set_sensitive(False)
-			self.builder.get_object("configActions").set_sensitive(False)
-		else:
-			self.builder.get_object("configActions").set_sensitive(True)
-			self.builder.get_object("snapshotActions").set_sensitive(True)
+		has_config = treestore != None
+		self.builder.get_object("snapshotActions").set_sensitive(has_config)
+		self.builder.get_object("configActions").set_sensitive(has_config)
+		
 		self.snapshotsTreeView.set_model(treestore)
-		self.snapshotsTreeView.expand_all()
+		#self.snapshotsTreeView.expand_all()
 
 	def init_configs_group(self,actionGroup):
 		configActions = []
@@ -86,7 +84,6 @@ class SnapperGUI(object):
 			radioitem.connect("toggled", self.on_menu_config_changed)
 			if self.currentConfig == config[0]:
 				radioitem.set_active(True)
-
 
 	def get_config_treestore(self,config):
 		configstree = Gtk.TreeStore(int, int, int, str, str, str, str)
@@ -120,18 +117,25 @@ class SnapperGUI(object):
 
 	def add_snapshot_to_tree(self, snapshot, pre_snapshot=None):
 		treemodel = self.snapshotsTreeView.get_model()
-		for aux, row in enumerate(treemodel):
-			if(pre_snapshot == str(row[0])):
-				pass
 		snapinfo = snapper.GetSnapshot(self.currentConfig, snapshot)
+		pre_number = snapinfo[2]
+		if (snapinfo[1] == 2): # if type is post
+			for aux, row in enumerate(treemodel):
+				if(pre_number == row[0]):
+					pre_snapshot = treemodel.get_iter(aux)
+					break
 		treemodel.append(pre_snapshot, self.snapshot_columns(snapinfo))
 
 	def remove_snapshot_from_tree(self, snapshot):
-		# TODO Check if this row has any childs
 		treemodel = self.snapshotsTreeView.get_model()
 		for aux, row in enumerate(treemodel):
 			if(snapshot == row[0]):
-				del treemodel[aux]
+				has_child = treemodel.iter_has_child(treemodel.get_iter(aux))
+				if(has_child):
+					# FIXME meh
+					update_snapshots_list()
+				else:
+					del treemodel[aux]
 
 	def on_button_press_event(self, widget, event):
 		# Check if right mouse button was preseed
