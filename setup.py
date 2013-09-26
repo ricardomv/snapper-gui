@@ -15,7 +15,9 @@ config = {
  'download_url': 'https://github.com/ricardo-vieira/snapper-gui',
  'author_email': 'ricardo.vieira@ist.utl.pt',
  'package_data' : {"snappergui": ["glade/*.glade",
- 								"icons/*.svg"]}
+ 								"icons/*.svg"]},
+ 'entry_points' : { 'gui_scripts' : 
+                    [ 'snapper-gui = snappergui.mainWindow:start_ui' ] }
 }
 
 setup(**config)

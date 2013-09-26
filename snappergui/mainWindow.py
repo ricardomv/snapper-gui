@@ -17,6 +17,9 @@ bus = dbus.SystemBus(mainloop=DBusGMainLoop())
 snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/Snapper'),
 							dbus_interface='org.opensuse.Snapper')
 
+def start_ui():
+	SnapperGUI().main()
+
 class SnapperGUI(object):
 	"""docstring for SnapperGUI"""
 
