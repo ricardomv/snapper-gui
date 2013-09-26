@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.0 on Thu Sep 26 19:57:30 2013 -->
 <interface>
-  <!-- interface-requires gtk+ 3.6 -->
+  <!-- interface-requires gtk+ 3.10 -->
+  <object class="GtkListStore" id="userdatastore">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+      <!-- column-name gchararray2 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">&lt;Type here&gt;</col>
+        <col id="1" translatable="yes"/>
+      </row>
+    </data>
+  </object>
   <object class="GtkMessageDialog" id="dialogCreate">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
-    <property name="type_hint">dialog</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="type_hint">normal</property>
     <property name="skip_taskbar_hint">True</property>
+    <property name="has_resize_grip">False</property>
     <property name="message_type">other</property>
     <property name="buttons">ok-cancel</property>
     <child internal-child="vbox">
@@ -60,8 +77,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
-                <property name="entry_text_column">0</property>
-                <property name="id_column">1</property>
                 <signal name="changed" handler="on_config_changed" swapped="no"/>
               </object>
               <packing>
@@ -76,7 +91,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">●</property>
-                <property name="invisible_char_set">True</property>
                 <signal name="changed" handler="on_description_changed" swapped="no"/>
               </object>
               <packing>
@@ -117,8 +131,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="active">0</property>
-                <property name="entry_text_column">0</property>
-                <property name="id_column">1</property>
                 <items>
                   <item translatable="yes">None</item>
                   <item>number</item>
@@ -145,22 +157,27 @@
           <object class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="vscrollbar_policy">never</property>
             <property name="shadow_type">in</property>
             <child>
               <object class="GtkTreeView" id="userdatatreeview">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="model">userdatastore</property>
                 <property name="headers_clickable">False</property>
+                <property name="search_column">0</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview-selection1"/>
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn3">
                     <property name="title" translatable="yes">Name</property>
+                    <property name="expand">True</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext1">
                         <property name="editable">True</property>
-                        <signal name="edited" handler="on_name_edited" swapped="no"/>
+                        <signal name="edited" handler="_on_name_edited" swapped="no"/>
+                        <signal name="editing-started" handler="_on_editing_started" swapped="no"/>
                       </object>
                       <attributes>
                         <attribute name="text">0</attribute>
@@ -171,10 +188,11 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                     <property name="title" translatable="yes">Value</property>
+                    <property name="expand">True</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext2">
                         <property name="editable">True</property>
-                        <signal name="edited" handler="on_value_edited" swapped="no"/>
+                        <signal name="edited" handler="_on_value_edited" swapped="no"/>
                       </object>
                       <attributes>
                         <attribute name="text">1</attribute>

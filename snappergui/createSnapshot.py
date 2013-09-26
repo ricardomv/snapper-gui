@@ -16,13 +16,14 @@ class createSnapshot(object):
 		builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/createSnapshot.glade"))
 		
 		self.dialog = builder.get_object("dialogCreate")
+		self.userdataTree = builder.get_object("userdatatreeview")
 		self.dialog.set_transient_for(parent)
 		builder.connect_signals(self)
 
 		self.config = ""
 		self.description = ""
 		self.cleanup = ""
-		self.userdata = {"by":"SnapperGui"}
+		self.userdata = {}
 
 		configscombo = Gtk.ListStore(str)
 		for config in snapper.ListConfigs():
@@ -33,7 +34,7 @@ class createSnapshot(object):
 			combobox.set_active(0)
 		builder.get_object("cleanupcombo").set_active(0)
 
-		self.userdataTree = builder.get_object("userdatatreeview")
+
 
 	def on_config_changed(self,widget):
 		self.config = widget.get_model()[widget.get_active()][0]
@@ -46,14 +47,31 @@ class createSnapshot(object):
 		if self.cleanup == "None":
 			self.cleanup = ""
 
-	def on_name_edited(self, path, new_text, user_data):
-		pass
+	def _on_editing_started(self, cell, editable, path):
+		if editable.get_text() == "<Type here>":
+			editable.set_text("")
 
-	def on_value_edited(self, path, new_text, user_data):
-		pass
+	def _on_name_edited(self, renderer, path, new_text):
+		userdatamodel = self.userdataTree.get_model()
+		if new_text != "":
+			if userdatamodel[path][0] == "<Type here>":
+				userdatamodel.append(["<Type here>", ""])
+			userdatamodel[path][0] = new_text
+
+
+	def _on_value_edited(self, renderer, path, new_text):
+		userdatamodel = self.userdataTree.get_model()
+		userdatamodel[path][1] = new_text
+
+	def get_userdata_from_model(self, model):
+		for row in model:
+			if row[0] != "<Type here>":
+				self.userdata[row[0]] = row[1]
 
 	def run(self):
-		return self.dialog.run()
+		response = self.dialog.run()
+		self.get_userdata_from_model( self.userdataTree.get_model() )
+		return response
 
 	def destroy(self):
 		self.dialog.destroy()
