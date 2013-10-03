@@ -103,6 +103,20 @@ class changesWindow(object):
 		# we dont want this function to be called anymore
 		return False
 
+	def get_lines_from_file(self, path):
+		try:
+			return list(open(path))
+		except IsADirectoryError:
+			pass
+		except FileNotFoundError:
+			return ""
+		except UnicodeDecodeError:
+			pass
+		except PermissionError:
+			print("PermissionError")
+			pass # TODO maybe display a dialog with the error?
+		return None
+
 	def _on_pathstree_selection_changed(self, selection):
 		(model, treeiter) = selection.get_selected()
 		if treeiter != None and model[treeiter] != "":
@@ -110,34 +124,24 @@ class changesWindow(object):
 			fromfile = self.beginpath+model[treeiter][2]
 			tofile = self.endpath+model[treeiter][2]
 
-			try:
-				fromlines = list(open(fromfile))
+			fromlines = self.get_lines_from_file(fromfile)
+			if fromlines == None:
+				return
+			elif fromlines == "":
+				fromfile = "New File"
+				fromdate = None
+			else:
 				fromdate = time.ctime(os.stat(fromfile).st_mtime)
-			except IsADirectoryError:
-				return
-			except FileNotFoundError:
-				fromfile = "New file"
-				fromlines = ""
-				fromdate = ""
-			except UnicodeDecodeError:
-				return
-			except PermissionError:
-				print("PermissionError")
-				return # TODO maybe display a dialog with the error?
 
-			try:
-				tolines = list(open(tofile))
+			tolines = self.get_lines_from_file(tofile)
+			if tolines == None:
+				return
+			elif tolines == "":
+				tofile = "Deleted File"
+				todate = None
+			else:
 				todate = time.ctime(os.stat(tofile).st_mtime)
-			except IsADirectoryError:
-				return
-			except FileNotFoundError:
-				tofile = "Deleted file"
-				tolines = ""
-				todate = ""
-			except UnicodeDecodeError:
-				return
-			except PermissionError:
-				return # TODO maybe display a dialog with the error?
+			
 
 			languagemanager = GtkSource.LanguageManager()
 			currentview = self.choicesviewgroup.get_action("end").get_current_value()
