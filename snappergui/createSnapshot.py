@@ -53,9 +53,11 @@ class createSnapshot(object):
 
 	def _on_name_edited(self, renderer, path, new_text):
 		userdatamodel = self.userdataTree.get_model()
-		if new_text != "":
-			if userdatamodel[path][0] == "<Type here>":
-				userdatamodel.append(["<Type here>", ""])
+		if userdatamodel[path][0] == "<Type here>":
+			userdatamodel.append(["<Type here>", ""])
+		if new_text == "":
+			del userdatamodel[path]
+		else:
 			userdatamodel[path][0] = new_text
 
 
