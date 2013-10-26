@@ -25,9 +25,10 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		Gtk.ApplicationWindow.__init__(self,
 											application=app,
 											title="SnapperGUI")
+		self.app = app
 		self.builder = Gtk.Builder()
 		self.builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/mainWindow.glade"))
-		self.mainWindow = self.builder.get_object("mainWindow")
+		self.snapshotsBox = self.builder.get_object("snapshotsBox")
 		self.statusbar = self.builder.get_object("statusbar")
 		self.snapshotsTreeView = self.builder.get_object("snapstreeview")
 		self.configsGroup = self.builder.get_object("configsGroup")
@@ -35,15 +36,13 @@ class SnapperGUI(Gtk.ApplicationWindow):
 
 		self.builder.connect_signals(self)
 
-		icon = GdkPixbuf.Pixbuf.new_from_file(pkg_resources.resource_filename("snappergui", "icons/snappergui.svg"))
-		self.mainWindow.set_default_icon(icon)
-
 		self.currentConfig = self.init_current_config()
 		self.init_configs_menuitem()
 
 		self.init_dbus_signal_handlers()
+		self.add(self.snapshotsBox)
 
-		self.mainWindow.show()
+		self.show()
 
 	def init_current_config(self):
 		for config in snapper.ListConfigs():
@@ -227,7 +226,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		snapshot_row[6] = text
 
 	def on_create_snapshot(self, widget):
-		dialog = createSnapshot(self.mainWindow)
+		dialog = createSnapshot(self)
 		response = dialog.run()
 		dialog.destroy()
 		if response == Gtk.ResponseType.OK:
@@ -239,7 +238,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 			pass
 
 	def on_create_config(self, widget):
-		dialog = createConfig(self.mainWindow)
+		dialog = createConfig(self)
 		response = dialog.run()
 		dialog.destroy()
 		if response == Gtk.ResponseType.OK:
@@ -256,7 +255,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		for path in paths:
 			treeiter = model.get_iter(path)
 			snapshots.append(model[treeiter][0])
-		dialog = deleteDialog(self.mainWindow, self.currentConfig,snapshots)
+		dialog = deleteDialog(self, self.currentConfig,snapshots)
 		response = dialog.run()
 		if response == Gtk.ResponseType.YES and len(dialog.to_delete) != 0:
 			snapper.DeleteSnapshots(self.currentConfig, dialog.to_delete)
@@ -282,7 +281,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 			window = changesWindow(self.currentConfig, begin, end)
 
 	def on_configs_properties_clicked(self, notebook):
-		dialog = propertiesDialog(self.mainWindow)
+		dialog = propertiesDialog(self)
 		dialog.dialog.run()
 		dialog.dialog.hide()
 
@@ -292,7 +291,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		about.hide()
 
 	def delete_event(self,widget):
-		Gtk.main_quit()
+		self.app._window.destroy()
 
 	def init_dbus_signal_handlers(self):
 		signals = {

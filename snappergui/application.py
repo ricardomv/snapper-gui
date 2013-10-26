@@ -56,5 +56,7 @@ class Application(Gtk.Application):
 	def do_activate(self):
 		if not self._window:
 			self._window = SnapperGUI(self)
+			icon = GdkPixbuf.Pixbuf.new_from_file(pkg_resources.resource_filename("snappergui", "icons/snappergui.svg"))
+			self._window.set_default_icon(icon)
 
 		self._window.present()
