@@ -1,5 +1,5 @@
 
-import pkg_resources
+import pkg_resources, sys, signal
 from snappergui.propertiesDialog import propertiesDialog
 from snappergui.createSnapshot import createSnapshot
 from snappergui.createConfig import createConfig
@@ -7,7 +7,7 @@ from snappergui.deleteDialog import deleteDialog
 from snappergui.changesWindow import changesWindow
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
-from gi.repository import Gtk, Gdk, GdkPixbuf#, GObject
+from gi.repository import Gtk, GLib, Gdk, GdkPixbuf, Gio#, GObject
 from time import strftime, localtime
 from pwd import getpwuid
 import subprocess
@@ -17,14 +17,14 @@ bus = dbus.SystemBus(mainloop=DBusGMainLoop())
 snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/Snapper'),
 							dbus_interface='org.opensuse.Snapper')
 
-def start_ui():
-	SnapperGUI().main()
 
-class SnapperGUI(object):
+class SnapperGUI(Gtk.ApplicationWindow):
 	"""docstring for SnapperGUI"""
 
-	def __init__(self):
-		super(SnapperGUI, self).__init__()
+	def __init__(self, app):
+		Gtk.ApplicationWindow.__init__(self,
+											application=app,
+											title="SnapperGUI")
 		self.builder = Gtk.Builder()
 		self.builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/mainWindow.glade"))
 		self.mainWindow = self.builder.get_object("mainWindow")
@@ -42,6 +42,8 @@ class SnapperGUI(object):
 		self.init_configs_menuitem()
 
 		self.init_dbus_signal_handlers()
+
+		self.mainWindow.show()
 
 	def init_current_config(self):
 		for config in snapper.ListConfigs():
@@ -291,11 +293,6 @@ class SnapperGUI(object):
 
 	def delete_event(self,widget):
 		Gtk.main_quit()
-
-	def main(self):
-		self.mainWindow.show()
-		Gtk.main()
-		return 0
 
 	def init_dbus_signal_handlers(self):
 		signals = {
