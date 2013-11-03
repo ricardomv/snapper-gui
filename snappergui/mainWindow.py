@@ -39,7 +39,6 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		self.statusbar = self.builder.get_object("statusbar")
 		self.snapshotsTreeView = self.builder.get_object("snapstreeview")
 		self.configsGroup = self.builder.get_object("configsGroup")
-		self.init_configs_group(self.configsGroup)
 
 		self.builder.connect_signals(self)
 
@@ -89,17 +88,6 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		self.snapshotsTreeView.set_model(treestore)
 		#self.snapshotsTreeView.expand_all()
 
-	def init_configs_group(self,actionGroup):
-		configActions = []
-		for value, config in enumerate(snapper.ListConfigs()):
-			configActions.append((config[0],config[0], value))
-		actionGroup.add_radio_actions(configActions,value=0, on_change=self.on_configs_group_changed)
-
-	def on_configs_group_changed(self,group):
-		for action in group.list_actions():
-			print(action.get_name())
-			print(action.get_current_value())
-
 	def init_configs_stack(self):
 		self._stack = Stack(
 				transition_type=StackTransitionType.CROSSFADE,
@@ -146,47 +134,6 @@ class SnapperGUI(Gtk.ApplicationWindow):
 				userdatatreeview.set_model(userdata_liststore)
 			except dbus.exceptions.DBusException:
 				pass
-
-	def on_menu_config_changed(self,widget):
-		if(widget.get_active()):
-			self.currentConfig = widget.get_label()
-			self.update_snapshots_list()
-
-	def on_view_item_column_toggled(self,widget):
-		widget.set_visible(not(widget.get_visible()))
-
-	def on_toolbar_style_change(self,widget):
-		styles = {
-		"Icons only" : 0,
-		"Text only" : 1,
-		"Text below icons" : 2,
-		"Text beside icons" : 3
-		}
-		toolbar = self.builder.get_object("toolbar1")
-		if(widget.get_active()):
-			toolbar.set_style(styles[widget.get_label()])
-
-	def on_view_item_userdata_toggled(self,widget):
-		userdataexpander = self.builder.get_object("userdataexpander")
-		if(widget.get_active()):
-			userdataexpander.show()
-		else:
-			userdataexpander.hide()
-
-	def on_view_item_toolbar_toggled(self,widget):
-		toolbar = self.builder.get_object("toolbar1")
-		if(widget.get_active()):
-			toolbar.show()
-		else:
-			toolbar.hide()
-
-	#NOT USED delete in the future
-	def on_configstreeview_changed(self,selection):
-		model, treeiter = selection.get_selected()
-		if treeiter != 0 and model != None:
-			self.currentConfig = model[treeiter][0]
-			print(self.currentConfig)
-			self.update_snapshots_list()
 
 	def on_create_snapshot(self, widget):
 		dialog = createSnapshot(self)
