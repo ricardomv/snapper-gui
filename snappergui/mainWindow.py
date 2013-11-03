@@ -5,6 +5,7 @@ from snappergui.createSnapshot import createSnapshot
 from snappergui.createConfig import createConfig
 from snappergui.deleteDialog import deleteDialog
 from snappergui.changesWindow import changesWindow
+from snappergui.snapshotsView import snapshotsView
 import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, GLib, Gdk, GdkPixbuf, Gio#, GObject
@@ -12,6 +13,12 @@ from time import strftime, localtime
 from pwd import getpwuid
 import subprocess
 import signal
+
+if Gtk.get_minor_version() > 8:
+    from gi.repository.Gtk import Stack, StackTransitionType
+else:
+    from gi.repository.Gd import Stack, StackTransitionType
+
 
 bus = dbus.SystemBus(mainloop=DBusGMainLoop())
 snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/Snapper'),
@@ -37,9 +44,25 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		self.builder.connect_signals(self)
 
 		self.currentConfig = self.init_current_config()
-		self.init_configs_menuitem()
 
 		self.init_dbus_signal_handlers()
+
+		self.init_configs_stack()
+
+		self._stack.set_visible_child_name("root")
+		
+		switcher = Gtk.StackSwitcher(margin_top=2, margin_bottom=2, visible=True)
+		switcher.set_stack(self._stack)
+		self.header_bar = Gtk.HeaderBar(title="SnapperGUI",visible=True)
+		self.header_bar.pack_start(switcher)
+		self.header_bar.set_show_close_button(True)
+
+		if Gtk.get_minor_version() > 8:
+			self.set_titlebar(self.header_bar)
+		else:
+			self._box.pack_start(self.header_bar, False, False, 0)
+			self.set_hide_titlebar_when_maximized(True)
+		self.builder.get_object("snapshotsScrolledWindow").add(self._stack)
 		self.add(self.snapshotsBox)
 
 		self.show()
@@ -58,9 +81,8 @@ class SnapperGUI(Gtk.ApplicationWindow):
 
 		return config[0]
 
-	def update_snapshots_list(self,widget=None):
-		treestore = self.get_config_treestore(self.currentConfig)
-		has_config = treestore != None
+	def update_snapshots_list(self, widget=None):
+
 		self.builder.get_object("snapshotActions").set_sensitive(has_config)
 		self.builder.get_object("configActions").set_sensitive(has_config)
 		
@@ -78,39 +100,17 @@ class SnapperGUI(Gtk.ApplicationWindow):
 			print(action.get_name())
 			print(action.get_current_value())
 
-	def init_configs_menuitem(self):
-		menu = self.builder.get_object("configsmenu")
-		radioitem = None
-		for aux, config in enumerate(snapper.ListConfigs()):
-			radioitem = Gtk.RadioMenuItem(label=config[0],group=radioitem)
-			menu.insert(radioitem,aux)
-			radioitem.show()
-			radioitem.connect("toggled", self.on_menu_config_changed)
-			if self.currentConfig == config[0]:
-				radioitem.set_active(True)
+	def init_configs_stack(self):
+		self._stack = Stack(
+				transition_type=StackTransitionType.CROSSFADE,
+				transition_duration=100,
+				visible=True)
 
-	def get_config_treestore(self,config):
-		configstree = Gtk.TreeStore(int, int, int, str, str, str, str)
-		# Get from DBus all the snappshots for this configuration
-		try:
-			snapshots_list = snapper.ListSnapshots(config)
-		except dbus.exceptions.DBusException:
-			return None
-		parents = []
-		self.statusbar.push(5,"%d snapshots"% (len(snapshots_list)))
-		for snapshot in snapshots_list:
-			if (snapshot[1] == 1): # Pre Snapshot
-				parents.append(configstree.append(None , self.snapshot_columns(snapshot)))
-			elif (snapshot[1] == 2): # Post snappshot
-				for parent in parents:
-					if (configstree.get_value(parent, 0) == snapshot[2]):
-						configstree.append(parent , self.snapshot_columns(snapshot))
-						break
-				if (configstree.get_value(parent, 0) != snapshot[2]):
-					configstree.append(None , self.snapshot_columns(snapshot))
-			else:  # Single snapshot
-				configstree.append(None , self.snapshot_columns(snapshot))
-		return configstree
+		for config in snapper.ListConfigs():
+			snapsView = snapshotsView(str(config[0]))
+			snapsView.update_view()
+			self._stack.add_titled(snapsView._TreeView, str(config[0]), str(config[0]))
+
 
 	def snapshot_columns(self,snapshot):
 		if(snapshot[3] == -1):
@@ -118,28 +118,6 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		else:
 			date = strftime("%a %R %e/%m/%Y", localtime(snapshot[3]))
 		return [snapshot[0], snapshot[1], snapshot[2], date, getpwuid(snapshot[4])[0], snapshot[5], snapshot[6]]
-
-	def add_snapshot_to_tree(self, snapshot, pre_snapshot=None):
-		treemodel = self.snapshotsTreeView.get_model()
-		snapinfo = snapper.GetSnapshot(self.currentConfig, snapshot)
-		pre_number = snapinfo[2]
-		if (snapinfo[1] == 2): # if type is post
-			for aux, row in enumerate(treemodel):
-				if(pre_number == row[0]):
-					pre_snapshot = treemodel.get_iter(aux)
-					break
-		treemodel.append(pre_snapshot, self.snapshot_columns(snapinfo))
-
-	def remove_snapshot_from_tree(self, snapshot):
-		treemodel = self.snapshotsTreeView.get_model()
-		for aux, row in enumerate(treemodel):
-			if(snapshot == row[0]):
-				has_child = treemodel.iter_has_child(treemodel.get_iter(aux))
-				if(has_child):
-					# FIXME meh
-					update_snapshots_list()
-				else:
-					del treemodel[aux]
 
 	def on_button_press_event(self, widget, event):
 		# Check if right mouse button was preseed
@@ -209,21 +187,6 @@ class SnapperGUI(Gtk.ApplicationWindow):
 			self.currentConfig = model[treeiter][0]
 			print(self.currentConfig)
 			self.update_snapshots_list()
-
-	def on_description_edited(self, widget, treepath, text):
-		snapshot_row = self.snapshotsTreeView.get_model()[treepath]
-		snapshot_num = snapshot_row[0]
-		snapshot_info = snapper.GetSnapshot(self.currentConfig,snapshot_num)
-		snapper.SetSnapshot(self.currentConfig,snapshot_info[0],text,snapshot_info[6],snapshot_info[7])
-		snapshot_row[5] = text
-
-
-	def on_cleanup_edited(self, widget, treepath, text):
-		snapshot_row = self.snapshotsTreeView.get_model()[treepath]
-		snapshot_num = snapshot_row[0]
-		snapshot_info = snapper.GetSnapshot(self.currentConfig,snapshot_num)
-		snapper.SetSnapshot(self.currentConfig,snapshot_info[0],snapshot_info[5],text,snapshot_info[7])
-		snapshot_row[6] = text
 
 	def on_create_snapshot(self, widget):
 		dialog = createSnapshot(self)
@@ -308,7 +271,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 	def on_dbus_snapshot_created(self,config,snapshot):
 		self.statusbar.push(True, "Snapshot %s created for %s"% (str(snapshot), config))
 		if config == self.currentConfig:
-			self.add_snapshot_to_tree(str(snapshot))
+			pass#self.add_snapshot_to_tree(str(snapshot))
 
 	def on_dbus_snapshot_modified(self,config,snapshot):
 		print("Snapshot SnapshotModified")
@@ -320,7 +283,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		self.statusbar.push(True, "Snapshots deleted from %s: %s"% (config, snaps_str))
 		if config == self.currentConfig:
 			for deleted in snapshots:
-				self.remove_snapshot_from_tree(deleted)
+				pass#self.remove_snapshot_from_tree(deleted)
 
 	def on_dbus_config_created(self,args):
 		print("Config Created")

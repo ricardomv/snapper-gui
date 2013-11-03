@@ -1,64 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Sat Oct 26 16:40:50 2013 -->
+<!-- Generated with glade 3.16.0 on Sun Nov  3 00:16:31 2013 -->
 <interface>
   <!-- interface-requires gtk+ 3.10 -->
-  <object class="GtkAccelGroup" id="configsaccelgroup"/>
-  <object class="GtkActionGroup" id="configActions">
-    <property name="accel_group">configsaccelgroup</property>
-    <child>
-      <object class="GtkAction" id="create-snapshot">
-        <property name="label" translatable="yes">Create Snapshot</property>
-        <property name="short_label" translatable="yes">New</property>
-        <property name="tooltip" translatable="yes">Create a new snapshot for the current configuration</property>
-        <property name="stock_id">gtk-add</property>
-        <signal name="activate" handler="on_create_snapshot" swapped="no"/>
-      </object>
-      <accelerator key="n" modifiers="GDK_CONTROL_MASK"/>
-    </child>
-    <child>
-      <object class="GtkAction" id="refresh">
-        <property name="label" translatable="yes">Refresh</property>
-        <property name="short_label" translatable="yes">Refresh</property>
-        <property name="tooltip" translatable="yes">Refresh snapshots list</property>
-        <property name="stock_id">gtk-refresh</property>
-        <signal name="activate" handler="update_snapshots_list" swapped="no"/>
-      </object>
-      <accelerator key="F5"/>
-    </child>
-  </object>
   <object class="GtkActionGroup" id="configsGroup"/>
-  <object class="GtkActionGroup" id="snapshotActions">
-    <property name="accel_group">snapsaccelgroup</property>
-    <child>
-      <object class="GtkAction" id="delete-snapshot">
-        <property name="label" translatable="yes">Delete</property>
-        <property name="short_label" translatable="yes">Del</property>
-        <property name="tooltip" translatable="yes">Delete selected snapshots</property>
-        <property name="stock_id">gtk-remove</property>
-        <signal name="activate" handler="on_delete_snapshot" object="treeview-selection1" swapped="no"/>
-      </object>
-      <accelerator key="Delete"/>
-    </child>
-    <child>
-      <object class="GtkAction" id="open-mountpoint">
-        <property name="label" translatable="yes">Open</property>
-        <property name="short_label" translatable="yes">Open</property>
-        <property name="tooltip" translatable="yes">Open snapshot mountpoint</property>
-        <property name="stock_id">gtk-open</property>
-        <signal name="activate" handler="on_open_snapshot_folder" object="treeview-selection1" swapped="no"/>
-      </object>
-      <accelerator key="o" modifiers="GDK_CONTROL_MASK"/>
-    </child>
-    <child>
-      <object class="GtkAction" id="view-changes">
-        <property name="label" translatable="yes">View changes</property>
-        <property name="short_label" translatable="yes">Changes</property>
-        <property name="tooltip" translatable="yes">Show witch files have changed between selected snapshots</property>
-        <property name="stock_id">gtk-file</property>
-        <signal name="activate" handler="on_viewchanges_clicked" object="treeview-selection1" swapped="no"/>
-      </object>
-    </child>
-  </object>
   <object class="GtkAboutDialog" id="aboutdialog1">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -89,6 +33,63 @@ for filesystem snapshot management</property>
         <child>
           <placeholder/>
         </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkAccelGroup" id="configsaccelgroup"/>
+  <object class="GtkActionGroup" id="configActions">
+    <property name="accel_group">configsaccelgroup</property>
+    <child>
+      <object class="GtkAction" id="create-snapshot">
+        <property name="label" translatable="yes">Create Snapshot</property>
+        <property name="short_label" translatable="yes">New</property>
+        <property name="tooltip" translatable="yes">Create a new snapshot for the current configuration</property>
+        <property name="stock_id">gtk-add</property>
+        <signal name="activate" handler="on_create_snapshot" swapped="no"/>
+      </object>
+      <accelerator key="n" modifiers="GDK_CONTROL_MASK"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="refresh">
+        <property name="label" translatable="yes">Refresh</property>
+        <property name="short_label" translatable="yes">Refresh</property>
+        <property name="tooltip" translatable="yes">Refresh snapshots list</property>
+        <property name="stock_id">gtk-refresh</property>
+        <signal name="activate" handler="update_snapshots_list" swapped="no"/>
+      </object>
+      <accelerator key="F5"/>
+    </child>
+  </object>
+  <object class="GtkAccelGroup" id="snapsaccelgroup"/>
+  <object class="GtkActionGroup" id="snapshotActions">
+    <property name="accel_group">snapsaccelgroup</property>
+    <child>
+      <object class="GtkAction" id="delete-snapshot">
+        <property name="label" translatable="yes">Delete</property>
+        <property name="short_label" translatable="yes">Del</property>
+        <property name="tooltip" translatable="yes">Delete selected snapshots</property>
+        <property name="stock_id">gtk-remove</property>
+        <signal name="activate" handler="on_delete_snapshot" object="treeview-selection1" swapped="no"/>
+      </object>
+      <accelerator key="Delete"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="open-mountpoint">
+        <property name="label" translatable="yes">Open</property>
+        <property name="short_label" translatable="yes">Open</property>
+        <property name="tooltip" translatable="yes">Open snapshot mountpoint</property>
+        <property name="stock_id">gtk-open</property>
+        <signal name="activate" handler="on_open_snapshot_folder" object="treeview-selection1" swapped="no"/>
+      </object>
+      <accelerator key="o" modifiers="GDK_CONTROL_MASK"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="view-changes">
+        <property name="label" translatable="yes">View changes</property>
+        <property name="short_label" translatable="yes">Changes</property>
+        <property name="tooltip" translatable="yes">Show witch files have changed between selected snapshots</property>
+        <property name="stock_id">gtk-file</property>
+        <signal name="activate" handler="on_viewchanges_clicked" object="treeview-selection1" swapped="no"/>
       </object>
     </child>
   </object>
@@ -177,39 +178,6 @@ for filesystem snapshot management</property>
       <action-widget response="0">button1</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkMenu" id="popupSnapshots">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkImageMenuItem" id="menuitem13">
-        <property name="related_action">create-snapshot</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <property name="always_show_image">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkImageMenuItem" id="menuitem2">
-        <property name="related_action">delete-snapshot</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkImageMenuItem" id="menuitem12">
-        <property name="related_action">open-mountpoint</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkAccelGroup" id="snapsaccelgroup"/>
   <object class="GtkBox" id="snapshotsBox">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -310,169 +278,169 @@ for filesystem snapshot management</property>
           </object>
         </child>
         <child>
-              <object class="GtkMenuItem" id="menuitem3">
+          <object class="GtkMenuItem" id="menuitem3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">_View</property>
+            <property name="use_underline">True</property>
+            <child type="submenu">
+              <object class="GtkMenu" id="menu2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_View</property>
-                <property name="use_underline">True</property>
-                <child type="submenu">
-                  <object class="GtkMenu" id="menu2">
+                <child>
+                  <object class="GtkMenuItem" id="menuitem11">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkMenuItem" id="menuitem11">
+                    <property name="label" translatable="yes">Columns</property>
+                    <property name="use_underline">True</property>
+                    <child type="submenu">
+                      <object class="GtkMenu" id="menu4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Columns</property>
-                        <property name="use_underline">True</property>
-                        <child type="submenu">
-                          <object class="GtkMenu" id="menu4">
+                        <child>
+                          <object class="GtkCheckMenuItem" id="menuitem5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkCheckMenuItem" id="menuitem5">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">#</property>
-                                <property name="use_underline">True</property>
-                                <property name="active">True</property>
-                                <signal name="toggled" handler="on_view_item_column_toggled" object="treeviewcolumn1" swapped="no"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckMenuItem" id="menuitem6">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Date</property>
-                                <property name="use_underline">True</property>
-                                <property name="active">True</property>
-                                <signal name="toggled" handler="on_view_item_column_toggled" object="treeviewcolumn2" swapped="no"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckMenuItem" id="menuitem7">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">User</property>
-                                <property name="use_underline">True</property>
-                                <property name="active">True</property>
-                                <signal name="toggled" handler="on_view_item_column_toggled" object="treeviewcolumn3" swapped="no"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckMenuItem" id="menuitem8">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Description</property>
-                                <property name="use_underline">True</property>
-                                <property name="active">True</property>
-                                <signal name="toggled" handler="on_view_item_column_toggled" object="treeviewcolumn4" swapped="no"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckMenuItem" id="menuitem9">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Cleanup</property>
-                                <property name="use_underline">True</property>
-                                <property name="active">True</property>
-                                <signal name="toggled" handler="on_view_item_column_toggled" object="treeviewcolumn5" swapped="no"/>
-                              </object>
-                            </child>
+                            <property name="label" translatable="yes">#</property>
+                            <property name="use_underline">True</property>
+                            <property name="active">True</property>
+                            <signal name="toggled" handler="on_view_item_column_toggled" object="treeviewcolumn1" swapped="no"/>
                           </object>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="checkmenuitem1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Toolbar</property>
-                        <property name="use_underline">True</property>
-                        <child type="submenu">
-                          <object class="GtkMenu" id="menu1">
+                        <child>
+                          <object class="GtkCheckMenuItem" id="menuitem6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkRadioMenuItem" id="menuitem16">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Icons only</property>
-                                <property name="draw_as_radio">True</property>
-                                <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkRadioMenuItem" id="menuitem17">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Text only</property>
-                                <property name="draw_as_radio">True</property>
-                                <property name="group">menuitem16</property>
-                                <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkRadioMenuItem" id="menuitem18">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Text below icons</property>
-                                <property name="active">True</property>
-                                <property name="draw_as_radio">True</property>
-                                <property name="group">menuitem16</property>
-                                <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkRadioMenuItem" id="menuitem19">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Text beside icons</property>
-                                <property name="draw_as_radio">True</property>
-                                <property name="group">menuitem16</property>
-                                <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkSeparatorMenuItem" id="separatormenuitem2">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckMenuItem" id="checkmenuitem2">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Show</property>
-                                <property name="use_underline">True</property>
-                                <property name="active">True</property>
-                                <signal name="toggled" handler="on_view_item_toolbar_toggled" swapped="no"/>
-                              </object>
-                            </child>
+                            <property name="label" translatable="yes">Date</property>
+                            <property name="use_underline">True</property>
+                            <property name="active">True</property>
+                            <signal name="toggled" handler="on_view_item_column_toggled" object="treeviewcolumn2" swapped="no"/>
                           </object>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkSeparatorMenuItem" id="menuitem10">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkCheckMenuItem" id="menuitem20">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Show userdata</property>
-                        <property name="use_underline">True</property>
-                        <property name="active">True</property>
-                        <signal name="toggled" handler="on_view_item_userdata_toggled" swapped="no"/>
+                        <child>
+                          <object class="GtkCheckMenuItem" id="menuitem7">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">User</property>
+                            <property name="use_underline">True</property>
+                            <property name="active">True</property>
+                            <signal name="toggled" handler="on_view_item_column_toggled" object="treeviewcolumn3" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckMenuItem" id="menuitem8">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Description</property>
+                            <property name="use_underline">True</property>
+                            <property name="active">True</property>
+                            <signal name="toggled" handler="on_view_item_column_toggled" object="treeviewcolumn4" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckMenuItem" id="menuitem9">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Cleanup</property>
+                            <property name="use_underline">True</property>
+                            <property name="active">True</property>
+                            <signal name="toggled" handler="on_view_item_column_toggled" object="treeviewcolumn5" swapped="no"/>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkMenuItem" id="checkmenuitem1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Toolbar</property>
+                    <property name="use_underline">True</property>
+                    <child type="submenu">
+                      <object class="GtkMenu" id="menu1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkRadioMenuItem" id="menuitem16">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Icons only</property>
+                            <property name="draw_as_radio">True</property>
+                            <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkRadioMenuItem" id="menuitem17">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Text only</property>
+                            <property name="draw_as_radio">True</property>
+                            <property name="group">menuitem16</property>
+                            <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkRadioMenuItem" id="menuitem18">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Text below icons</property>
+                            <property name="active">True</property>
+                            <property name="draw_as_radio">True</property>
+                            <property name="group">menuitem16</property>
+                            <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkRadioMenuItem" id="menuitem19">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Text beside icons</property>
+                            <property name="draw_as_radio">True</property>
+                            <property name="group">menuitem16</property>
+                            <signal name="toggled" handler="on_toolbar_style_change" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSeparatorMenuItem" id="separatormenuitem2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckMenuItem" id="checkmenuitem2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Show</property>
+                            <property name="use_underline">True</property>
+                            <property name="active">True</property>
+                            <signal name="toggled" handler="on_view_item_toolbar_toggled" swapped="no"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparatorMenuItem" id="menuitem10">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckMenuItem" id="menuitem20">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Show userdata</property>
+                    <property name="use_underline">True</property>
+                    <property name="active">True</property>
+                    <signal name="toggled" handler="on_view_item_userdata_toggled" swapped="no"/>
+                  </object>
+                </child>
               </object>
             </child>
+          </object>
+        </child>
         <child>
           <object class="GtkMenuItem" id="menuitem4">
             <property name="visible">True</property>
@@ -638,102 +606,12 @@ for filesystem snapshot management</property>
         <property name="can_focus">True</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow2">
+          <object class="GtkScrolledWindow" id="snapshotsScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="shadow_type">in</property>
             <child>
-              <object class="GtkTreeView" id="snapstreeview">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="headers_clickable">False</property>
-                <property name="search_column">0</property>
-                <property name="rubber_banding">True</property>
-                <signal name="button-press-event" handler="on_button_press_event" swapped="no"/>
-                <signal name="popup-menu" handler="on_popup" swapped="no"/>
-                <signal name="row-activated" handler="on_open_snapshot_folder" object="treeview-selection1" swapped="no"/>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection">
-                    <property name="mode">multiple</property>
-                    <signal name="changed" handler="on_snapshots_selection_changed" swapped="no"/>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                    <property name="resizable">True</property>
-                    <property name="title" translatable="yes">#</property>
-                    <property name="clickable">True</property>
-                    <property name="sort_column_id">0</property>
-                    <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                    <property name="resizable">True</property>
-                    <property name="title" translatable="yes">Date</property>
-                    <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
-                      <attributes>
-                        <attribute name="text">3</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                    <property name="resizable">True</property>
-                    <property name="title" translatable="yes">User</property>
-                    <property name="clickable">True</property>
-                    <property name="sort_column_id">4</property>
-                    <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext3"/>
-                      <attributes>
-                        <attribute name="text">4</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn4">
-                    <property name="resizable">True</property>
-                    <property name="title" translatable="yes">Description</property>
-                    <property name="expand">True</property>
-                    <property name="clickable">True</property>
-                    <property name="sort_column_id">5</property>
-                    <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext4">
-                        <property name="editable">True</property>
-                        <signal name="edited" handler="on_description_edited" swapped="no"/>
-                      </object>
-                      <attributes>
-                        <attribute name="text">5</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn5">
-                    <property name="resizable">True</property>
-                    <property name="title" translatable="yes">Cleanup</property>
-                    <property name="clickable">True</property>
-                    <property name="sort_column_id">6</property>
-                    <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext5">
-                        <property name="editable">True</property>
-                        <signal name="edited" handler="on_cleanup_edited" swapped="no"/>
-                      </object>
-                      <attributes>
-                        <attribute name="text">6</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-              </object>
+              <placeholder/>
             </child>
           </object>
           <packing>
