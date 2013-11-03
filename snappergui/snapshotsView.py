@@ -52,9 +52,9 @@ class snapshotsView(Gtk.Widget):
 				configstree.append(None , self.snapshot_columns(snapshot))
 		return configstree
 
-	def add_snapshot(self, snapshot, pre_snapshot=None):
+	def add_snapshot_to_tree(self, snapshot, pre_snapshot=None):
 		treemodel = self._TreeView.get_model()
-		snapinfo = snapper.GetSnapshot(self.currentConfig, snapshot)
+		snapinfo = snapper.GetSnapshot(self.config, snapshot)
 		pre_number = snapinfo[2]
 		if (snapinfo[1] == 2): # if type is post
 			for aux, row in enumerate(treemodel):
@@ -63,7 +63,7 @@ class snapshotsView(Gtk.Widget):
 					break
 		treemodel.append(pre_snapshot, self.snapshot_columns(snapinfo))
 
-	def remove_snapshot(self, snapshot):
+	def remove_snapshot_from_tree(self, snapshot):
 		treemodel = self._TreeView.get_model()
 		for aux, row in enumerate(treemodel):
 			if(snapshot == row[0]):
@@ -85,7 +85,6 @@ class snapshotsView(Gtk.Widget):
 	def on_cleanup_edited(self, widget, treepath, text):
 		snapshot_row = self._TreeView.get_model()[treepath]
 		snapshot_num = snapshot_row[0]
-		print(snapshot_num,config)
-		snapshot_info = snapper.GetSnapshot(config,snapshot_num)
-		snapper.SetSnapshot(config,snapshot_info[0],snapshot_info[5],text,snapshot_info[7])
+		snapshot_info = snapper.GetSnapshot(self.config,snapshot_num)
+		snapper.SetSnapshot(self.config,snapshot_info[0],snapshot_info[5],text,snapshot_info[7])
 		snapshot_row[6] = text

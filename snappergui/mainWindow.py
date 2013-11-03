@@ -43,6 +43,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		self.builder.connect_signals(self)
 
 		self.currentConfig = self.init_current_config()
+		self.configView = {}
 
 		self.init_dbus_signal_handlers()
 
@@ -97,9 +98,10 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		self._stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
 
 		for config in snapper.ListConfigs():
-			snapsView = snapshotsView(str(config[0]))
-			snapsView.update_view() #this should not be done here (adds up startup time)
-			self._stack.add_titled(snapsView._TreeView, str(config[0]), str(config[0]))
+			name = str(config[0])
+			self.configView[name] = snapshotsView(name)
+			self.configView[name].update_view() #this should not be done here (adds up startup time)
+			self._stack.add_titled(self.configView[name]._TreeView, name, name)
 
 
 	def snapshot_columns(self,snapshot):
@@ -208,8 +210,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 
 	def on_dbus_snapshot_created(self,config,snapshot):
 		self.statusbar.push(True, "Snapshot %s created for %s"% (str(snapshot), config))
-		if config == self.currentConfig:
-			pass#self.add_snapshot_to_tree(str(snapshot))
+		self.configView[config].add_snapshot_to_tree(str(snapshot))
 
 	def on_dbus_snapshot_modified(self,config,snapshot):
 		print("Snapshot SnapshotModified")
@@ -219,9 +220,8 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		for snapshot in snapshots:
 			snaps_str += str(snapshot) + " " 
 		self.statusbar.push(True, "Snapshots deleted from %s: %s"% (config, snaps_str))
-		if config == self.currentConfig:
-			for deleted in snapshots:
-				pass#self.remove_snapshot_from_tree(deleted)
+		for deleted in snapshots:
+			self.configView[config].remove_snapshot_from_tree(deleted)
 
 	def on_dbus_config_created(self,args):
 		print("Config Created")
