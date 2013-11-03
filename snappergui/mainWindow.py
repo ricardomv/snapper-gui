@@ -91,12 +91,14 @@ class SnapperGUI(Gtk.ApplicationWindow):
 	def init_configs_stack(self):
 		self._stack = Stack(
 				transition_type=StackTransitionType.CROSSFADE,
-				transition_duration=100,
+				transition_duration=300,
 				visible=True)
+
+		self._stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
 
 		for config in snapper.ListConfigs():
 			snapsView = snapshotsView(str(config[0]))
-			snapsView.update_view()
+			snapsView.update_view() #this should not be done here (adds up startup time)
 			self._stack.add_titled(snapsView._TreeView, str(config[0]), str(config[0]))
 
 
@@ -106,17 +108,6 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		else:
 			date = strftime("%a %R %e/%m/%Y", localtime(snapshot[3]))
 		return [snapshot[0], snapshot[1], snapshot[2], date, getpwuid(snapshot[4])[0], snapshot[5], snapshot[6]]
-
-	def on_button_press_event(self, widget, event):
-		# Check if right mouse button was preseed
-		if event.type == Gdk.EventType.BUTTON_PRESS and event.button == 3:
-			popup = self.builder.get_object("popupSnapshots")
-			popup.popup(None, None, None, None, event.button, event.time)
-			return False
-
-	def on_popup(self,widget):
-		popup = self.builder.get_object("popupSnapshots")
-		popup.popup(None,None,None,None,0,0)
 
 	def on_snapshots_selection_changed(self,selection):
 		userdatatreeview = self.builder.get_object("userdatatreeview")
