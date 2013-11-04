@@ -42,7 +42,6 @@ class SnapperGUI(Gtk.ApplicationWindow):
 
 		self.builder.connect_signals(self)
 
-		self.currentConfig = self.init_current_config()
 		self.configView = {}
 
 		self.init_dbus_signal_handlers()
@@ -65,21 +64,12 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		self.builder.get_object("snapshotsScrolledWindow").add(self._stack)
 		self.add(self.snapshotsBox)
 
+		# TODO do not hardcode to root configuration
+		self.statusbar.push(5,"%d snapshots"% self.configView["root"].count)
+		self.configView["root"].selection.connect("changed", self.on_snapshots_selection_changed)
+		
 		self.show()
 
-	def init_current_config(self):
-		for config in snapper.ListConfigs():
-			try:
-				snapper.ListSnapshots(config[0])
-			except dbus.exceptions.DBusException:
-				continue
-			break
-		try:
-			config[0]
-		except NameError:
-			return "None"
-
-		return config[0]
 
 	def update_snapshots_list(self, widget=None):
 
@@ -112,6 +102,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		return [snapshot[0], snapshot[1], snapshot[2], date, getpwuid(snapshot[4])[0], snapshot[5], snapshot[6]]
 
 	def on_snapshots_selection_changed(self,selection):
+		config = "root"
 		userdatatreeview = self.builder.get_object("userdatatreeview")
 		(model, paths) = selection.get_selected_rows()
 		if(len(paths) == 0):
@@ -120,7 +111,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		else:
 			self.builder.get_object("snapshotActions").set_sensitive(True)
 			try:
-				snapshot_data = snapper.GetSnapshot(self.currentConfig,model[model.get_iter(paths[0])][0])
+				snapshot_data = snapper.GetSnapshot(config,model[model.get_iter(paths[0])][0])
 				userdata_liststore = Gtk.ListStore(str, str)
 				for key, value in snapshot_data[7].items():
 					userdata_liststore.append([key, value])
@@ -152,36 +143,42 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		elif response == Gtk.ResponseType.CANCEL:
 			pass
 
-	def on_delete_snapshot(self, selection):
+	def on_delete_snapshot(self, widget):
+		config = self._stack.get_visible_child_name()
+		selection = self.configView[config].selection
 		(model, paths) = selection.get_selected_rows()
 		snapshots = []
 		for path in paths:
 			treeiter = model.get_iter(path)
 			snapshots.append(model[treeiter][0])
-		dialog = deleteDialog(self, self.currentConfig,snapshots)
+		dialog = deleteDialog(self, config,snapshots)
 		response = dialog.run()
 		if response == Gtk.ResponseType.YES and len(dialog.to_delete) != 0:
-			snapper.DeleteSnapshots(self.currentConfig, dialog.to_delete)
+			snapper.DeleteSnapshots(config, dialog.to_delete)
 		else:
 			pass
 
-	def on_open_snapshot_folder(self, selection, treepath=None, column=None):
+	def on_open_snapshot_folder(self, widget):
+		config = self._stack.get_visible_child_name()
+		selection = self.configView[config].selection
 		model, paths = selection.get_selected_rows()
 		for path in paths:
 			treeiter = model.get_iter(path)
-			mountpoint = snapper.GetMountPoint(self.currentConfig, model[treeiter][0])
+			mountpoint = snapper.GetMountPoint(config, model[treeiter][0])
 			subprocess.Popen(['xdg-open', mountpoint])
 			self.statusbar.push(True, 
 				"The mount point for the snapshot %s from %s is %s"% 
-				(model[treeiter][0], self.currentConfig, mountpoint))
+				(model[treeiter][0], config, mountpoint))
 
-	def on_viewchanges_clicked(self, selection):
+	def on_viewchanges_clicked(self, widget):
+		config = self._stack.get_visible_child_name()
+		selection = self.configView[config].selection
 		model, paths = selection.get_selected_rows()
 		if len(paths) > 1:
 			begin = model[paths[0]][0]
 			end = model[paths[-1]][0]
 
-			window = changesWindow(self.currentConfig, begin, end)
+			window = changesWindow(config, begin, end)
 
 	def on_configs_properties_clicked(self, notebook):
 		dialog = propertiesDialog(self)

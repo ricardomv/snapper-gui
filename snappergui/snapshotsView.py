@@ -16,6 +16,8 @@ class snapshotsView(Gtk.Widget):
 		self.builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/snapshotsView.glade"))
 		self.builder.connect_signals(self)
 		self._TreeView = self.builder.get_object("snapstreeview")
+		self.selection = self.builder.get_object("snapshotsSelection")
+		self.count = 0
 		
 	def update_view(self):
 		treestore = self.get_config_treestore()
@@ -37,7 +39,7 @@ class snapshotsView(Gtk.Widget):
 		except dbus.exceptions.DBusException:
 			return
 		parents = []
-		#self.statusbar.push(5,"%d snapshots"% (len(snapshots_list)))
+		self.count = len(snapshots_list)
 		for snapshot in snapshots_list:
 			if (snapshot[1] == 1): # Pre Snapshot
 				parents.append(configstree.append(None , self.snapshot_columns(snapshot)))
