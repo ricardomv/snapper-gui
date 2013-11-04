@@ -142,16 +142,17 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		snapshots = []
 		for path in paths:
 			treeiter = model.get_iter(path)
-			snapshots.append(model[treeiter][0])
+			# avoid duplicates because post snapshots are always added
+			if model[treeiter][0] not in snapshots:
+				snapshots.append(model[treeiter][0])
+			# if snapshot has post add that to delete
 			if model.iter_has_child(treeiter):
 				child_treeiter = model.iter_children(treeiter)
 				snapshots.append(model[child_treeiter][0])
 		dialog = deleteDialog(self, config,snapshots)
 		response = dialog.run()
-		if response == Gtk.ResponseType.YES and len(dialog.to_delete) != 0:
+		if response == Gtk.ResponseType.YES and len(dialog.to_delete) > 0:
 			snapper.DeleteSnapshots(config, dialog.to_delete)
-		else:
-			pass
 
 	def on_open_snapshot_folder(self, widget):
 		config = self._stack.get_visible_child_name()
