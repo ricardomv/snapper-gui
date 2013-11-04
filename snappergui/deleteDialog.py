@@ -58,4 +58,3 @@ class deleteDialog(object):
 		else:
 			if snapshot_num in self.to_delete:
 				self.to_delete.remove(snapshot_num)
-		print(self.to_delete)

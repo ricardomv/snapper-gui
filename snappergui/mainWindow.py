@@ -39,19 +39,20 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		self.statusbar = self.builder.get_object("statusbar")
 		self.snapshotsTreeView = self.builder.get_object("snapstreeview")
 		self.configsGroup = self.builder.get_object("configsGroup")
-
 		self.builder.connect_signals(self)
 
-		self.configView = {}
+		self.set_default_size(700,600)
 
-		self.init_dbus_signal_handlers()
+		self.configView = {}
 
 		self.init_configs_stack()
 
 		self._stack.set_visible_child_name("root")
 		
+		# Switch configurations from the header bar with a StackSwitcher
 		switcher = Gtk.StackSwitcher(margin_top=2, margin_bottom=2, visible=True)
 		switcher.set_stack(self._stack)
+
 		self.header_bar = Gtk.HeaderBar(title="SnapperGUI",visible=True)
 		self.header_bar.pack_start(switcher)
 		self.header_bar.set_show_close_button(True)
@@ -68,16 +69,8 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		self.statusbar.push(5,"%d snapshots"% self.configView["root"].count)
 		self.configView["root"].selection.connect("changed", self.on_snapshots_selection_changed)
 		
+		self.init_dbus_signal_handlers()
 		self.show()
-
-
-	def update_snapshots_list(self, widget=None):
-
-		self.builder.get_object("snapshotActions").set_sensitive(has_config)
-		self.builder.get_object("configActions").set_sensitive(has_config)
-		
-		self.snapshotsTreeView.set_model(treestore)
-		#self.snapshotsTreeView.expand_all()
 
 	def init_configs_stack(self):
 		self._stack = Stack(
@@ -92,7 +85,6 @@ class SnapperGUI(Gtk.ApplicationWindow):
 			self.configView[name] = snapshotsView(name)
 			self.configView[name].update_view() #this should not be done here (adds up startup time)
 			self._stack.add_titled(self.configView[name]._TreeView, name, name)
-
 
 	def snapshot_columns(self,snapshot):
 		if(snapshot[3] == -1):
@@ -151,6 +143,9 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		for path in paths:
 			treeiter = model.get_iter(path)
 			snapshots.append(model[treeiter][0])
+			if model.iter_has_child(treeiter):
+				child_treeiter = model.iter_children(treeiter)
+				snapshots.append(model[child_treeiter][0])
 		dialog = deleteDialog(self, config,snapshots)
 		response = dialog.run()
 		if response == Gtk.ResponseType.YES and len(dialog.to_delete) != 0:

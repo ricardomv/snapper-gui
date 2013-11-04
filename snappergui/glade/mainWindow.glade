@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Sun Nov  3 00:26:16 2013 -->
+<!-- Generated with glade 3.16.0 on Mon Nov  4 21:01:16 2013 -->
 <interface>
   <!-- interface-requires gtk+ 3.10 -->
   <object class="GtkActionGroup" id="configsGroup"/>
@@ -48,49 +48,6 @@ for filesystem snapshot management</property>
         <signal name="activate" handler="on_create_snapshot" swapped="no"/>
       </object>
       <accelerator key="n" modifiers="GDK_CONTROL_MASK"/>
-    </child>
-    <child>
-      <object class="GtkAction" id="refresh">
-        <property name="label" translatable="yes">Refresh</property>
-        <property name="short_label" translatable="yes">Refresh</property>
-        <property name="tooltip" translatable="yes">Refresh snapshots list</property>
-        <property name="stock_id">gtk-refresh</property>
-        <signal name="activate" handler="update_snapshots_list" swapped="no"/>
-      </object>
-      <accelerator key="F5"/>
-    </child>
-  </object>
-  <object class="GtkAccelGroup" id="snapsaccelgroup"/>
-  <object class="GtkActionGroup" id="snapshotActions">
-    <property name="accel_group">snapsaccelgroup</property>
-    <child>
-      <object class="GtkAction" id="delete-snapshot">
-        <property name="label" translatable="yes">Delete</property>
-        <property name="short_label" translatable="yes">Del</property>
-        <property name="tooltip" translatable="yes">Delete selected snapshots</property>
-        <property name="stock_id">gtk-remove</property>
-        <signal name="activate" handler="on_delete_snapshot" object="treeview-selection1" swapped="no"/>
-      </object>
-      <accelerator key="Delete"/>
-    </child>
-    <child>
-      <object class="GtkAction" id="open-mountpoint">
-        <property name="label" translatable="yes">Open</property>
-        <property name="short_label" translatable="yes">Open</property>
-        <property name="tooltip" translatable="yes">Open snapshot mountpoint</property>
-        <property name="stock_id">gtk-open</property>
-        <signal name="activate" handler="on_open_snapshot_folder" object="treeview-selection1" swapped="no"/>
-      </object>
-      <accelerator key="o" modifiers="GDK_CONTROL_MASK"/>
-    </child>
-    <child>
-      <object class="GtkAction" id="view-changes">
-        <property name="label" translatable="yes">View changes</property>
-        <property name="short_label" translatable="yes">Changes</property>
-        <property name="tooltip" translatable="yes">Show witch files have changed between selected snapshots</property>
-        <property name="stock_id">gtk-file</property>
-        <signal name="activate" handler="on_viewchanges_clicked" object="treeview-selection1" swapped="no"/>
-      </object>
     </child>
   </object>
   <object class="GtkDialog" id="dialogProperties">
@@ -178,6 +135,39 @@ for filesystem snapshot management</property>
       <action-widget response="0">button1</action-widget>
     </action-widgets>
   </object>
+  <object class="GtkAccelGroup" id="snapsaccelgroup"/>
+  <object class="GtkActionGroup" id="snapshotActions">
+    <property name="accel_group">snapsaccelgroup</property>
+    <child>
+      <object class="GtkAction" id="delete-snapshot">
+        <property name="label" translatable="yes">Delete</property>
+        <property name="short_label" translatable="yes">Del</property>
+        <property name="tooltip" translatable="yes">Delete selected snapshots</property>
+        <property name="stock_id">gtk-remove</property>
+        <signal name="activate" handler="on_delete_snapshot" object="treeview-selection1" swapped="no"/>
+      </object>
+      <accelerator key="Delete"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="open-mountpoint">
+        <property name="label" translatable="yes">Open</property>
+        <property name="short_label" translatable="yes">Open</property>
+        <property name="tooltip" translatable="yes">Open snapshot mountpoint</property>
+        <property name="stock_id">gtk-open</property>
+        <signal name="activate" handler="on_open_snapshot_folder" object="treeview-selection1" swapped="no"/>
+      </object>
+      <accelerator key="o" modifiers="GDK_CONTROL_MASK"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="view-changes">
+        <property name="label" translatable="yes">View changes</property>
+        <property name="short_label" translatable="yes">Changes</property>
+        <property name="tooltip" translatable="yes">Show witch files have changed between selected snapshots</property>
+        <property name="stock_id">gtk-file</property>
+        <signal name="activate" handler="on_viewchanges_clicked" object="treeview-selection1" swapped="no"/>
+      </object>
+    </child>
+  </object>
   <object class="GtkBox" id="snapshotsBox">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -259,21 +249,6 @@ for filesystem snapshot management</property>
             <property name="label" translatable="yes">Changes</property>
             <property name="use_underline">True</property>
             <property name="stock_id">gtk-file</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="homogeneous">True</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkToolButton" id="toolbutton3">
-            <property name="related_action">refresh</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes">Update snapshots list</property>
-            <property name="label" translatable="yes">Refresh</property>
-            <property name="use_underline">True</property>
-            <property name="stock_id">gtk-refresh</property>
           </object>
           <packing>
             <property name="expand">False</property>

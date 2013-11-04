@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.6 -->
+  <!-- interface-requires gtk+ 3.10 -->
   <!-- interface-requires gtksourceview 3.0 -->
   <object class="GtkActionGroup" id="actiongroup">
     <child>
