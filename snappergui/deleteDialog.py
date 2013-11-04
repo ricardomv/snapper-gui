@@ -22,22 +22,40 @@ class deleteDialog(object):
 		builder.connect_signals(self)
 
 		self.snapshots_list = snapshots
+		self.to_delete = snapshots
 
-		self.deleteTreeStore = Gtk.ListStore(bool, int, str,  str)
+		parents = []
+		self.deleteTreeStore = Gtk.TreeStore(bool, int, str,  str)
 		for snapshot in snapshots:
 			snapinfo = snapper.GetSnapshot(config,snapshot)
-			self.deleteTreeStore.append([True, snapinfo[0], getpwuid(snapinfo[4])[0], snapinfo[5]])
+			#self.deleteTreeStore.append([True, snapinfo[0], getpwuid(snapinfo[4])[0], snapinfo[5]])
+			if (snapinfo[1] == 1): # Pre Snapshot
+				parents.append(self.deleteTreeStore.append(None , [True, snapinfo[0], getpwuid(snapinfo[4])[0], snapinfo[5]]))
+			elif (snapinfo[1] == 2): # Post snappshot
+				for parent in parents:
+					if (self.deleteTreeStore.get_value(parent, 1) == snapinfo[2]):
+						self.deleteTreeStore.append(parent , [True, snapinfo[0], getpwuid(snapinfo[4])[0], snapinfo[5]])
+						break
+				if (self.deleteTreeStore.get_value(parent, 1) != snapinfo[2]):
+					self.deleteTreeStore.append(None , [True, snapinfo[0], getpwuid(snapinfo[4])[0], snapinfo[5]])
+			else:  # Single snapshot
+				self.deleteTreeStore.append(None , [True, snapinfo[0], getpwuid(snapinfo[4])[0], snapinfo[5]])
 		self.deletetreeview.set_model(self.deleteTreeStore)
+		self.deletetreeview.expand_all()
 
 	def run(self):
 		response = self.dialog.run()
-		self.to_delete = []
-		# Check if any of the selected snapshots was toggled
-		for (aux,snapshot) in enumerate(self.snapshots_list):
-			if self.deleteTreeStore[aux][0]:
-				self.to_delete.append(snapshot)
 		self.dialog.destroy()
 		return response
 
-	def on_toggle_delete_snapshot(self,widget,index):
-		self.deleteTreeStore[int(index)][0] = not(self.deleteTreeStore[int(index)][0])
+	def on_toggle_delete_snapshot(self,widget,path):
+		treeiter = self.deleteTreeStore.get_iter(path)
+		self.deleteTreeStore.set_value(treeiter, False, not(self.deleteTreeStore.get_value(treeiter, False)))
+		snapshot_num = self.deleteTreeStore.get_value(treeiter, True)
+		if self.deleteTreeStore.get_value(treeiter,False):
+			if snapshot_num not in self.to_delete:
+				self.to_delete.append(snapshot_num)
+		else:
+			if snapshot_num in self.to_delete:
+				self.to_delete.remove(snapshot_num)
+		print(self.to_delete)
