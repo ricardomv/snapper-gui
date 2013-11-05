@@ -1,29 +1,19 @@
-
-import pkg_resources, sys, signal
+from snappergui import snapper
+import pkg_resources, subprocess, dbus
 from snappergui.propertiesDialog import propertiesDialog
 from snappergui.createSnapshot import createSnapshot
 from snappergui.createConfig import createConfig
 from snappergui.deleteDialog import deleteDialog
 from snappergui.changesWindow import changesWindow
 from snappergui.snapshotsView import snapshotsView
-import dbus
-from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, GLib, Gdk, GdkPixbuf, Gio#, GObject
 from time import strftime, localtime
 from pwd import getpwuid
-import subprocess
-import signal
 
 if Gtk.get_minor_version() > 8:
     from gi.repository.Gtk import Stack, StackTransitionType
 else:
     from gi.repository.Gd import Stack, StackTransitionType
-
-
-bus = dbus.SystemBus(mainloop=DBusGMainLoop())
-snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/Snapper'),
-							dbus_interface='org.opensuse.Snapper')
-
 
 class SnapperGUI(Gtk.ApplicationWindow):
 	"""docstring for SnapperGUI"""

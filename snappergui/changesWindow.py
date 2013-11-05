@@ -1,15 +1,6 @@
-
-import pkg_resources
-import dbus
-import os
-import time
-import difflib
-from dbus.mainloop.glib import DBusGMainLoop
+from snappergui import snapper
+import pkg_resources, os, time, difflib
 from gi.repository import Gtk, Gdk, GObject, GtkSource
-
-bus = dbus.SystemBus(mainloop=DBusGMainLoop())
-snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/Snapper'),
-							dbus_interface='org.opensuse.Snapper')
 
 class changesWindow(object):
 	"""docstring for changesWindow"""

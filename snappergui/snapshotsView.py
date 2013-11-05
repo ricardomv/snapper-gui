@@ -1,11 +1,8 @@
+from snappergui import snapper
 import pkg_resources, dbus
 from gi.repository import Gtk, GObject
 from time import strftime, localtime
 from pwd import getpwuid
-
-bus = dbus.SystemBus()
-snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/Snapper'),
-							dbus_interface='org.opensuse.Snapper')
 
 class snapshotsView(Gtk.Widget):
 	"""docstring for snapshotsView"""

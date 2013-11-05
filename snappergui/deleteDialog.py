@@ -1,13 +1,7 @@
-
+from snappergui import snapper
 import pkg_resources
-import dbus
-from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
 from pwd import getpwuid
-
-bus = dbus.SystemBus(mainloop=DBusGMainLoop())
-snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/Snapper'),
-							dbus_interface='org.opensuse.Snapper')
 
 class deleteDialog(object):
 	"""docstring for deleteDialog"""
@@ -23,7 +17,6 @@ class deleteDialog(object):
 
 		self.snapshots_list = snapshots
 		self.to_delete = snapshots
-		print(snapshots)
 
 		parents = []
 		self.deleteTreeStore = Gtk.TreeStore(bool, int, str,  str)

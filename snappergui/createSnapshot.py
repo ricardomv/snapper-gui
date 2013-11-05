@@ -1,12 +1,6 @@
-
+from snappergui import snapper
 import pkg_resources
-import dbus
-from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import Gtk, Gdk#, GObject
-
-bus = dbus.SystemBus(mainloop=DBusGMainLoop())
-snapper = dbus.Interface(bus.get_object('org.opensuse.Snapper', '/org/opensuse/Snapper'),
-							dbus_interface='org.opensuse.Snapper')
 
 class createSnapshot(object):
 	"""docstring for createSnapshot"""
