@@ -23,6 +23,7 @@ class deleteDialog(object):
 
 		self.snapshots_list = snapshots
 		self.to_delete = snapshots
+		print(snapshots)
 
 		parents = []
 		self.deleteTreeStore = Gtk.TreeStore(bool, int, str,  str)
@@ -32,12 +33,12 @@ class deleteDialog(object):
 			if (snapinfo[1] == 1): # Pre Snapshot
 				parents.append(self.deleteTreeStore.append(None , [True, snapinfo[0], getpwuid(snapinfo[4])[0], snapinfo[5]]))
 			elif (snapinfo[1] == 2): # Post snappshot
+				parent_node = None
 				for parent in parents:
 					if (self.deleteTreeStore.get_value(parent, 1) == snapinfo[2]):
-						self.deleteTreeStore.append(parent , [True, snapinfo[0], getpwuid(snapinfo[4])[0], snapinfo[5]])
+						parent_node = parent
 						break
-				if (self.deleteTreeStore.get_value(parent, 1) != snapinfo[2]):
-					self.deleteTreeStore.append(None , [True, snapinfo[0], getpwuid(snapinfo[4])[0], snapinfo[5]])
+				self.deleteTreeStore.append(parent_node, [True, snapinfo[0], getpwuid(snapinfo[4])[0], snapinfo[5]])
 			else:  # Single snapshot
 				self.deleteTreeStore.append(None , [True, snapinfo[0], getpwuid(snapinfo[4])[0], snapinfo[5]])
 		self.deletetreeview.set_model(self.deleteTreeStore)

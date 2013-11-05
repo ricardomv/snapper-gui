@@ -44,12 +44,12 @@ class snapshotsView(Gtk.Widget):
 			if (snapshot[1] == 1): # Pre Snapshot
 				parents.append(configstree.append(None , self.snapshot_columns(snapshot)))
 			elif (snapshot[1] == 2): # Post snappshot
+				parent_node = None
 				for parent in parents:
 					if (configstree.get_value(parent, 0) == snapshot[2]):
-						configstree.append(parent , self.snapshot_columns(snapshot))
+						parent_node = parent
 						break
-				if (configstree.get_value(parent, 0) != snapshot[2]):
-					configstree.append(None , self.snapshot_columns(snapshot))
+				configstree.append(parent_node , self.snapshot_columns(snapshot))
 			else:  # Single snapshot
 				configstree.append(None , self.snapshot_columns(snapshot))
 		return configstree
