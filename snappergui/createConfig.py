@@ -15,7 +15,7 @@ class createConfig(object):
 
 		self.name = ""
 		self.subvolume = ""
-		self.fstype = ""
+		self.fstype = "btrfs"
 		self.template = "default"
 
 		builder.get_object("fsTypeCombo").set_active(0)

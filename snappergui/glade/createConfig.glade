@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.0 on Tue Nov  5 02:09:01 2013 -->
 <interface>
   <!-- interface-requires gtk+ 3.10 -->
   <object class="GtkMessageDialog" id="createConfig">
@@ -46,8 +47,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="active">0</property>
-                <property name="entry_text_column">0</property>
-                <property name="id_column">1</property>
                 <items>
                   <item translatable="yes">btrfs</item>
                   <item translatable="yes">ext4</item>
@@ -93,7 +92,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">●</property>
-                <property name="invisible_char_set">True</property>
+                <property name="text" translatable="yes">default</property>
                 <signal name="changed" handler="on_template_changed" swapped="no"/>
               </object>
               <packing>
@@ -108,7 +107,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">●</property>
-                <property name="invisible_char_set">True</property>
                 <signal name="changed" handler="on_subvolume_changed" swapped="no"/>
               </object>
               <packing>
@@ -136,7 +134,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">●</property>
-                <property name="invisible_char_set">True</property>
                 <signal name="changed" handler="on_name_changed" swapped="no"/>
               </object>
               <packing>

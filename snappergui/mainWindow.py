@@ -206,8 +206,12 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		for deleted in snapshots:
 			self.configView[config].remove_snapshot_from_tree(deleted)
 
-	def on_dbus_config_created(self,args):
-		print("Config Created")
+	def on_dbus_config_created(self, config):
+		self.configView[config] = snapshotsView(config)
+		self.configView[config].update_view()
+		self._stack.add_titled(self.configView[config]._TreeView, config, config)
+		self.statusbar.push(5,"Created new configuration %s"% config)
+
 
 	def on_dbus_config_modified(self,args):
 		print("Config Modified")

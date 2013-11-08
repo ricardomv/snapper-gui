@@ -1,8 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Mon Nov  4 21:01:16 2013 -->
+<!-- Generated with glade 3.16.0 on Tue Nov  5 01:45:41 2013 -->
 <interface>
   <!-- interface-requires gtk+ 3.10 -->
   <object class="GtkActionGroup" id="configsGroup"/>
+  <object class="GtkActionGroup" id="snapshotActions">
+    <property name="accel_group">snapsaccelgroup</property>
+    <child>
+      <object class="GtkAction" id="delete-snapshot">
+        <property name="label" translatable="yes">Delete</property>
+        <property name="short_label" translatable="yes">Del</property>
+        <property name="tooltip" translatable="yes">Delete selected snapshots</property>
+        <property name="stock_id">gtk-remove</property>
+        <signal name="activate" handler="on_delete_snapshot" object="treeview-selection1" swapped="no"/>
+      </object>
+      <accelerator key="Delete"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="open-mountpoint">
+        <property name="label" translatable="yes">Open</property>
+        <property name="short_label" translatable="yes">Open</property>
+        <property name="tooltip" translatable="yes">Open snapshot mountpoint</property>
+        <property name="stock_id">gtk-open</property>
+        <signal name="activate" handler="on_open_snapshot_folder" object="treeview-selection1" swapped="no"/>
+      </object>
+      <accelerator key="o" modifiers="GDK_CONTROL_MASK"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="view-changes">
+        <property name="label" translatable="yes">View changes</property>
+        <property name="short_label" translatable="yes">Changes</property>
+        <property name="tooltip" translatable="yes">Show witch files have changed between selected snapshots</property>
+        <property name="stock_id">gtk-file</property>
+        <signal name="activate" handler="on_viewchanges_clicked" object="treeview-selection1" swapped="no"/>
+      </object>
+    </child>
+  </object>
   <object class="GtkAboutDialog" id="aboutdialog1">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -136,38 +168,6 @@ for filesystem snapshot management</property>
     </action-widgets>
   </object>
   <object class="GtkAccelGroup" id="snapsaccelgroup"/>
-  <object class="GtkActionGroup" id="snapshotActions">
-    <property name="accel_group">snapsaccelgroup</property>
-    <child>
-      <object class="GtkAction" id="delete-snapshot">
-        <property name="label" translatable="yes">Delete</property>
-        <property name="short_label" translatable="yes">Del</property>
-        <property name="tooltip" translatable="yes">Delete selected snapshots</property>
-        <property name="stock_id">gtk-remove</property>
-        <signal name="activate" handler="on_delete_snapshot" object="treeview-selection1" swapped="no"/>
-      </object>
-      <accelerator key="Delete"/>
-    </child>
-    <child>
-      <object class="GtkAction" id="open-mountpoint">
-        <property name="label" translatable="yes">Open</property>
-        <property name="short_label" translatable="yes">Open</property>
-        <property name="tooltip" translatable="yes">Open snapshot mountpoint</property>
-        <property name="stock_id">gtk-open</property>
-        <signal name="activate" handler="on_open_snapshot_folder" object="treeview-selection1" swapped="no"/>
-      </object>
-      <accelerator key="o" modifiers="GDK_CONTROL_MASK"/>
-    </child>
-    <child>
-      <object class="GtkAction" id="view-changes">
-        <property name="label" translatable="yes">View changes</property>
-        <property name="short_label" translatable="yes">Changes</property>
-        <property name="tooltip" translatable="yes">Show witch files have changed between selected snapshots</property>
-        <property name="stock_id">gtk-file</property>
-        <signal name="activate" handler="on_viewchanges_clicked" object="treeview-selection1" swapped="no"/>
-      </object>
-    </child>
-  </object>
   <object class="GtkBox" id="snapshotsBox">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -201,6 +201,7 @@ for filesystem snapshot management</property>
                   <object class="GtkMenuItem" id="menuitem24">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Create Configuration</property>
                     <signal name="activate" handler="on_create_config" swapped="no"/>
                   </object>
                 </child>
