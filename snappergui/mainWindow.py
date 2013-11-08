@@ -73,7 +73,6 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		for config in snapper.ListConfigs():
 			name = str(config[0])
 			self.configView[name] = snapshotsView(name)
-			self.configView[name].update_view() #this should not be done here (adds up startup time)
 			self._stack.add_titled(self.configView[name]._TreeView, name, name)
 
 	def snapshot_columns(self,snapshot):

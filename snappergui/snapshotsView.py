@@ -15,8 +15,9 @@ class snapshotsView(Gtk.Widget):
 		self._TreeView = self.builder.get_object("snapstreeview")
 		self.selection = self.builder.get_object("snapshotsSelection")
 		self.count = 0
+		self._TreeView.connect("realize", self.update_view)
 		
-	def update_view(self):
+	def update_view(self, widget=None, user_data=None):
 		treestore = self.get_config_treestore()
 		if treestore:
 			self._TreeView.set_model(treestore)
