@@ -160,9 +160,15 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		selection = self.configView[config].selection
 		model, paths = selection.get_selected_rows()
 		if len(paths) > 1:
+			# open a changes window with the first and the last snapshot selected
 			begin = model[paths[0]][0]
 			end = model[paths[-1]][0]
-
+			window = changesWindow(config, begin, end)
+		elif len(paths) == 1 and model.iter_has_child(model.get_iter(paths[0])):
+			# open a changes window with the selected pre snapshot and is's post
+			child_iter = model.iter_children(model.get_iter(paths[0]))
+			begin = model[paths[0]][0]
+			end = model.get_value(child_iter,0)
 			window = changesWindow(config, begin, end)
 
 	def on_configs_properties_clicked(self, notebook):
