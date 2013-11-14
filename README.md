@@ -21,4 +21,5 @@ Installation
 -----------
 
     $ git clone https://github.com/ricardo-vieira/snapper-gui/
-    # python3 snapper-gui/setup.py install
+    $ cd snapper-gui/
+    # python3 setup.py install
