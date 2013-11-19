@@ -52,7 +52,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		else:
 			self._box.pack_start(self.header_bar, False, False, 0)
 			self.set_hide_titlebar_when_maximized(True)
-		self.builder.get_object("snapshotsScrolledWindow").add(self._stack)
+		self.builder.get_object("snapshotsviewport").add(self._stack)
 		self.add(self.snapshotsBox)
 
 		# TODO do not hardcode to root configuration
@@ -72,7 +72,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		for config in snapper.ListConfigs():
 			name = str(config[0])
 			self.configView[name] = snapshotsView(name)
-			self._stack.add_titled(self.configView[name]._TreeView, name, name)
+			self._stack.add_titled(self.configView[name].scrolledwindow, name, name)
 			self.configView[name].selection.connect("changed", self.on_snapshots_selection_changed)
 
 	def snapshot_columns(self,snapshot):

@@ -14,6 +14,7 @@ class snapshotsView(Gtk.Widget):
 		self.builder.connect_signals(self)
 		self._TreeView = self.builder.get_object("snapstreeview")
 		self.selection = self.builder.get_object("snapshotsSelection")
+		self.scrolledwindow = self.builder.get_object("scrolledwindow1")
 		self.count = 0
 		self._TreeView.connect("realize", self.update_view)
 		
