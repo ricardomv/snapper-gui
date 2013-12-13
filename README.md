@@ -23,3 +23,7 @@ Installation
     $ git clone https://github.com/ricardo-vieira/snapper-gui/
     $ cd snapper-gui/
     # python3 setup.py install
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ricardo-vieira/snapper-gui/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
