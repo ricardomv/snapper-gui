@@ -76,6 +76,8 @@ class propertiesDialog(object):
 		setting = self.widgets[setting]
 		line = setting[1]
 		widget = self.grid[self.notebook.get_current_page()].get_child_at(1,line)
+		if not widget: # if property is not set in config file
+			return None
 		if setting[0] == Gtk.Entry:
 			return widget.get_text()
 		elif setting[0] == Gtk.Switch:
@@ -91,7 +93,7 @@ class propertiesDialog(object):
 		currentConfig = str(snapper.ListConfigs()[self.notebook.get_current_page()][0])
 		for k, v in self.widgets.items():
 			currentValue = self.get_current_value(k)
-			if v[2+self.notebook.get_current_page()] != currentValue:
+			if currentValue and v[2+self.notebook.get_current_page()] != currentValue:
 				changed[k] = currentValue
 		return changed
 
