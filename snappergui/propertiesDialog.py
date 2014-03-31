@@ -31,7 +31,8 @@ class propertiesDialog(object):
 		"NUMBER_MIN_AGE" : [Gtk.SpinButton, 14],
 		"NUMBER_CLEANUP" : [Gtk.Switch, 15],
 		"BACKGROUND_COMPARISON" : [Gtk.Switch, 16],
-		"NUMBER_LIMIT_IMPORTANT" : [Gtk.SpinButton, 17]
+		"NUMBER_LIMIT_IMPORTANT" : [Gtk.SpinButton, 17],
+		"SYNC_ACL" : [Gtk.Switch, 18]
 		}
 		# array that will hold the grids for each tab/config
 		self.grid = []
