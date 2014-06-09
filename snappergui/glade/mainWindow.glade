@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Tue Nov 19 01:14:05 2013 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.10 -->
-  <object class="GtkActionGroup" id="configsGroup"/>
+  <requires lib="gtk+" version="3.10"/>
   <object class="GtkAboutDialog" id="aboutdialog1">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -12,6 +11,7 @@
     <property name="copyright" translatable="yes">2013</property>
     <property name="comments" translatable="yes">A user interface for the program snapper
 for filesystem snapshot management</property>
+    <property name="logo_icon_name">image-missing</property>
     <property name="license_type">gpl-2-0</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="aboutdialog-vbox1">
@@ -36,6 +36,7 @@ for filesystem snapshot management</property>
       </object>
     </child>
   </object>
+  <object class="GtkActionGroup" id="configsGroup"/>
   <object class="GtkAccelGroup" id="configsaccelgroup"/>
   <object class="GtkActionGroup" id="configActions">
     <property name="accel_group">configsaccelgroup</property>
@@ -165,30 +166,6 @@ for filesystem snapshot management</property>
             <property name="label" translatable="yes">Changes</property>
             <property name="use_underline">True</property>
             <property name="stock_id">gtk-file</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="homogeneous">True</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSeparatorToolItem" id="toolbutton5">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="homogeneous">True</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkToolButton" id="toolbutton4">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Exit</property>
-            <property name="use_underline">True</property>
-            <property name="stock_id">gtk-quit</property>
-            <signal name="clicked" handler="delete_event" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
