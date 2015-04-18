@@ -52,12 +52,11 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		else:
 			self._box.pack_start(self.header_bar, False, False, 0)
 			self.set_hide_titlebar_when_maximized(True)
-		self.builder.get_object("snapshotsScrolledWindow").add(self._stack)
+		self.builder.get_object("snapshotsviewport").add(self._stack)
 		self.add(self.snapshotsBox)
 
 		# TODO do not hardcode to root configuration
 		self.statusbar.push(5,"%d snapshots"% self.configView["root"].count)
-		self.configView["root"].selection.connect("changed", self.on_snapshots_selection_changed)
 		
 		self.init_dbus_signal_handlers()
 		self.show()
@@ -73,7 +72,8 @@ class SnapperGUI(Gtk.ApplicationWindow):
 		for config in snapper.ListConfigs():
 			name = str(config[0])
 			self.configView[name] = snapshotsView(name)
-			self._stack.add_titled(self.configView[name]._TreeView, name, name)
+			self._stack.add_titled(self.configView[name].scrolledwindow, name, name)
+			self.configView[name].selection.connect("changed", self.on_snapshots_selection_changed)
 
 	def snapshot_columns(self,snapshot):
 		if(snapshot[3] == -1):
@@ -82,8 +82,11 @@ class SnapperGUI(Gtk.ApplicationWindow):
 			date = strftime("%a %R %e/%m/%Y", localtime(snapshot[3]))
 		return [snapshot[0], snapshot[1], snapshot[2], date, getpwuid(snapshot[4])[0], snapshot[5], snapshot[6]]
 
+	def get_current_config(self):
+		return self._stack.get_visible_child_name()
+
 	def on_snapshots_selection_changed(self,selection):
-		config = "root"
+		config = self.get_current_config()
 		userdatatreeview = self.builder.get_object("userdatatreeview")
 		(model, paths) = selection.get_selected_rows()
 		if(len(paths) == 0):
@@ -125,7 +128,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 			pass
 
 	def on_delete_snapshot(self, widget):
-		config = self._stack.get_visible_child_name()
+		config = self.get_current_config()
 		selection = self.configView[config].selection
 		(model, paths) = selection.get_selected_rows()
 		snapshots = []
@@ -144,7 +147,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 			snapper.DeleteSnapshots(config, dialog.to_delete)
 
 	def on_open_snapshot_folder(self, widget):
-		config = self._stack.get_visible_child_name()
+		config = self.get_current_config()
 		selection = self.configView[config].selection
 		model, paths = selection.get_selected_rows()
 		for path in paths:
@@ -156,7 +159,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
 				(model[treeiter][0], config, mountpoint))
 
 	def on_viewchanges_clicked(self, widget):
-		config = self._stack.get_visible_child_name()
+		config = self.get_current_config()
 		selection = self.configView[config].selection
 		model, paths = selection.get_selected_rows()
 		if len(paths) > 1:
