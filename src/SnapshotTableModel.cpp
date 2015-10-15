@@ -4,7 +4,6 @@
 SnapshotTableModel::SnapshotTableModel(QString configName, QObject *parent)
     : QAbstractTableModel(parent)
 {
-
     QDBusConnection bus = QDBusConnection::systemBus();
     QDBusInterface dbus_iface("org.opensuse.Snapper", "/org/opensuse/Snapper",
                               "org.opensuse.Snapper", bus);
@@ -15,7 +14,7 @@ SnapshotTableModel::SnapshotTableModel(QString configName, QObject *parent)
     QVariantList list;
     arg.beginArray();
     while (!arg.atEnd()) {
-        info << new Snapshot(arg);
+        info << new Snapshot(configName, arg);
     }
     arg.endArray();
 }

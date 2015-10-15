@@ -1,21 +1,23 @@
-/* 
+/*
  * Copyright © 2015  Ricardo Vieira <ricardo.vieira@tecnico.ulisboa.pt>
- * 
+ *
  * This file is part of Snapper-GUI.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <unistd.h>
 
 #include "Snapshot.h"
 
@@ -24,8 +26,9 @@ Snapshot::Snapshot(QObject *parent)
 {
 }
 
-Snapshot::Snapshot(const QDBusArgument & arg, QObject *parent)
+Snapshot::Snapshot(QString configName, const QDBusArgument & arg, QObject *parent)
     : QObject(parent)
+    , m_config(configName)
 {
     // signature="uquxussa{ss}"
     arg.beginStructure();
@@ -46,4 +49,12 @@ Snapshot::Snapshot(const QDBusArgument & arg, QObject *parent)
         }
         arg.endArray();
     arg.endStructure();
+}
+
+void Snapshot::deleteSnapshot() {
+    QDBusConnection bus = QDBusConnection::systemBus();
+    QDBusInterface dbus_iface("org.opensuse.Snapper", "/org/opensuse/Snapper",
+                              "org.opensuse.Snapper", bus);
+    QList<QVariant> reply = dbus_iface.call("DeleteSnapshots", m_config, m_number).arguments();
+    qDebug() << reply.at(0);
 }
