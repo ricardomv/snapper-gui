@@ -17,7 +17,12 @@ Dependencies
 	dbus-1-python3
 	python-gtksourceview-devel
 	python3-setuptools
-	
+### Ubuntu
+	python3
+	libgtksourceview-3.0-1
+	python3-dbus
+	python3-setuptools
+
 Installation
 -----------
 
