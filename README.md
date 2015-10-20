@@ -8,6 +8,7 @@ Dependencies
 	python3
 	gtk3
 	python-dbus
+	python-gobject
 	python-setuptools
 	gtksourceview3
 	snapper-git (AUR)
