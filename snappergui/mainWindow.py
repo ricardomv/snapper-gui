@@ -37,8 +37,6 @@ class SnapperGUI(Gtk.ApplicationWindow):
 
         self.init_configs_stack()
 
-        self._stack.set_visible_child_name("root")
-
         # Switch configurations from the header bar with a StackSwitcher
         switcher = Gtk.StackSwitcher(margin_top=2, margin_bottom=2, visible=True)
         switcher.set_stack(self._stack)
@@ -54,9 +52,6 @@ class SnapperGUI(Gtk.ApplicationWindow):
             self.set_hide_titlebar_when_maximized(True)
         self.builder.get_object("snapshotsviewport").add(self._stack)
         self.add(self.snapshotsBox)
-
-        # TODO do not hardcode to root configuration
-        self.statusbar.push(5,"%d snapshots"% self.configView["root"].count)
 
         self.init_dbus_signal_handlers()
         self.show()
