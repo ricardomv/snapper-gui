@@ -6,14 +6,10 @@ from snappergui.createConfig import createConfig
 from snappergui.deleteDialog import deleteDialog
 from snappergui.changesWindow import changesWindow
 from snappergui.snapshotsView import snapshotsView
-from gi.repository import Gtk, GLib, Gdk, GdkPixbuf, Gio#, GObject
+from gi.repository import Gtk
 from time import strftime, localtime
 from pwd import getpwuid
 
-if Gtk.get_minor_version() > 8:
-    from gi.repository.Gtk import Stack, StackTransitionType
-else:
-    from gi.repository.Gd import Stack, StackTransitionType
 
 class SnapperGUI(Gtk.ApplicationWindow):
     """docstring for SnapperGUI"""
@@ -57,8 +53,8 @@ class SnapperGUI(Gtk.ApplicationWindow):
         self.show()
 
     def init_configs_stack(self):
-        self._stack = Stack(
-                transition_type=StackTransitionType.CROSSFADE,
+        self._stack = Gtk.Stack(
+                transition_type=Gtk.StackTransitionType.CROSSFADE,
                 transition_duration=300,
                 visible=True)
 

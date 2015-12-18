@@ -1,6 +1,6 @@
 from snappergui import snapper
 import pkg_resources, os, time, difflib
-from gi.repository import Gtk, Gdk, GObject, GtkSource
+from gi.repository import Gtk, GtkSource
 
 class changesWindow(object):
     """docstring for changesWindow"""

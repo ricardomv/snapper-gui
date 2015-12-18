@@ -1,6 +1,6 @@
 from snappergui import snapper
 import pkg_resources, dbus
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk
 from time import strftime, localtime
 from pwd import getpwuid
 

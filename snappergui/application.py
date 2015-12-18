@@ -1,5 +1,5 @@
 import pkg_resources, sys, signal
-from gi.repository import Gtk, GLib, Gdk, GdkPixbuf, Gio#, GObject
+from gi.repository import Gtk, GLib, GdkPixbuf, Gio
 from snappergui.mainWindow import SnapperGUI
 from snappergui.propertiesDialog import propertiesDialog
 

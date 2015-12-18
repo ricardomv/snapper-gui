@@ -1,6 +1,6 @@
 from snappergui import snapper
 import pkg_resources
-from gi.repository import Gtk, Gdk#, GObject
+from gi.repository import Gtk
 from pwd import getpwuid
 
 class deleteDialog(object):
