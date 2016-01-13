@@ -1,6 +1,6 @@
 from snappergui import snapper
 import pkg_resources, os, time, difflib
-from gi.repository import Gtk, GtkSource
+from gi.repository import Gtk, GtkSource, GObject
 
 class changesWindow(object):
     """docstring for changesWindow"""
@@ -95,7 +95,7 @@ class changesWindow(object):
 
     def get_lines_from_file(self, path):
         try:
-            return list(open(path))
+            return open(path, 'U').readlines()
         except IsADirectoryError:
             pass
         except FileNotFoundError:
@@ -119,7 +119,7 @@ class changesWindow(object):
                 return
             elif fromlines == "":
                 fromfile = "New File"
-                fromdate = None
+                fromdate = ""
             else:
                 fromdate = time.ctime(os.stat(fromfile).st_mtime)
 
@@ -128,7 +128,7 @@ class changesWindow(object):
                 return
             elif tolines == "":
                 tofile = "Deleted File"
-                todate = None
+                todate = ""
             else:
                 todate = time.ctime(os.stat(tofile).st_mtime)
 
