@@ -95,7 +95,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
                 pass
 
     def on_create_snapshot(self, widget):
-        dialog = createSnapshot(self)
+        dialog = createSnapshot(self, self.get_current_config())
         response = dialog.run()
         dialog.destroy()
         if response == Gtk.ResponseType.OK:

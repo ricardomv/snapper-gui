@@ -4,7 +4,7 @@ from gi.repository import Gtk
 
 class createSnapshot(object):
     """docstring for createSnapshot"""
-    def __init__(self, parent):
+    def __init__(self, parent, config_name):
         super(createSnapshot, self).__init__()
         builder = Gtk.Builder()
         builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/createSnapshot.glade"))
@@ -20,12 +20,14 @@ class createSnapshot(object):
         self.userdata = {}
 
         configscombo = Gtk.ListStore(str)
-        for config in snapper.ListConfigs():
-            configscombo.append( [str(config[0])] )
         combobox = builder.get_object("configsCombo")
         combobox.set_model(configscombo)
-        if len(configscombo) != 0:
-            combobox.set_active(0)
+        for i, config in enumerate(snapper.ListConfigs()):
+            name = str(config[0])
+            configscombo.append([name])
+            if name == config_name:
+                combobox.set_active(i)
+
         builder.get_object("cleanupcombo").set_active(0)
 
 
