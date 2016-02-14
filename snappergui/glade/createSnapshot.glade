@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.19.0 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkListStore" id="userdatastore">
@@ -18,50 +18,45 @@
   </object>
   <object class="GtkMessageDialog" id="dialogCreate">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="resizable">False</property>
     <property name="window_position">center-on-parent</property>
-    <property name="type_hint">normal</property>
+    <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">other</property>
     <property name="buttons">ok-cancel</property>
+    <property name="text" translatable="yes">Create new snapshot</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox4">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">10</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area4">
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="layout_style">expand</property>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
+            <property name="fill">False</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Create new snapshot</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="column_homogeneous">True</property>
+            <property name="margin_left">5</property>
+            <property name="margin_right">5</property>
+            <property name="row_spacing">5</property>
+            <property name="column_spacing">5</property>
+            <property name="row_homogeneous">True</property>
             <child>
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="hexpand">True</property>
                 <property name="label" translatable="yes">Configuration: </property>
               </object>
               <packing>
@@ -71,6 +66,7 @@
             </child>
             <child>
               <object class="GtkComboBoxText" id="configsCombo">
+                <property name="width_request">200</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
@@ -83,6 +79,7 @@
             </child>
             <child>
               <object class="GtkEntry" id="entry1">
+                <property name="width_request">200</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">●</property>
@@ -97,6 +94,8 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="hexpand">True</property>
                 <property name="label" translatable="yes">Cleanup:</property>
               </object>
               <packing>
@@ -108,6 +107,8 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="hexpand">True</property>
                 <property name="label" translatable="yes">Description: </property>
               </object>
               <packing>
@@ -117,6 +118,7 @@
             </child>
             <child>
               <object class="GtkComboBoxText" id="cleanupcombo">
+                <property name="width_request">200</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="active">0</property>
@@ -137,13 +139,15 @@
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="margin_left">5</property>
+            <property name="margin_right">5</property>
             <property name="vscrollbar_policy">never</property>
             <property name="shadow_type">in</property>
             <child>
@@ -193,7 +197,7 @@
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">5</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>
