@@ -42,6 +42,7 @@ Contributors
 ------------
 
  - Ricardo Vieira <ricardo.vieira@tecnico.ulisboa.pt>
+ - Marek Rusinowski <marekrusinowski@gmail.com>
 
 License
 -------
