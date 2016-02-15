@@ -6,7 +6,7 @@ class createSnapshot(object):
     TYPE_HERE = "<Type here>"
 
     """docstring for createSnapshot"""
-    def __init__(self, parent, default_config):
+    def __init__(self, parent, config_name):
         super(createSnapshot, self).__init__()
         builder = Gtk.Builder()
         builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/createSnapshot.glade"))
@@ -23,17 +23,14 @@ class createSnapshot(object):
         self.userdata = {}
 
         configscombo = Gtk.ListStore(str)
-        default_configscombo_entry = -1
-        for i, config in enumerate(snapper.ListConfigs()):
-            config_name = str(config[0])
-            configscombo.append([config_name])
-            if config_name == default_config:
-                default_configscombo_entry = i
-
         combobox = builder.get_object("configsCombo")
         combobox.set_model(configscombo)
-        if default_configscombo_entry != -1:
-            combobox.set_active(default_configscombo_entry)
+        for i, config in enumerate(snapper.ListConfigs()):
+            name = str(config[0])
+            configscombo.append([name])
+            if name == config_name:
+                combobox.set_active(i)
+
         builder.get_object("cleanupcombo").set_active(0)
 
 
