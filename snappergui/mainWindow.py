@@ -58,6 +58,8 @@ class SnapperGUI(Gtk.ApplicationWindow):
                 transition_duration=300,
                 visible=True)
 
+        self._stack.connect("notify::visible-child", self.on_stack_visible_child_changed)
+
         self._stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
 
         for config in snapper.ListConfigs():
@@ -76,11 +78,18 @@ class SnapperGUI(Gtk.ApplicationWindow):
     def get_current_config(self):
         return self._stack.get_visible_child_name()
 
-    def on_snapshots_selection_changed(self,selection):
+    def on_stack_visible_child_changed(self, stack, property):
+        self.update_controlls_and_userdatatreeview()
+
+    def on_snapshots_selection_changed(self, selection):
+        self.update_controlls_and_userdatatreeview()
+
+    def update_controlls_and_userdatatreeview(self):
         config = self.get_current_config()
         userdatatreeview = self.builder.get_object("userdatatreeview")
-        (model, paths) = selection.get_selected_rows()
-        if(len(paths) == 0):
+        if config is not None:
+            model, paths = self.configView[config].selection.get_selected_rows()
+        if config is None or len(paths) == 0:
             self.builder.get_object("snapshotActions").set_sensitive(False)
             userdatatreeview.set_model(None)
         else:
