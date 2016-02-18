@@ -38,7 +38,7 @@ class Application(Gtk.Application):
         self.add_action(quitAction)
 
     def show_configs_properties(self, action, param):
-        dialog = propertiesDialog(self)
+        dialog = propertiesDialog(self, self._window)
         dialog.dialog.run()
         dialog.dialog.hide()
 
