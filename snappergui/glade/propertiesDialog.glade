@@ -725,7 +725,6 @@
   </object>
   <object class="GtkMessageDialog" id="dialogProperties">
     <property name="can_focus">False</property>
-    <property name="type">popup</property>
     <property name="resizable">False</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
