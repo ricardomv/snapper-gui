@@ -55,7 +55,11 @@ class snapshotsView(Gtk.Widget):
 
     def add_snapshot_to_tree(self, snapshot, pre_snapshot=None):
         treemodel = self._TreeView.get_model()
-        snapinfo = snapper.GetSnapshot(self.config, snapshot)
+        # Ignore if we are notified about snapshot we can't read details about.
+        try:
+            snapinfo = snapper.GetSnapshot(self.config, snapshot)
+        except dbus.exceptions.DBusException:
+            return
         pre_number = snapinfo[2]
         if (snapinfo[1] == 2): # if type is post
             for aux, row in enumerate(treemodel):
