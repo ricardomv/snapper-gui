@@ -94,6 +94,12 @@ class SnapperGUI(Gtk.ApplicationWindow):
             userdatatreeview.set_model(None)
         else:
             self.builder.get_object("snapshotActions").set_sensitive(True)
+
+            if len(paths) == 2 or (len(paths) == 1 and model.iter_has_child(model.get_iter(paths[0]))):
+                self.builder.get_object("view-changes").set_sensitive(True)
+            else:
+                self.builder.get_object("view-changes").set_sensitive(False)
+
             try:
                 snapshot_data = snapper.GetSnapshot(config,model[model.get_iter(paths[0])][0])
                 userdata_liststore = Gtk.ListStore(str, str)
