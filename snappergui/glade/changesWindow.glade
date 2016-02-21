@@ -55,7 +55,9 @@
                   <object class="GtkTreeView" id="pathstreeview">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="has_tooltip">True</property>
                     <property name="search_column">1</property>
+                    <signal name="query-tooltip" handler="on_query_tooltip" swapped="no"/>
                     <signal name="show" handler="on_idle_init_paths_tree" after="yes" swapped="no"/>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection">
@@ -77,6 +79,7 @@
                           <object class="GtkCellRendererText" id="cellrenderertext1"/>
                           <attributes>
                             <attribute name="text">1</attribute>
+                            <attribute name="foreground-rgba">3</attribute>
                           </attributes>
                         </child>
                       </object>
