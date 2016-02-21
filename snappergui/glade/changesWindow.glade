@@ -146,7 +146,7 @@
                         <property name="can_focus">False</property>
                         <property name="layout_style">center</property>
                         <child>
-                          <object class="GtkButton" id="button1">
+                          <object class="GtkToggleButton" id="togglebutton1">
                             <property name="related_action">begin</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -159,7 +159,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="button2">
+                          <object class="GtkToggleButton" id="togglebutton2">
                             <property name="related_action">diff</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -172,7 +172,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="button3">
+                          <object class="GtkToggleButton" id="togglebutton3">
                             <property name="related_action">end</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
