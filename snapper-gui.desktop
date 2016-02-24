@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Snapper GUI
+Comment=Frontend for snapper snapshot manager
+Exec=snapper-gui
+Icon=drive-harddisk
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Utilities;
+	

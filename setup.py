@@ -17,6 +17,7 @@ config = {
  'package_data' : {"snappergui": ["glade/*.glade",
  								"icons/*.svg",
  								"ui/*.ui"]},
+ 'data_files': [ ('share/applications', ['snapper-gui.desktop'])],
  'entry_points' : { 'gui_scripts' : 
                     [ 'snapper-gui = snappergui.application:start_ui' ] }
 }
