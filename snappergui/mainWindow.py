@@ -1,6 +1,5 @@
 from snappergui import snapper
 import pkg_resources, subprocess, dbus
-from snappergui.propertiesDialog import propertiesDialog
 from snappergui.createSnapshot import createSnapshot
 from snappergui.createConfig import createConfig
 from snappergui.deleteDialog import deleteDialog
@@ -11,62 +10,32 @@ from time import strftime, localtime
 from pwd import getpwuid
 
 
-class SnapperGUI(Gtk.ApplicationWindow):
+class SnapperGUI():
     """docstring for SnapperGUI"""
 
     def __init__(self, app):
-        Gtk.ApplicationWindow.__init__(self,
-                                       application=app,
-                                       title="SnapperGUI")
-        self.app = app
+        super(SnapperGUI, self).__init__()
         self.builder = Gtk.Builder()
         self.builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/mainWindow.glade"))
-        self.snapshotsBox = self.builder.get_object("snapshotsBox")
         self.statusbar = self.builder.get_object("statusbar")
         self.snapshotsTreeView = self.builder.get_object("snapstreeview")
         self.configsGroup = self.builder.get_object("configsGroup")
+        self.window = self.builder.get_object("applicationwindow1")
+        self.stack = self.builder.get_object("stack1")
         self.builder.connect_signals(self)
 
-        self.set_default_size(700,600)
+        self.window.set_application(app)
 
         self.configView = {}
-
-        self.init_configs_stack()
-
-        # Switch configurations from the header bar with a StackSwitcher
-        switcher = Gtk.StackSwitcher(margin_top=2, margin_bottom=2, visible=True)
-        switcher.set_stack(self._stack)
-
-        self.header_bar = Gtk.HeaderBar(title="SnapperGUI",visible=True)
-        self.header_bar.pack_start(switcher)
-        self.header_bar.set_show_close_button(True)
-
-        if Gtk.get_minor_version() > 8:
-            self.set_titlebar(self.header_bar)
-        else:
-            self._box.pack_start(self.header_bar, False, False, 0)
-            self.set_hide_titlebar_when_maximized(True)
-        self.builder.get_object("snapshotsviewport").add(self._stack)
-        self.add(self.snapshotsBox)
-
-        self.init_dbus_signal_handlers()
-        self.show()
-
-    def init_configs_stack(self):
-        self._stack = Gtk.Stack(
-                transition_type=Gtk.StackTransitionType.CROSSFADE,
-                transition_duration=300,
-                visible=True)
-
-        self._stack.connect("notify::visible-child", self.on_stack_visible_child_changed)
-
-        self._stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
 
         for config in snapper.ListConfigs():
             name = str(config[0])
             self.configView[name] = snapshotsView(name)
-            self._stack.add_titled(self.configView[name].scrolledwindow, name, name)
+            self.stack.add_titled(self.configView[name].scrolledwindow, name, name)
             self.configView[name].selection.connect("changed", self.on_snapshots_selection_changed)
+
+        self.init_dbus_signal_handlers()
+        self.window.show()
 
     def snapshot_columns(self,snapshot):
         if(snapshot[3] == -1):
@@ -76,7 +45,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
         return [snapshot[0], snapshot[1], snapshot[2], date, getpwuid(snapshot[4])[0], snapshot[5], snapshot[6]]
 
     def get_current_config(self):
-        return self._stack.get_visible_child_name()
+        return self.stack.get_visible_child_name()
 
     def on_stack_visible_child_changed(self, stack, property):
         self.update_controlls_and_userdatatreeview()
@@ -110,7 +79,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
                 pass
 
     def on_create_snapshot(self, widget):
-        dialog = createSnapshot(self, self.get_current_config())
+        dialog = createSnapshot(self.window, self.get_current_config())
         response = dialog.run()
         dialog.destroy()
         if response == Gtk.ResponseType.OK:
@@ -122,7 +91,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
             pass
 
     def on_create_config(self, widget):
-        dialog = createConfig(self)
+        dialog = createConfig(self.window)
         response = dialog.run()
         dialog.destroy()
         if response == Gtk.ResponseType.OK:
@@ -147,7 +116,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
             if model.iter_has_child(treeiter):
                 child_treeiter = model.iter_children(treeiter)
                 snapshots.append(model[child_treeiter][0])
-        dialog = deleteDialog(self, config,snapshots)
+        dialog = deleteDialog(self.window, config,snapshots)
         response = dialog.run()
         if response == Gtk.ResponseType.YES and len(dialog.to_delete) > 0:
             snapper.DeleteSnapshots(config, dialog.to_delete)
@@ -180,19 +149,6 @@ class SnapperGUI(Gtk.ApplicationWindow):
             end = model.get_value(child_iter,0)
             window = changesWindow(config, begin, end)
 
-    def on_configs_properties_clicked(self, notebook):
-        dialog = propertiesDialog(self)
-        dialog.dialog.run()
-        dialog.dialog.hide()
-
-    def on_about_clicked(self,widget):
-        about = self.builder.get_object("aboutdialog1")
-        about.run()
-        about.hide()
-
-    def delete_event(self,widget):
-        self.app._window.destroy()
-
     def init_dbus_signal_handlers(self):
         signals = {
         "SnapshotCreated" : self.on_dbus_snapshot_created,
@@ -223,7 +179,7 @@ class SnapperGUI(Gtk.ApplicationWindow):
     def on_dbus_config_created(self, config):
         self.configView[config] = snapshotsView(config)
         self.configView[config].update_view()
-        self._stack.add_titled(self.configView[config]._TreeView, config, config)
+        self.stack.add_titled(self.configView[config]._TreeView, config, config)
         self.statusbar.push(5,"Created new configuration %s"% config)
 
 

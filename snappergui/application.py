@@ -15,7 +15,7 @@ class Application(Gtk.Application):
         GLib.set_application_name("SnapperGUI")
         GLib.set_prgname('snappergui')
 
-        self._window = None
+        self.snappergui = None
 
     def build_app_menu(self):
         builder = Gtk.Builder()
@@ -38,7 +38,7 @@ class Application(Gtk.Application):
         self.add_action(quitAction)
 
     def show_configs_properties(self, action, param):
-        dialog = propertiesDialog(self, self._window)
+        dialog = propertiesDialog(self, self.snappergui.window)
         dialog.dialog.run()
         dialog.dialog.hide()
 
@@ -46,16 +46,13 @@ class Application(Gtk.Application):
         pass
 
     def quit(self, action=None, param=None):
-        self._window.destroy()
+        self.snappergui.window.destroy()
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
         self.build_app_menu()
 
     def do_activate(self):
-        if not self._window:
-            self._window = SnapperGUI(self)
-            icon = GdkPixbuf.Pixbuf.new_from_file(pkg_resources.resource_filename("snappergui", "icons/snappergui.svg"))
-            self._window.set_default_icon(icon)
-
-        self._window.present()
+        if not self.snappergui:
+            self.snappergui = SnapperGUI(self)
+        self.snappergui.window.present()
