@@ -6,7 +6,8 @@ class PropertiesTab(object):
     """docstring for PropertiesTab"""
     def __init__(self, config):
         builder = Gtk.Builder()
-        builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/propertiesDialog.glade"))
+        builder.add_from_file(pkg_resources.resource_filename("snappergui",
+                                                              "glade/propertiesDialog.glade"))
         self.configsGrid = builder.get_object("configsGrid")
 
         self.widgets = {}
@@ -16,7 +17,11 @@ class PropertiesTab(object):
             if type(widget) == Gtk.Entry:
                 widget.set_text(v)
             elif type(widget) == Gtk.SpinButton:
-                adjustment = Gtk.Adjustment(value=int(v), lower=0, upper=5000, step_increment=1, page_increment=10, page_size=0)
+                adjustment = Gtk.Adjustment(value=int(v),
+                                            lower=0, upper=5000,
+                                            step_increment=1,
+                                            page_increment=10,
+                                            page_size=0)
                 widget.set_adjustment(adjustment)
             elif type(widget) == Gtk.Switch:
                 if v == "yes":
@@ -46,7 +51,8 @@ class propertiesDialog(object):
         self.parent = parent
 
         builder = Gtk.Builder()
-        builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/propertiesDialog.glade"))
+        builder.add_from_file(pkg_resources.resource_filename("snappergui",
+                                                              "glade/propertiesDialog.glade"))
         self.dialog = builder.get_object("dialogProperties")
         self.notebook = builder.get_object("notebookProperties")
         builder.connect_signals(self)

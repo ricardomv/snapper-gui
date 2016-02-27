@@ -16,7 +16,8 @@ class SnapperGUI():
     def __init__(self, app):
         super(SnapperGUI, self).__init__()
         self.builder = Gtk.Builder()
-        self.builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/mainWindow.glade"))
+        self.builder.add_from_file(pkg_resources.resource_filename("snappergui",
+                                                                   "glade/mainWindow.glade"))
         self.statusbar = self.builder.get_object("statusbar")
         self.snapshotsTreeView = self.builder.get_object("snapstreeview")
         self.configsGroup = self.builder.get_object("configsGroup")
@@ -32,7 +33,8 @@ class SnapperGUI():
             name = str(config[0])
             self.configView[name] = snapshotsView(name)
             self.stack.add_titled(self.configView[name].scrolledwindow, name, name)
-            self.configView[name].selection.connect("changed", self.on_snapshots_selection_changed)
+            self.configView[name].selection.connect("changed",
+                                                    self.on_snapshots_selection_changed)
 
         self.init_dbus_signal_handlers()
         self.window.show()
@@ -42,7 +44,13 @@ class SnapperGUI():
             date = "Now"
         else:
             date = strftime("%a %R %e/%m/%Y", localtime(snapshot[3]))
-        return [snapshot[0], snapshot[1], snapshot[2], date, getpwuid(snapshot[4])[0], snapshot[5], snapshot[6]]
+        return [snapshot[0],
+                snapshot[1],
+                snapshot[2],
+                date,
+                getpwuid(snapshot[4])[0],
+                snapshot[5],
+                snapshot[6]]
 
     def get_current_config(self):
         return self.stack.get_visible_child_name()

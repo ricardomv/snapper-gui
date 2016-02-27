@@ -10,7 +10,8 @@ class snapshotsView(Gtk.Widget):
         super(snapshotsView, self).__init__()
         self.config = config
         self.builder = Gtk.Builder()
-        self.builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/snapshotsView.glade"))
+        self.builder.add_from_file(pkg_resources.resource_filename("snappergui",
+                                                                   "glade/snapshotsView.glade"))
         self.builder.connect_signals(self)
         self._TreeView = self.builder.get_object("snapstreeview")
         self.selection = self.builder.get_object("snapshotsSelection")
@@ -28,7 +29,13 @@ class snapshotsView(Gtk.Widget):
             date = "Now"
         else:
             date = strftime("%a %R %e/%m/%Y", localtime(snapshot[3]))
-        return [snapshot[0], snapshot[1], snapshot[2], date, getpwuid(snapshot[4])[0], snapshot[5], snapshot[6]]
+        return [snapshot[0],
+                snapshot[1],
+                snapshot[2],
+                date,
+                getpwuid(snapshot[4])[0],
+                snapshot[5],
+                snapshot[6]]
 
     def get_config_treestore(self):
         configstree = Gtk.TreeStore(int, int, int, str, str, str, str)

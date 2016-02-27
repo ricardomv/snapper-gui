@@ -7,8 +7,8 @@ class createConfig(object):
     def __init__(self, parent):
         super(createConfig, self).__init__()
         builder = Gtk.Builder()
-        builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/createConfig.glade"))
-
+        builder.add_from_file(pkg_resources.resource_filename("snappergui",
+                                                              "glade/createConfig.glade"))
         self.dialog = builder.get_object("createConfig")
         self.dialog.set_transient_for(parent)
         builder.connect_signals(self)

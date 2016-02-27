@@ -27,7 +27,8 @@ class changesWindow(object):
         super(changesWindow, self).__init__()
         builder = Gtk.Builder()
         GObject.type_register(GtkSource.View)
-        builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/changesWindow.glade"))
+        builder.add_from_file(pkg_resources.resource_filename("snappergui",
+                                                              "glade/changesWindow.glade"))
 
         builder.get_object("titlelabel").set_text("%s -> %s"%(begin, end))
         self.window = builder.get_object("changesWindow")

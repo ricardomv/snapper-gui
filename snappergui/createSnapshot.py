@@ -9,7 +9,8 @@ class createSnapshot(object):
     def __init__(self, parent, config_name):
         super(createSnapshot, self).__init__()
         builder = Gtk.Builder()
-        builder.add_from_file(pkg_resources.resource_filename("snappergui", "glade/createSnapshot.glade"))
+        builder.add_from_file(pkg_resources.resource_filename("snappergui",
+                                                              "glade/createSnapshot.glade"))
 
         self.dialog = builder.get_object("dialogCreate")
         self.userdataTree = builder.get_object("userdatatreeview")

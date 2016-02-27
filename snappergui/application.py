@@ -19,9 +19,8 @@ class Application(Gtk.Application):
 
     def build_app_menu(self):
         builder = Gtk.Builder()
-
-        builder.add_from_file(pkg_resources.resource_filename("snappergui", "ui/app-menu.ui"))
-
+        builder.add_from_file(pkg_resources.resource_filename("snappergui",
+                                                              "ui/app-menu.ui"))
         menu = builder.get_object('app-menu')
         self.set_app_menu(menu)
 
