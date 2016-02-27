@@ -11,7 +11,7 @@ Dependencies
 	python-gobject
 	python-setuptools
 	gtksourceview3
-	snapper-git (AUR)
+	snapper
 ### openSUSE:
 	python3
 	dbus-1-python3
