@@ -1,6 +1,8 @@
 snapper-gui
 ===========
 
+Snapper-gui is a graphical user interface for the tool [snapper](http://snapper.io/) for Linux filesystem snapshot management. It can compare snapshots and revert differences between snapshots. In simple terms, this allows root and non-root users to view older versions of files and revert changes. Currently works with btrfs, ext4 and thin-provisioned LVM volumes
+
 Dependencies
 -----------
 
