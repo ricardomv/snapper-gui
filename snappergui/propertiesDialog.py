@@ -71,7 +71,7 @@ class propertiesDialog(object):
         changed = {}
         for k, v in snapper.GetConfig(config)[2].items():
             currentValue = self.tabs[config].get_current_value(k)
-            if v != currentValue:
+            if currentValue and v != currentValue:
                 changed[k] = currentValue
         return changed
 
