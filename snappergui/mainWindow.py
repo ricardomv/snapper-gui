@@ -43,7 +43,7 @@ class SnapperGUI():
         if(snapshot[3] == -1):
             date = "Now"
         else:
-            date = strftime("%a %R %e/%m/%Y", localtime(snapshot[3]))
+            date = strftime("%a %x %R", localtime(snapshot[3]))
         return [snapshot[0],
                 snapshot[1],
                 snapshot[2],
