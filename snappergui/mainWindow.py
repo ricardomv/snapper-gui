@@ -9,7 +9,6 @@ from gi.repository import Gtk
 from time import strftime, localtime
 from pwd import getpwuid
 
-
 class SnapperGUI():
     """docstring for SnapperGUI"""
 
@@ -136,6 +135,8 @@ class SnapperGUI():
         for path in paths:
             treeiter = model.get_iter(path)
             mountpoint = snapper.GetMountPoint(config, model[treeiter][0])
+            if model[treeiter][6] != '':
+                snapper.MountSnapshot(config,model[treeiter][0],'true')
             subprocess.Popen(['xdg-open', mountpoint])
             self.statusbar.push(True,
                 "The mount point for the snapshot %s from %s is %s"%
@@ -196,3 +197,10 @@ class SnapperGUI():
 
     def on_dbus_config_deleted(self,args):
         print("Config Deleted")
+
+    def on_main_destroy(self,args):
+        for config in snapper.ListConfigs():
+            for snapshot in snapper.ListSnapshots(config[0]):
+                if snapshot[6] != '':
+                    snapper.UmountSnapshot(config[0],snapshot[0],'true')
+
