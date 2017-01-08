@@ -22,6 +22,7 @@ Dependencies
 ### Ubuntu
 	python3
 	libgtksourceview-3.0-1
+	gir1.2-gtksource-3.0
 	python3-dbus
 	python3-setuptools
 
