@@ -3,11 +3,6 @@ from gi.repository import Gtk, GLib, GdkPixbuf, Gio
 from snappergui.mainWindow import SnapperGUI
 from snappergui.propertiesDialog import propertiesDialog
 
-def start_ui():
-    app = Application()
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
-    exit_status = app.run(sys.argv)
-    sys.exit(exit_status)
 
 class Application(Gtk.Application):
     def __init__(self):
@@ -55,3 +50,22 @@ class Application(Gtk.Application):
         if not self.snappergui:
             self.snappergui = SnapperGUI(self)
         self.snappergui.window.present()
+
+
+def start_ui():
+    from os import getuid, system
+    if not getuid() == 0:
+        system("gksu "
+               "--user root "
+               "--message 'snapper-gui require root' " +
+               sys.executable + ' ' +
+               ' '.join(sys.argv))
+        exit()
+    app = Application()
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    exit_status = app.run(sys.argv)
+    sys.exit(exit_status)
+
+
+if __name__ == '__main__':
+    start_ui()
