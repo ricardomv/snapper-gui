@@ -78,7 +78,7 @@ for filesystem snapshot management</property>
       <object class="GtkAction" id="view-changes">
         <property name="label" translatable="yes">View changes</property>
         <property name="short_label" translatable="yes">Changes</property>
-        <property name="tooltip" translatable="yes">Show witch files have changed between selected snapshots</property>
+        <property name="tooltip" translatable="yes">Show which files have changed between selected snapshots</property>
         <property name="stock_id">gtk-file</property>
         <signal name="activate" handler="on_viewchanges_clicked" object="treeview-selection1" swapped="no"/>
       </object>
