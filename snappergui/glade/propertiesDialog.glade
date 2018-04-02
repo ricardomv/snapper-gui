@@ -262,7 +262,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="TIMELINE_LIMIT_HOURLY">
+                      <object class="GtkEntry" id="TIMELINE_LIMIT_HOURLY">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
@@ -274,7 +274,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="TIMELINE_LIMIT_DAILY">
+                      <object class="GtkEntry" id="TIMELINE_LIMIT_DAILY">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
@@ -285,7 +285,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="TIMELINE_LIMIT_MONTHLY">
+                      <object class="GtkEntry" id="TIMELINE_LIMIT_MONTHLY">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
@@ -297,7 +297,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="TIMELINE_LIMIT_YEARLY">
+                      <object class="GtkEntry" id="TIMELINE_LIMIT_YEARLY">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
@@ -351,7 +351,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="TIMELINE_LIMIT_WEEKLY">
+                      <object class="GtkEntry" id="TIMELINE_LIMIT_WEEKLY">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
@@ -470,7 +470,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="NUMBER_LIMIT">
+                      <object class="GtkEntry" id="NUMBER_LIMIT">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
@@ -493,7 +493,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="NUMBER_LIMIT_IMPORTANT">
+                      <object class="GtkEntry" id="NUMBER_LIMIT_IMPORTANT">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
