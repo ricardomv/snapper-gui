@@ -6,16 +6,18 @@ from gi.repository import Gtk, GtkSource, GObject, Gdk
 class StatusFlags(object):
     """File status flags from https://github.com/openSUSE/snapper/blob/master/snapper/File.h#L39-L51"""
 
-    CREATED = 1        # created
-    DELETED = 2        # deleted
-    TYPE = 4           # type has changed
-    CONTENT = 8        # content has changed
-    PERMISSIONS = 16   # permissions have changed, see chmod(2)
-    OWNER = 32         # owner has changed, see chown(2)
-    USER = 32          # deprecated - alias for OWNER
-    GROUP = 64         # group has changed, see chown(2)
-    XATTRS = 128       # extended attributes changed, see attr(5)
-    ACL = 256          # access control list changed, see acl(5)
+    # @formatter:off
+    CREATED     =   1  # created
+    DELETED     =   2  # deleted
+    TYPE        =   4  # type has changed
+    CONTENT     =   8  # content has changed
+    PERMISSIONS =  16  # permissions have changed, see chmod(2)
+    OWNER       =  32  # owner has changed, see chown(2)
+    USER        =  32  # deprecated - alias for OWNER
+    GROUP       =  64  # group has changed, see chown(2)
+    XATTRS      = 128  # extended attributes changed, see attr(5)
+    ACL         = 256  # access control list changed, see acl(5)
+    # @formatter:on
 
 
 class changesWindow(object):
@@ -30,7 +32,7 @@ class changesWindow(object):
         builder.add_from_file(pkg_resources.resource_filename("snappergui",
                                                               "glade/changesWindow.glade"))
 
-        builder.get_object("titlelabel").set_text("%s -> %s"%(begin, end))
+        builder.get_object("titlelabel").set_text("%s -> %s" % (begin, end))
         self.window = builder.get_object("changesWindow")
         self.statusbar = builder.get_object("statusbar1")
         self.pathstreeview = builder.get_object("pathstreeview")
@@ -102,8 +104,9 @@ class changesWindow(object):
     def get_treestore_from_tree(self, tree):
         # Row: [gtk-stock-icon, file name, file complete path, entry color, tooltip]
         treestore = Gtk.TreeStore(str, str, str, Gdk.RGBA, str)
-        def get_childs(tree, parent=None):
-            for file_name, child in tree.children.items():
+
+        def get_children(subtree, parent=None):
+            for file_name, child in subtree.children.items():
                 color = Gdk.RGBA(0.0, 0.0, 0.0)
                 if child.status & StatusFlags.CREATED:  # Created file
                     color = Gdk.RGBA(0.0, 0.57, 0.0)
@@ -112,14 +115,15 @@ class changesWindow(object):
                 elif child.status > 0:  # Modified file
                     color = Gdk.RGBA(0.49, 0.47, 0.0)
 
-                node = treestore.append(parent,[
+                node = treestore.append(parent, [
                     Gtk.STOCK_DIRECTORY if child.is_dir else Gtk.STOCK_FILE,
                     file_name, child.path, color, self.file_status_to_string(child.status)
-                    ])
+                ])
                 # if this child is a directory get childs
                 if child.children is not None:
-                    get_childs(child, node)
-        get_childs(tree)
+                    get_children(child, node)
+
+        get_children(tree)
         return treestore
 
     def on_query_tooltip(self, widget, x, y, keyboard_tip, tooltip):
@@ -135,23 +139,23 @@ class changesWindow(object):
                 return False
 
     def on_idle_init_paths_tree(self):
-        snapper.CreateComparison(self.config,self.snapshot_begin,self.snapshot_end)
+        snapper.CreateComparison(self.config, self.snapshot_begin, self.snapshot_end)
 
-        dbus_array = snapper.GetFiles(self.config,self.snapshot_begin,self.snapshot_end)
+        dbus_array = snapper.GetFiles(self.config, self.snapshot_begin, self.snapshot_end)
 
         # create structure to sort paths into tree
         files_tree = changesWindow.TreeNode("/", {}, 0, True)
         for entry in dbus_array:
             self.add_path_to_tree(str(entry[0]), int(entry[1]), files_tree)
 
-        #self.print_tree(files_tree)
+        # self.print_tree(files_tree)
         self.pathstreeview.set_model(self.get_treestore_from_tree(files_tree))
-        #self.pathstreeview.expand_all()
+        # self.pathstreeview.expand_all()
 
         # display in statusbar how many files have changed
-        self.statusbar.push(1,"%d files"%len(dbus_array))
+        self.statusbar.push(1, "%d files" % len(dbus_array))
 
-        snapper.DeleteComparison(self.config,self.snapshot_begin,self.snapshot_end)
+        snapper.DeleteComparison(self.config, self.snapshot_begin, self.snapshot_end)
 
         # we dont want this function to be called anymore
         return False
@@ -167,18 +171,18 @@ class changesWindow(object):
             pass
         except PermissionError:
             print("PermissionError")
-            pass # TODO maybe display a dialog with the error?
+            pass  # TODO maybe display a dialog with the error?
         return None
 
     def _on_pathstree_selection_changed(self, selection):
         (model, treeiter) = selection.get_selected()
-        if treeiter != None and model[treeiter] != "":
+        if treeiter is not None and model[treeiter] != "":
             # append file path to snapshot mountpoint
-            fromfile = self.beginpath+model[treeiter][2]
-            tofile = self.endpath+model[treeiter][2]
+            fromfile = self.beginpath + model[treeiter][2]
+            tofile = self.endpath + model[treeiter][2]
 
             fromlines = self.get_lines_from_file(fromfile)
-            if fromlines == None:
+            if fromlines is None:
                 return
             elif fromlines == "":
                 fromfile = "New File"
@@ -187,7 +191,7 @@ class changesWindow(object):
                 fromdate = time.ctime(os.stat(fromfile).st_mtime)
 
             tolines = self.get_lines_from_file(tofile)
-            if tolines == None:
+            if tolines is None:
                 return
             elif tolines == "":
                 tofile = "Deleted File"
@@ -198,10 +202,10 @@ class changesWindow(object):
             languagemanager = GtkSource.LanguageManager()
             currentview = self.choicesviewgroup.get_action("end").get_current_value()
 
-            if currentview == 0: # show file from begin snapshot
+            if currentview == 0:  # show file from begin snapshot
                 self.sourcebuffer.set_language(languagemanager.get_language("text"))
                 self.sourcebuffer.set_text("".join(fromlines))
-            elif currentview == 1: # show diff of file changes between snapshots
+            elif currentview == 1:  # show diff of file changes between snapshots
                 self.sourcebuffer.set_language(languagemanager.get_language("diff"))
                 difflines = difflib.unified_diff(fromlines,
                                                  tolines,

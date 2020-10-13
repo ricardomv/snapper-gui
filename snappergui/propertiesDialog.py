@@ -2,8 +2,10 @@ from snappergui import snapper
 import pkg_resources, dbus
 from gi.repository import Gtk
 
+
 class PropertiesTab(object):
     """docstring for PropertiesTab"""
+
     def __init__(self, config):
         builder = Gtk.Builder()
         builder.add_from_file(pkg_resources.resource_filename("snappergui",
@@ -29,7 +31,7 @@ class PropertiesTab(object):
                 elif v == "no":
                     widget.set_active(False)
             else:
-                print("ERROR: Could not handle property \"%s\"."% k)
+                print("ERROR: Could not handle property \"%s\"." % k)
             self.widgets[k] = widget
 
     def get_current_value(self, setting):
@@ -37,7 +39,7 @@ class PropertiesTab(object):
         if type(widget) == Gtk.Entry:
             return widget.get_text()
         elif type(widget) == Gtk.Switch:
-            if(widget.get_active()):
+            if widget.get_active():
                 return "yes"
             else:
                 return "no"
@@ -47,6 +49,7 @@ class PropertiesTab(object):
 
 class propertiesDialog(object):
     """docstring for propertiesDialog"""
+
     def __init__(self, widget, parent):
         self.parent = parent
 
@@ -66,7 +69,6 @@ class propertiesDialog(object):
             self.notebook.append_page(currentTab.configsGrid, Gtk.Label.new(config[0]))
         self.notebook.show_all()
 
-
     def get_changed_settings(self, config):
         changed = {}
         for k, v in snapper.GetConfig(config)[2].items():
@@ -81,9 +83,10 @@ class propertiesDialog(object):
             try:
                 snapper.SetConfig(currentConfig, self.get_changed_settings(currentConfig))
             except dbus.exceptions.DBusException as error:
-                if(str(error).find("error.no_permission") != -1):
+                if str(error).find("error.no_permission") != -1:
                     self.dialog.destroy()
                     dialog = Gtk.MessageDialog(self.parent, 0, Gtk.MessageType.WARNING,
-                    Gtk.ButtonsType.OK, "You don't have permission to edit configurations")
+                                               Gtk.ButtonsType.OK,
+                                               "You don't have permission to edit configurations")
                     dialog.run()
                     dialog.destroy()

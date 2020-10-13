@@ -4,8 +4,10 @@ from gi.repository import Gtk
 from time import strftime, localtime
 from pwd import getpwuid
 
+
 class snapshotsView(Gtk.Widget):
     """docstring for snapshotsView"""
+
     def __init__(self, config):
         super(snapshotsView, self).__init__()
         self.config = config
@@ -24,8 +26,8 @@ class snapshotsView(Gtk.Widget):
         if treestore:
             self._TreeView.set_model(treestore)
 
-    def snapshot_columns(self,snapshot):
-        if(snapshot[3] == -1):
+    def snapshot_columns(self, snapshot):
+        if snapshot[3] == -1:
             date = "Now"
         else:
             date = strftime("%a %x %R", localtime(snapshot[3]))
@@ -47,17 +49,17 @@ class snapshotsView(Gtk.Widget):
         parents = []
         self.count = len(snapshots_list)
         for snapshot in snapshots_list:
-            if (snapshot[1] == 1): # Pre Snapshot
-                parents.append(configstree.append(None , self.snapshot_columns(snapshot)))
-            elif (snapshot[1] == 2): # Post snappshot
+            if snapshot[1] == 1:  # Pre snapshot
+                parents.append(configstree.append(None, self.snapshot_columns(snapshot)))
+            elif snapshot[1] == 2:  # Post snapshot
                 parent_node = None
                 for parent in parents:
-                    if (configstree.get_value(parent, 0) == snapshot[2]):
+                    if configstree.get_value(parent, 0) == snapshot[2]:
                         parent_node = parent
                         break
-                configstree.append(parent_node , self.snapshot_columns(snapshot))
+                configstree.append(parent_node, self.snapshot_columns(snapshot))
             else:  # Single snapshot
-                configstree.append(None , self.snapshot_columns(snapshot))
+                configstree.append(None, self.snapshot_columns(snapshot))
         return configstree
 
     def add_snapshot_to_tree(self, snapshot, pre_snapshot=None):
@@ -68,9 +70,9 @@ class snapshotsView(Gtk.Widget):
         except dbus.exceptions.DBusException:
             return
         pre_number = snapinfo[2]
-        if (snapinfo[1] == 2): # if type is post
+        if snapinfo[1] == 2:  # if type is post
             for aux, row in enumerate(treemodel):
-                if(pre_number == row[0]):
+                if pre_number == row[0]:
                     pre_snapshot = treemodel.get_iter(aux)
                     break
         treemodel.append(pre_snapshot, self.snapshot_columns(snapinfo))
@@ -78,9 +80,9 @@ class snapshotsView(Gtk.Widget):
     def remove_snapshot_from_tree(self, snapshot):
         treemodel = self._TreeView.get_model()
         for aux, row in enumerate(treemodel):
-            if(snapshot == row[0]):
+            if snapshot == row[0]:
                 has_child = treemodel.iter_has_child(treemodel.get_iter(aux))
-                if(has_child):
+                if has_child:
                     # FIXME meh
                     self.update_view()
                 else:
@@ -89,14 +91,13 @@ class snapshotsView(Gtk.Widget):
     def on_description_edited(self, widget, treepath, text):
         snapshot_row = self._TreeView.get_model()[treepath]
         snapshot_num = snapshot_row[0]
-        snapshot_info = snapper.GetSnapshot(self.config,snapshot_num)
-        snapper.SetSnapshot(self.config,snapshot_info[0],text,snapshot_info[6],snapshot_info[7])
+        snapshot_info = snapper.GetSnapshot(self.config, snapshot_num)
+        snapper.SetSnapshot(self.config, snapshot_info[0], text, snapshot_info[6], snapshot_info[7])
         snapshot_row[5] = text
-
 
     def on_cleanup_edited(self, widget, treepath, text):
         snapshot_row = self._TreeView.get_model()[treepath]
         snapshot_num = snapshot_row[0]
-        snapshot_info = snapper.GetSnapshot(self.config,snapshot_num)
-        snapper.SetSnapshot(self.config,snapshot_info[0],snapshot_info[5],text,snapshot_info[7])
+        snapshot_info = snapper.GetSnapshot(self.config, snapshot_num)
+        snapper.SetSnapshot(self.config, snapshot_info[0], snapshot_info[5], text, snapshot_info[7])
         snapshot_row[6] = text

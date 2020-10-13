@@ -6,6 +6,7 @@ from pwd import getpwuid
 
 class deleteDialog(object):
     """docstring for deleteDialog"""
+
     def __init__(self, parent, config, snapshots):
         super(deleteDialog, self).__init__()
         builder = Gtk.Builder()
@@ -21,21 +22,21 @@ class deleteDialog(object):
         self.to_delete = snapshots
 
         parents = []
-        self.deleteTreeStore = Gtk.TreeStore(bool, int, str,  str)
+        self.deleteTreeStore = Gtk.TreeStore(bool, int, str, str)
         for snapshot in snapshots:
-            snapinfo = snapper.GetSnapshot(config,snapshot)
-            #self.deleteTreeStore.append(self.get_row(snapinfo))
-            if (snapinfo[1] == 1): # Pre Snapshot
+            snapinfo = snapper.GetSnapshot(config, snapshot)
+            # self.deleteTreeStore.append(self.get_row(snapinfo))
+            if snapinfo[1] == 1:  # Pre snapshot
                 parents.append(self.deleteTreeStore.append(None, self.get_row(snapinfo)))
-            elif (snapinfo[1] == 2): # Post snappshot
+            elif snapinfo[1] == 2:  # Post snapshot
                 parent_node = None
                 for parent in parents:
-                    if (self.deleteTreeStore.get_value(parent, 1) == snapinfo[2]):
+                    if self.deleteTreeStore.get_value(parent, 1) == snapinfo[2]:
                         parent_node = parent
                         break
-                self.deleteTreeStore.append(parent_node, )
+                self.deleteTreeStore.append(parent_node)
             else:  # Single snapshot
-                self.deleteTreeStore.append(None , self.get_row(snapinfo))
+                self.deleteTreeStore.append(None, self.get_row(snapinfo))
         self.deletetreeview.set_model(self.deleteTreeStore)
         self.deletetreeview.expand_all()
 
@@ -47,13 +48,13 @@ class deleteDialog(object):
         self.dialog.destroy()
         return response
 
-    def on_toggle_delete_snapshot(self,widget,path):
+    def on_toggle_delete_snapshot(self, widget, path):
         treeiter = self.deleteTreeStore.get_iter(path)
         self.deleteTreeStore.set_value(treeiter,
                                        False,
-                                       not(self.deleteTreeStore.get_value(treeiter, False)))
+                                       not (self.deleteTreeStore.get_value(treeiter, False)))
         snapshot_num = self.deleteTreeStore.get_value(treeiter, True)
-        if self.deleteTreeStore.get_value(treeiter,False):
+        if self.deleteTreeStore.get_value(treeiter, False):
             if snapshot_num not in self.to_delete:
                 self.to_delete.append(snapshot_num)
         else:
