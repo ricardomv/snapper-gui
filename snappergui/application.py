@@ -3,11 +3,13 @@ from gi.repository import Gtk, GLib, GdkPixbuf, Gio
 from snappergui.mainWindow import SnapperGUI
 from snappergui.propertiesDialog import propertiesDialog
 
+
 def start_ui():
     app = Application()
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     exit_status = app.run(sys.argv)
     sys.exit(exit_status)
+
 
 class Application(Gtk.Application):
     def __init__(self):

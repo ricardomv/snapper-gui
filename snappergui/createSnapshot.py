@@ -2,6 +2,7 @@ from snappergui import snapper
 import pkg_resources
 from gi.repository import Gtk, Gdk
 
+
 class createSnapshot(object):
     TYPE_HERE = "<Type here>"
 
@@ -34,8 +35,6 @@ class createSnapshot(object):
 
         builder.get_object("cleanupcombo").set_active(0)
 
-
-
     def on_config_changed(self,widget):
         self.config = widget.get_model()[widget.get_active()][0]
 
@@ -65,7 +64,6 @@ class createSnapshot(object):
             del userdatamodel[path]
         else:
             userdatamodel[path][0] = new_text
-
 
     def _on_value_edited(self, renderer, path, new_text):
         userdatamodel = self.userdataTree.get_model()
