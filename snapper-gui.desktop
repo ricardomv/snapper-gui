@@ -6,4 +6,4 @@ Icon=drive-harddisk
 Terminal=false
 Type=Application
 StartupNotify=true
-Categories=Utilities;
+Categories=Utilities;System;
