@@ -162,7 +162,7 @@ class changesWindow(object):
 
     def get_lines_from_file(self, path):
         try:
-            return open(path, 'U').readlines()
+            return open(path).readlines()
         except IsADirectoryError:
             pass
         except FileNotFoundError:
