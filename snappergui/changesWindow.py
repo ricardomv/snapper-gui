@@ -62,14 +62,16 @@ class changesWindow(object):
         node = tree
         # Add directories to tree
         for file_name in parts[1:-1]:
-            if not file_name in node.children:
-                node.children[file_name] = changesWindow.TreeNode("", {}, 0, True)
-            node = node.children[file_name]
+            if node.children is not None:
+                if not file_name in node.children:
+                    node.children[file_name] = changesWindow.TreeNode("", {}, 0, True)
+                node = node.children[file_name]
         # Add last part of path to tree
-        if is_dir:
-            node.children[parts[-1]] = changesWindow.TreeNode("", {}, status, True)
-        else:
-            node.children[parts[-1]] = changesWindow.TreeNode(path, None, status, False)
+        if node.children is not None:
+            if is_dir:
+                node.children[parts[-1]] = changesWindow.TreeNode("", {}, status, True)
+            else:
+                node.children[parts[-1]] = changesWindow.TreeNode(path, None, status, False)
 
     def print_tree(self, tree, indent=""):
         for name, child in tree.children.items():
@@ -162,7 +164,7 @@ class changesWindow(object):
 
     def get_lines_from_file(self, path):
         try:
-            return open(path, 'U').readlines()
+            return open(path).readlines()
         except IsADirectoryError:
             pass
         except FileNotFoundError:
